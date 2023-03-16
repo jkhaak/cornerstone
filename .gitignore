@@ -1,0 +1,14 @@
+*
+
+!.gitignore
+!.eslintrc.cjs
+
+!/*/
+!/.editorconfig
+!/.gitattributes
+!/.prettierignore
+!/.node-version
+!/.prettierrc.js
+!/README.md
+!/LICENCE
+!/rush.json
