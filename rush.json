@@ -20,7 +20,13 @@
     "defaultRemote": "origin"
   },
 
-  "allowedProjectTags": ["tools", "frontend", "serverless"],
+  "allowedProjectTags": ["tools", "library", "frontend", "serverless"],
 
-  "projects": []
+  "projects": [
+    {
+      "packageName": "ruuvi",
+      "projectFolder": "lib/ruuvi",
+      "tags": ["library"]
+    }
+  ]
 }

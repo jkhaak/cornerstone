@@ -1,0 +1,30 @@
+{
+  "name": "ruuvi",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "EUPL-1.2",
+  "author": "Jani Haakana",
+  "type": "module",
+  "module": "dist/index.js",
+  "scripts": {
+    "build": "heft build --clean",
+    "test": "heft test --clean"
+  },
+  "dependencies": {
+    "@abandonware/noble": "~1.9.2-20"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-config": "~3.2.0",
+    "@rushstack/heft": "~0.50.0",
+    "@rushstack/heft-jest-plugin": "~0.5.5",
+    "@tsconfig/node-lts-strictest-esm": "~18.12.1",
+    "@types/heft-jest": "~1.0.3",
+    "@types/node": "~18.15.3",
+    "@typescript-eslint/eslint-plugin": "~5.55.0",
+    "@typescript-eslint/parser": "~5.55.0",
+    "eslint": "~8.36.0",
+    "eslint-config-prettier": "~8.7.0",
+    "typescript": "~5.0.2"
+  }
+}
