@@ -24,8 +24,8 @@
 
   "projects": [
     {
-      "packageName": "ruuvi",
-      "projectFolder": "lib/ruuvi",
+      "packageName": "ruuvi-collector",
+      "projectFolder": "apps/ruuvi-collector",
       "tags": ["library"]
     }
   ]
