@@ -1,49 +1,34 @@
+import type { Format as DataFormat5 } from "./formats/data-format-5.js";
+import * as dataFormat5 from "./formats/data-format-5.js";
+import type { Either, GetVersion, GetFormats } from "./utils.js";
+
 export type RuuviManufacturerId = "499";
-export type RuuviVersion = 5;
-export type Humidity = {};
-export type Pressure = {};
-export type Acceleration = {};
-export type Voltage = {};
-export type DBM = {};
-export type MovementCounter = {};
-export type MeasurementSequence = {};
-export type MACAddress = {};
-
-export type DataFormat5 = {
-  manufacturerId: RuuviManufacturerId;
-  version: RuuviVersion;
-  humidity: Humidity;
-  pressure: Pressure;
-  acceleration: Acceleration;
-  power: Voltage;
-  txPower: DBM;
-  movementCounter: MovementCounter;
-  measurementSequence: MeasurementSequence;
-  mac: MACAddress;
-};
-
-export type Either<T> = { type: "ok"; value: T } | { type: "error"; message: string };
-
-export type RuuviData = DataFormat5;
-
 const ruuviManufacturerId = "499" satisfies RuuviManufacturerId;
 
-function parseDataFormat5(input: Buffer): Partial<RuuviData> {
-  return {
-    manufacturerId: "499",
-    version: 5
-  };
-}
+export type DataFormats = [5, DataFormat5];
+export type DataFormatVersion = GetVersion<DataFormats>;
+export type RuuviData = GetFormats<DataFormats>;
 
-function safeParse(input: Buffer): Either<RuuviData> {
+export function safeParse(input: Buffer): Either<RuuviData> {
   const manufacturerId = input.readInt16LE(0).toString(16);
   if (manufacturerId !== ruuviManufacturerId) {
     return { type: "error", message: "Unknown manufacturer id" };
   }
 
+  let parser: (b: Buffer) => RuuviData;
+  const version = input.readInt8(2);
+
+  switch (version) {
+    case 5:
+      parser = dataFormat5.parse;
+      break;
+    default:
+      return { type: "error", message: "Unknown data format" };
+  }
+
   return {
     type: "ok",
-    value: parseDataFormat5(input) as RuuviData
+    value: parser(input) as RuuviData
   };
 }
 
