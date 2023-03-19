@@ -1,5 +1,5 @@
 {
-  "name": "ruuvi",
+  "name": "ruuvi-collector",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -21,10 +21,7 @@
     "@tsconfig/node-lts-strictest-esm": "~18.12.1",
     "@types/heft-jest": "~1.0.3",
     "@types/node": "~18.15.3",
-    "@typescript-eslint/eslint-plugin": "~5.55.0",
-    "@typescript-eslint/parser": "~5.55.0",
     "eslint": "~8.36.0",
-    "eslint-config-prettier": "~8.7.0",
     "typescript": "~5.0.2"
   }
 }

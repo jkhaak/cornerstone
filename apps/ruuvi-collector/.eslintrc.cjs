@@ -2,15 +2,13 @@
 require("@rushstack/eslint-config/patch/modern-module-resolution");
 
 module.exports = {
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:@typescript-eslint/strict",
-    "prettier"
-  ],
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
-  root: true,
+  extends: ["@rushstack/eslint-config/profile/node"],
+  rules: {
+    // disable typedef
+    "@rushstack/typedef-var": "off",
+
+    // prefer types
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"]
+  },
   parserOptions: { tsconfigRootDir: __dirname }
 };
