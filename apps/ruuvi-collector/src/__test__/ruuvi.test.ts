@@ -7,7 +7,7 @@ describe("Ruuvi tag advertisement data parser", () => {
   const adData2 = Buffer.from("99040511623a3fc8d601c80394ffe4b356988f7adb7a25194f70", "hex");
 
   it("should be able to parse advertisement data", () => {
-    expect(Ruuvi.parse(adData1)).toStrictEqual({
+    expect(Ruuvi.parse(adData1)).toMatchObject({
       manufacturerId: "499",
       version: 5
     });

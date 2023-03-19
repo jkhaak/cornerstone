@@ -27,6 +27,14 @@ export type Format = {
 export function parse(input: Buffer): RuuviData {
   return {
     manufacturerId: "499",
-    version: 5
-  } as RuuviData;
+    version: 5,
+    humidity: 0,
+    pressure: 0,
+    acceleration: { x: 0, y: 0, z: 0 },
+    power: 0,
+    txPower: 0,
+    movementCounter: 0,
+    measurementSequence: 0,
+    mac: ""
+  };
 }

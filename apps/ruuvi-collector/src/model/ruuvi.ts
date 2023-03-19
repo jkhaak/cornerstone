@@ -28,7 +28,7 @@ export function safeParse(input: Buffer): Either<RuuviData> {
 
   return {
     type: "ok",
-    value: parser(input) as RuuviData
+    value: parser(input)
   };
 }
 
