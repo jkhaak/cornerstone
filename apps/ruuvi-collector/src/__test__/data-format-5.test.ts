@@ -13,13 +13,13 @@ describe("Data format 5 specs", () => {
       acceleration: {
         x: 0,
         y: 0,
-        z: 0
+        z: 0,
       },
       power: 0,
       txPower: 0,
       movementCounter: 0,
       measurementSequence: 0,
-      mac: ""
+      mac: "",
     });
   });
 });

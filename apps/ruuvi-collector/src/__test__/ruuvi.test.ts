@@ -9,7 +9,7 @@ describe("Ruuvi tag advertisement data parser", () => {
   it("should be able to parse advertisement data", () => {
     expect(Ruuvi.parse(adData1)).toMatchObject({
       manufacturerId: "499",
-      version: 5
+      version: 5,
     });
   });
 

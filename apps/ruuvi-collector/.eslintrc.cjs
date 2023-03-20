@@ -8,7 +8,7 @@ module.exports = {
     "@rushstack/typedef-var": "off",
 
     // prefer types
-    "@typescript-eslint/consistent-type-definitions": ["error", "type"]
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
   },
-  parserOptions: { tsconfigRootDir: __dirname }
+  parserOptions: { tsconfigRootDir: __dirname },
 };

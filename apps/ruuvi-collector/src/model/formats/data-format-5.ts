@@ -35,6 +35,6 @@ export function parse(input: Buffer): RuuviData {
     txPower: 0,
     movementCounter: 0,
     measurementSequence: 0,
-    mac: ""
+    mac: "",
   };
 }

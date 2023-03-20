@@ -2,6 +2,7 @@
 common/changes
 common/scripts
 common/config
+common/temp
 CHANGELOG.*
 
 # Package manager files
@@ -10,5 +11,9 @@ shrinkwrap.json
 
 # Build outputs
 dist
+dist-commonjs
+temp
+.heft
+.rush
 
 *.md
