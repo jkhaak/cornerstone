@@ -25,6 +25,16 @@ export type Format = {
   mac: MACAddress;
 };
 
+export function parseTemperature(input: Buffer, offset: number = 0): Temperature {
+  const num = input.readInt16BE(offset) / 200.0;
+  return -163.84 < num && num < 163.84 ? num : NaN;
+}
+
+export function parseHumidity(input: Buffer, offset: number = 0): Humidity {
+  const num = input.readUInt16BE(offset) / 400.0;
+  return 0 <= num && num <= 100 ? num : NaN;
+}
+
 export function parse(input: Buffer): RuuviData {
   return {
     manufacturerId: "499",
