@@ -7,7 +7,7 @@ import type { Format as DataFormat5 } from "./data-format-5";
 export type RuuviManufacturerId = "499";
 
 /**
- * Temperature in 0.005 degrees.
+ * Temperature (16bit signed integer) in 0.005 degrees.
  *
  * Allowed range -32_757..32_767.
  */

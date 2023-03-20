@@ -4,7 +4,7 @@ require("@rushstack/eslint-config/patch/modern-module-resolution");
 module.exports = {
   extends: ["@rushstack/eslint-config/profile/node"],
   rules: {
-    // disable typedef
+    "@typescript-eslint/explicit-function-return-type": "off",
     "@rushstack/typedef-var": "off",
 
     // prefer types

@@ -14,8 +14,8 @@ import type {
 
 export type Format = {
   manufacturerId: RuuviManufacturerId;
-  temperature: Temperature;
   version: DataFormatVersion;
+  temperature: Temperature;
   humidity: Humidity;
   pressure: Pressure;
   acceleration: Acceleration;
