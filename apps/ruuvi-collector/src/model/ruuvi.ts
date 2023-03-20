@@ -1,13 +1,8 @@
-import type { Format as DataFormat5 } from "./formats/data-format-5";
 import * as dataFormat5 from "./formats/data-format-5";
-import type { Either, GetVersion, GetFormats } from "./utils";
+import type { RuuviData, RuuviManufacturerId } from "./formats/ruuvi-data-types";
+import type { Either } from "./utils";
 
-export type RuuviManufacturerId = "499";
 const ruuviManufacturerId = "499" satisfies RuuviManufacturerId;
-
-export type DataFormats = [5, DataFormat5];
-export type DataFormatVersion = GetVersion<DataFormats>;
-export type RuuviData = GetFormats<DataFormats>;
 
 export function safeParse(input: Buffer): Either<RuuviData> {
   const manufacturerId = input.readInt16LE(0).toString(16);

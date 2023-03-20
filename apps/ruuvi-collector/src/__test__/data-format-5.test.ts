@@ -15,8 +15,10 @@ describe("Data format 5 specs", () => {
         y: 0,
         z: 0,
       },
-      power: 0,
-      txPower: 0,
+      power: {
+        voltage: 0,
+        tx: 0,
+      },
       movementCounter: 0,
       measurementSequence: 0,
       mac: "",
