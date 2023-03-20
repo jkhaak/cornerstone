@@ -1,14 +1,7 @@
 *
 
-!.eslintrc.cjs
 !.gitignore
 !README.md
-!package.json
-!tsconfig.json
-
-!/*/
-!/apps/*/
-!/lib/*/
 
 !/.editorconfig
 !/.gitattributes
@@ -17,3 +10,7 @@
 !/.prettierrc.js
 !/LICENCE
 !/rush.json
+
+!/*/
+!/apps/*/
+!/lib/*/

@@ -1,6 +1,6 @@
-import type { Format as DataFormat5 } from "./formats/data-format-5.js";
-import * as dataFormat5 from "./formats/data-format-5.js";
-import type { Either, GetVersion, GetFormats } from "./utils.js";
+import type { Format as DataFormat5 } from "./formats/data-format-5";
+import * as dataFormat5 from "./formats/data-format-5";
+import type { Either, GetVersion, GetFormats } from "./utils";
 
 export type RuuviManufacturerId = "499";
 const ruuviManufacturerId = "499" satisfies RuuviManufacturerId;

@@ -1,4 +1,4 @@
-import type { RuuviManufacturerId, DataFormatVersion, RuuviData } from "../ruuvi.js";
+import type { RuuviManufacturerId, DataFormatVersion, RuuviData } from "../ruuvi";
 
 import type {
   Humidity,
@@ -8,8 +8,8 @@ import type {
   DBM,
   MovementCounter,
   MeasurementSequence,
-  MACAddress
-} from "./ruuvi-fields.js";
+  MACAddress,
+} from "./ruuvi-fields";
 
 export type Format = {
   manufacturerId: RuuviManufacturerId;
