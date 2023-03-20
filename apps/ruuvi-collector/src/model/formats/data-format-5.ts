@@ -2,6 +2,7 @@ import type { DataFormatVersion, RuuviData } from "./ruuvi-data-types";
 
 import type {
   RuuviManufacturerId,
+  Temperature,
   Humidity,
   Pressure,
   Acceleration,
@@ -13,6 +14,7 @@ import type {
 
 export type Format = {
   manufacturerId: RuuviManufacturerId;
+  temperature: Temperature;
   version: DataFormatVersion;
   humidity: Humidity;
   pressure: Pressure;
@@ -27,11 +29,14 @@ export function parse(input: Buffer): RuuviData {
   return {
     manufacturerId: "499",
     version: 5,
+    temperature: 0,
     humidity: 0,
     pressure: 0,
     acceleration: { x: 0, y: 0, z: 0 },
-    power: 0,
-    txPower: 0,
+    power: {
+      voltage: 0,
+      tx: 0,
+    },
     movementCounter: 0,
     measurementSequence: 0,
     mac: "",

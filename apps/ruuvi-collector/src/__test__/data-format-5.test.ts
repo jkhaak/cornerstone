@@ -8,6 +8,7 @@ describe("Data format 5 specs", () => {
     expect(parse(adData1)).toEqual({
       manufacturerId: "499",
       version: 5,
+      temperature: 0,
       humidity: 0,
       pressure: 0,
       acceleration: {
