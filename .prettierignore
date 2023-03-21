@@ -8,6 +8,7 @@ CHANGELOG.*
 # Package manager files
 pnpm-lock.yaml
 shrinkwrap.json
+node_modules
 
 # Build outputs
 dist
