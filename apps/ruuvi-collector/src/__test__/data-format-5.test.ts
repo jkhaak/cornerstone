@@ -1,21 +1,42 @@
 import * as DataFormat5 from "../model/formats/data-format-5";
 
-type TestValues<T, Input = string> = [Input, T];
+type TestValues<Input, Expected> = [Input, Expected];
+
+type TestValuesBuffer = TestValues<Buffer, number>;
+type TestValuesHex = TestValues<string, number>;
+type TestValuesNumber = TestValues<number, number>;
+
+type InputTypes = "UInt8" | "Int8" | "UInt16BE" | "hex";
+
+function toBuffer<
+  Input extends string | number,
+  Expected extends number,
+  TV extends TestValues<Input, Expected>
+>(inputType: InputTypes): (testValues: TV) => TestValuesBuffer {
+  return ([input, expected]: TV) => {
+    if (inputType === "hex" && typeof input === "string") {
+      return [Buffer.from(input, "hex"), expected];
+    } else if (inputType === "UInt8" && typeof input === "number") {
+      const buf = Buffer.alloc(1);
+      buf.writeUInt8(input);
+      return [buf, expected];
+    } else if (inputType === "Int8" && typeof input === "number") {
+      const buf = Buffer.alloc(1);
+      buf.writeInt8(input);
+      return [buf, expected];
+    } else if (inputType === "UInt16BE" && typeof input === "number") {
+      const buf = Buffer.alloc(2);
+      buf.writeUInt16BE(input);
+      return [buf, expected];
+    }
+    throw new Error("Exhaustive check failure in test");
+  };
+}
 
 const testWith =
   <T>(fn: (b: Buffer) => T) =>
-  ([input, expected]: TestValues<T, number | string>) => {
-    let buf;
-    if (typeof input === "string") {
-      buf = Buffer.from(input, "hex");
-    } else if (typeof input === "number") {
-      buf = Buffer.alloc(2);
-      buf.writeUInt16BE(input);
-    } else {
-      throw new Error("unknown type");
-    }
-
-    expect(fn(buf)).toBe(expected);
+  ([input, expected]: TestValuesBuffer) => {
+    expect(fn(input)).toBe(expected);
   };
 
 describe("Data format 5 specs", () => {
@@ -44,25 +65,62 @@ describe("Data format 5 specs", () => {
     });
   });
 
-  it("should parse temperature correctly", () => {
+  it("should parse temperature", () => {
     const testValues = [
       ["0000", 0],
       ["01c3", 2.255],
       ["fe3d", -2.255],
       ["8000", NaN],
-    ] satisfies TestValues<number, string>[];
+    ] satisfies TestValuesHex[];
 
-    testValues.forEach(testWith(DataFormat5.parseTemperature));
+    const buffered = testValues.map(toBuffer("hex")) satisfies TestValuesBuffer[];
+
+    buffered.forEach(testWith(DataFormat5.parseTemperature));
   });
 
-  it.only("should parse humidity correctly", () => {
+  it("should parse humidity", () => {
     const testValues = [
-      [0x000, 0],
-      [10010, 25.025],
-      [40000, 100.0],
-      [65535, NaN],
-    ] satisfies TestValues<number, number>[];
+      [0, 0],
+      [10_010, 25.025],
+      [40_000, 100.0],
+      [65_535, NaN],
+    ] satisfies TestValuesNumber[];
 
-    testValues.forEach(testWith(DataFormat5.parseHumidity));
+    const buffered = testValues.map(toBuffer("UInt16BE")) satisfies TestValuesBuffer[];
+    buffered.forEach(testWith(DataFormat5.parseHumidity));
+  });
+
+  it("should parse atmospheric pressure", () => {
+    const testValues = [
+      [0, 50_000],
+      [51_325, 10_1325],
+      [65_534, 11_5534],
+      [65_535, NaN],
+    ] satisfies TestValuesNumber[];
+
+    const buffered = testValues.map(toBuffer("UInt16BE")) satisfies TestValuesBuffer[];
+    buffered.forEach(testWith(DataFormat5.parsePressure));
+  });
+
+  it("should parse acceleration", () => {
+    const testValues = [
+      ["fc18", -1_000],
+      ["03e8", 1_000],
+      ["8000", NaN],
+    ] satisfies TestValuesHex[];
+
+    const buffered = testValues.map(toBuffer("hex")) satisfies TestValuesBuffer[];
+
+    buffered.forEach(testWith(DataFormat5.parseAcceleration));
+  });
+
+  it("should parse movement counter", () => {
+    const testValues = [
+      [0, 0],
+      [100, 100],
+      [255, NaN],
+    ] satisfies TestValuesNumber[];
+    const buffered = testValues.map(toBuffer("UInt8")) satisfies TestValuesBuffer[];
+    buffered.forEach(testWith(DataFormat5.parseMovementCounter));
   });
 });

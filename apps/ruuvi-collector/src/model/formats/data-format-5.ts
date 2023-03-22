@@ -1,4 +1,4 @@
-import type { DataFormatVersion, RuuviData } from "./ruuvi-data-types";
+import type { AccelerationValue, DataFormatVersion, RuuviData } from "./ruuvi-data-types";
 
 import type {
   RuuviManufacturerId,
@@ -33,6 +33,21 @@ export function parseTemperature(input: Buffer, offset: number = 0): Temperature
 export function parseHumidity(input: Buffer, offset: number = 0): Humidity {
   const num = input.readUInt16BE(offset) / 400.0;
   return 0 <= num && num <= 100 ? num : NaN;
+}
+
+export function parsePressure(input: Buffer, offset: number = 0): Pressure {
+  const num = input.readUInt16BE(offset) + 50_000;
+  return num < 115_535 ? num : NaN;
+}
+
+export function parseAcceleration(input: Buffer, offset: number = 0): AccelerationValue {
+  const num = input.readInt16BE(offset);
+  return -32768 < num && num < 32767 ? num : NaN;
+}
+
+export function parseMovementCounter(input: Buffer, offset: number = 0): MovementCounter {
+  const num = input.readUInt8(offset);
+  return num < 255 ? num : NaN;
 }
 
 export function parse(input: Buffer): RuuviData {
