@@ -106,4 +106,15 @@ describe("Data format 5 specs", () => {
     const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
     buffered.forEach(testWith(DataFormat5.parseTxPower));
   });
+
+  it("should parse measurement sequence number", () => {
+    const testValues = [
+      [0, 0],
+      [1000, 1000],
+      [65535, NaN],
+    ] satisfies TestValuesNumber[];
+
+    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
+    buffered.forEach(testWith(DataFormat5.parseMeasurementSequenceNumber));
+  });
 });

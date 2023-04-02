@@ -59,8 +59,13 @@ export function parseBatteryVoltage(input: Buffer, offset: number = 0): BatteryV
 }
 
 export function parseTxPower(input: Buffer, offset: number = 0): TxPower {
-  const num = input.readUint8(offset) / 0.5 - 40;
+  const num = input.readUInt8(offset) / 0.5 - 40;
   return -40 <= num && num < 22 ? num : NaN;
+}
+
+export function parseMeasurementSequenceNumber(input: Buffer, offset: number = 0): MeasurementSequence {
+  const num = input.readUInt16BE(offset);
+  return num < 65535 ? num : NaN;
 }
 
 export function parse(input: Buffer): RuuviData {
