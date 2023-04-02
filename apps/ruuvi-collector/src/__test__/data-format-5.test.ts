@@ -84,4 +84,26 @@ describe("Data format 5 specs", () => {
     const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
     buffered.forEach(testWith(DataFormat5.parseMovementCounter));
   });
+
+  it("should parse battery voltage", () => {
+    const testValues = [
+      [0, 1600],
+      [1400, 3000],
+      [2047, NaN],
+    ] satisfies TestValuesNumber[];
+
+    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
+    buffered.forEach(testWith(DataFormat5.parseBatteryVoltage));
+  });
+
+  it("should parse tx power", () => {
+    const testValues = [
+      [0, -40],
+      [22, 4],
+      [31, NaN],
+    ] satisfies TestValuesNumber[];
+
+    const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
+    buffered.forEach(testWith(DataFormat5.parseTxPower));
+  });
 });

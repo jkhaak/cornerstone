@@ -1,15 +1,18 @@
-import type { AccelerationValue, DataFormatVersion, RuuviData } from "./ruuvi-data-types";
-
 import type {
+  Acceleration,
+  AccelerationValue,
+  BatteryVoltage,
+  DataFormatVersion,
+  Humidity,
+  MACAddress,
+  MeasurementSequence,
+  MovementCounter,
+  Power,
+  Pressure,
+  RuuviData,
   RuuviManufacturerId,
   Temperature,
-  Humidity,
-  Pressure,
-  Acceleration,
-  Power,
-  MovementCounter,
-  MeasurementSequence,
-  MACAddress,
+  TxPower,
 } from "./ruuvi-data-types";
 
 export type Format = {
@@ -48,6 +51,16 @@ export function parseAcceleration(input: Buffer, offset: number = 0): Accelerati
 export function parseMovementCounter(input: Buffer, offset: number = 0): MovementCounter {
   const num = input.readUInt8(offset);
   return num < 255 ? num : NaN;
+}
+
+export function parseBatteryVoltage(input: Buffer, offset: number = 0): BatteryVoltage {
+  const num = input.readUInt16BE(offset) + 1600;
+  return num <= 3600 ? num : NaN;
+}
+
+export function parseTxPower(input: Buffer, offset: number = 0): TxPower {
+  const num = input.readUint8(offset) / 0.5 - 40;
+  return -40 <= num && num < 22 ? num : NaN;
 }
 
 export function parse(input: Buffer): RuuviData {

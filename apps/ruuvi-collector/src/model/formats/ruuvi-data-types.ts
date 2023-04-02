@@ -48,8 +48,8 @@ export type AccelerationValue = number;
  * -40dBm, in 2dBm steps (-40dBm to +20dBM range).
  */
 export type Power = {
-  voltage: Voltage;
-  tx: DBM;
+  voltage: BatteryVoltage;
+  tx: TxPower;
 };
 
 /**
@@ -57,14 +57,14 @@ export type Power = {
  *
  * Allowed range 0..2046.
  */
-export type Voltage = number;
+export type BatteryVoltage = number;
 
 /**
  * TX Power above -40dBm, in 2dBm steps (-40dBm to +20dBM range).
  *
  * Allowed range 0..30.
  */
-export type DBM = number;
+export type TxPower = number;
 
 /**
  * Movement counter (8bit unsigned), incremented by motion detection interrupts from
