@@ -1,12 +1,5 @@
 import * as DataFormat5 from "../model/formats/data-format-5";
-import {
-  createNumberInput,
-  createStringInput,
-  TestValuesHex,
-  TestValuesNumber,
-  testWith,
-  toBuffer,
-} from "./test-util";
+import { createTestValues, TestValuesHex, TestValuesNumber, testWith, toBuffer } from "./test-util";
 
 describe("Data format 5 specs", () => {
   const adData1 = Buffer.from("99040504aa7bb6c8f4fd0cfd4800007c76b92fa5f897846a37e6", "hex");
@@ -42,7 +35,7 @@ describe("Data format 5 specs", () => {
       ["8000", NaN],
     ] satisfies TestValuesHex[];
 
-    const buffered = testValues.map(toBuffer(createStringInput("hex")));
+    const buffered = testValues.map(toBuffer(createTestValues("hex")));
     buffered.forEach(testWith(DataFormat5.parseTemperature));
   });
 
@@ -54,7 +47,7 @@ describe("Data format 5 specs", () => {
       [65_535, NaN],
     ] satisfies TestValuesNumber[];
 
-    const buffered = testValues.map(toBuffer(createNumberInput("UInt16BE")));
+    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
     buffered.forEach(testWith(DataFormat5.parseHumidity));
   });
 
@@ -66,7 +59,7 @@ describe("Data format 5 specs", () => {
       [65_535, NaN],
     ] satisfies TestValuesNumber[];
 
-    const buffered = testValues.map(toBuffer(createNumberInput("UInt16BE")));
+    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
     buffered.forEach(testWith(DataFormat5.parsePressure));
   });
 
@@ -77,7 +70,7 @@ describe("Data format 5 specs", () => {
       ["8000", NaN],
     ] satisfies TestValuesHex[];
 
-    const buffered = testValues.map(toBuffer(createStringInput("hex")));
+    const buffered = testValues.map(toBuffer(createTestValues("hex")));
     buffered.forEach(testWith(DataFormat5.parseAcceleration));
   });
 
@@ -88,7 +81,7 @@ describe("Data format 5 specs", () => {
       [255, NaN],
     ] satisfies TestValuesNumber[];
 
-    const buffered = testValues.map(toBuffer(createNumberInput("UInt8")));
+    const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
     buffered.forEach(testWith(DataFormat5.parseMovementCounter));
   });
 });

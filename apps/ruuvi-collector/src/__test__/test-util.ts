@@ -1,4 +1,4 @@
-import { exhausted, ValueOf } from "../model/utils";
+import { exhausted } from "../model/utils";
 
 export type TestValues<Input, Expected> = [Input, Expected];
 
@@ -9,9 +9,18 @@ export type TestValuesNumber = TestValues<number, number>;
 export const inputNumberMethods = ["UInt8", "Int8", "UInt16BE"] as const;
 export const inputStringMethods = ["hex"] as const;
 
-export type InputNumberMethod = typeof inputNumberMethods[number];
-export type InputStringMethod = typeof inputStringMethods[number];
+function isInputNumberMethod(inputMethod: string): inputMethod is InputNumberMethod {
+  return inputNumberMethods.includes(inputMethod as InputNumberMethod);
+}
+
+function isInputStringMethod(inputMethod: string): inputMethod is InputStringMethod {
+  return inputStringMethods.includes(inputMethod as InputStringMethod);
+}
+
+export type InputNumberMethod = (typeof inputNumberMethods)[number];
+export type InputStringMethod = (typeof inputStringMethods)[number];
 export type InputTypes = InputNumberMethod | InputStringMethod;
+
 export type InputConfigString = {
   readonly inputType: "string";
   readonly inputMethod: InputStringMethod;
@@ -29,19 +38,22 @@ export const testWith =
     expect(fn(input)).toBe(expected);
   };
 
-export function createStringInput(inputMethod: InputStringMethod): InputConfigString {
-  return {
-    inputType: "string",
-    inputMethod,
-  };
-}
-
-export function createNumberInput(inputMethod: InputNumberMethod): InputConfigNumber {
-  return {
-    inputType: "number",
-    inputMethod,
-    allocSize: inputMethod === "UInt16BE" ? 2 : 1,
-  };
+export function createTestValues(inputMethod: InputStringMethod): InputConfigString;
+export function createTestValues(inputMethod: InputNumberMethod): InputConfigNumber;
+export function createTestValues(inputMethod: InputNumberMethod | InputStringMethod): InputConfig {
+  if (isInputStringMethod(inputMethod)) {
+    return {
+      inputType: "string",
+      inputMethod,
+    };
+  } else if (isInputNumberMethod(inputMethod)) {
+    return {
+      inputType: "number",
+      inputMethod,
+      allocSize: inputMethod === "UInt16BE" ? 2 : 1,
+    };
+  }
+  throw new Error("exhausted input methods");
 }
 
 export function toBuffer(
