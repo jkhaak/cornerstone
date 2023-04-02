@@ -9,3 +9,7 @@ export type GetFormats<Tuples extends [any, any]> = ValueOf<{
 export type GetVersion<Tuples extends [any, any]> = ValueOf<{
   [Tuple in Tuples as Tuple[0]]: Tuple[0];
 }>;
+
+export function exhausted(input: never): never {
+  throw new Error("Exhausted");
+}

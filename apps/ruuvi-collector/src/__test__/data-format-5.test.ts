@@ -1,43 +1,12 @@
 import * as DataFormat5 from "../model/formats/data-format-5";
-
-type TestValues<Input, Expected> = [Input, Expected];
-
-type TestValuesBuffer = TestValues<Buffer, number>;
-type TestValuesHex = TestValues<string, number>;
-type TestValuesNumber = TestValues<number, number>;
-
-type InputTypes = "UInt8" | "Int8" | "UInt16BE" | "hex";
-
-function toBuffer<
-  Input extends string | number,
-  Expected extends number,
-  TV extends TestValues<Input, Expected>
->(inputType: InputTypes): (testValues: TV) => TestValuesBuffer {
-  return ([input, expected]: TV) => {
-    if (inputType === "hex" && typeof input === "string") {
-      return [Buffer.from(input, "hex"), expected];
-    } else if (inputType === "UInt8" && typeof input === "number") {
-      const buf = Buffer.alloc(1);
-      buf.writeUInt8(input);
-      return [buf, expected];
-    } else if (inputType === "Int8" && typeof input === "number") {
-      const buf = Buffer.alloc(1);
-      buf.writeInt8(input);
-      return [buf, expected];
-    } else if (inputType === "UInt16BE" && typeof input === "number") {
-      const buf = Buffer.alloc(2);
-      buf.writeUInt16BE(input);
-      return [buf, expected];
-    }
-    throw new Error("Exhaustive check failure in test");
-  };
-}
-
-const testWith =
-  <T>(fn: (b: Buffer) => T) =>
-  ([input, expected]: TestValuesBuffer) => {
-    expect(fn(input)).toBe(expected);
-  };
+import {
+  createNumberInput,
+  createStringInput,
+  TestValuesHex,
+  TestValuesNumber,
+  testWith,
+  toBuffer,
+} from "./test-util";
 
 describe("Data format 5 specs", () => {
   const adData1 = Buffer.from("99040504aa7bb6c8f4fd0cfd4800007c76b92fa5f897846a37e6", "hex");
@@ -73,8 +42,7 @@ describe("Data format 5 specs", () => {
       ["8000", NaN],
     ] satisfies TestValuesHex[];
 
-    const buffered = testValues.map(toBuffer("hex")) satisfies TestValuesBuffer[];
-
+    const buffered = testValues.map(toBuffer(createStringInput("hex")));
     buffered.forEach(testWith(DataFormat5.parseTemperature));
   });
 
@@ -86,7 +54,7 @@ describe("Data format 5 specs", () => {
       [65_535, NaN],
     ] satisfies TestValuesNumber[];
 
-    const buffered = testValues.map(toBuffer("UInt16BE")) satisfies TestValuesBuffer[];
+    const buffered = testValues.map(toBuffer(createNumberInput("UInt16BE")));
     buffered.forEach(testWith(DataFormat5.parseHumidity));
   });
 
@@ -98,7 +66,7 @@ describe("Data format 5 specs", () => {
       [65_535, NaN],
     ] satisfies TestValuesNumber[];
 
-    const buffered = testValues.map(toBuffer("UInt16BE")) satisfies TestValuesBuffer[];
+    const buffered = testValues.map(toBuffer(createNumberInput("UInt16BE")));
     buffered.forEach(testWith(DataFormat5.parsePressure));
   });
 
@@ -109,8 +77,7 @@ describe("Data format 5 specs", () => {
       ["8000", NaN],
     ] satisfies TestValuesHex[];
 
-    const buffered = testValues.map(toBuffer("hex")) satisfies TestValuesBuffer[];
-
+    const buffered = testValues.map(toBuffer(createStringInput("hex")));
     buffered.forEach(testWith(DataFormat5.parseAcceleration));
   });
 
@@ -120,7 +87,8 @@ describe("Data format 5 specs", () => {
       [100, 100],
       [255, NaN],
     ] satisfies TestValuesNumber[];
-    const buffered = testValues.map(toBuffer("UInt8")) satisfies TestValuesBuffer[];
+
+    const buffered = testValues.map(toBuffer(createNumberInput("UInt8")));
     buffered.forEach(testWith(DataFormat5.parseMovementCounter));
   });
 });
