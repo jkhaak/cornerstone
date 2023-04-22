@@ -2,7 +2,6 @@ import * as DataFormat5 from "../model/formats/data-format-5";
 import type { Format as TDataFormat5 } from "../model/formats/data-format-5";
 import {
   createTestValues,
-  logInBinary,
   TestValuesBufferObject,
   TestValuesHex,
   TestValuesNumber,

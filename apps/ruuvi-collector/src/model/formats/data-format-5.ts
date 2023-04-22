@@ -83,8 +83,10 @@ export function parsePower(input: Buffer, offset: number = 0): Power {
     throw new Error("method=data-format-5.parsePower msg=input buffer out of range");
   }
 
+  // eslint-disable-next-line no-bitwise
   const info = (leftByte << 8) | rightByte;
   const voltage = _.floor((info >>> 5) / 1000 + 1.6, 3);
+  // eslint-disable-next-line no-bitwise
   const tx = (rightByte & 0b11111) * 2 - 40;
 
   return {
