@@ -5,6 +5,8 @@ export type TestValues<Input, Expected> = [Input, Expected];
 export type TestValuesBuffer = TestValues<Buffer, number>;
 export type TestValuesHex = TestValues<string, number>;
 export type TestValuesNumber = TestValues<number, number>;
+export type TestValuesBufferObject = TestValues<Buffer, object>;
+export type TestValuesNumberObject = TestValues<number, object>;
 
 export const inputNumberMethods = ["UInt8", "Int8", "UInt16BE"] as const;
 export const inputStringMethods = ["hex"] as const;
@@ -36,6 +38,12 @@ export const testWith =
   <T>(fn: (b: Buffer) => T) =>
   ([input, expected]: TestValuesBuffer) => {
     expect(fn(input)).toBe(expected);
+  };
+
+export const testWithMatch =
+  <T>(fn: (b: Buffer) => T) =>
+  ([input, expected]: TestValuesBufferObject) => {
+    expect(fn(input)).toMatchObject(expected);
   };
 
 export function createTestValues(inputMethod: InputStringMethod): InputConfigString;
@@ -88,4 +96,15 @@ export function toBuffer(
     }
     throw new Error("inputConfig inputType exhausted");
   };
+}
+
+export function logInBinary(buffer: Buffer, start: number = 0, end: number | undefined = undefined) {
+  const _end = end === undefined ? buffer.length : end;
+  const buf = Buffer.alloc(_end - start);
+  buffer.copy(buf, 0, start, _end);
+
+  const paddedBigInt = BigInt("0x" + buf.toString("hex"))
+    .toString(2)
+    .padStart(buf.length * 8, "0");
+  console.log(`${buf.toString("hex")}:${paddedBigInt}`);
 }

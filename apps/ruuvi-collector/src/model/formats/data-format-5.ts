@@ -1,8 +1,7 @@
-import type { ValueOf } from "../utils";
+import _ from "lodash";
 import type {
   Acceleration,
   AccelerationValue,
-  BatteryVoltage,
   DataFormatVersion,
   Humidity,
   MACAddress,
@@ -13,7 +12,6 @@ import type {
   RuuviData,
   RuuviManufacturerId,
   Temperature,
-  TxPower,
 } from "./ruuvi-data-types";
 
 export type Format = {
@@ -37,20 +35,17 @@ const specification: Specification<Format> = {
   manufacturerId: () => "499",
   version: () => 5,
   temperature: (b) => parseTemperature(b, 3),
-  humidity: (b) => parseHumidity(b, 4),
-  pressure: (b) => parsePressure(b, 6),
+  humidity: (b) => parseHumidity(b, 5),
+  pressure: (b) => parsePressure(b, 7),
   acceleration: (b) => ({
-    x: parseAcceleration(b, 8),
-    y: parseAcceleration(b, 10),
-    z: parseAcceleration(b, 12),
+    x: parseAcceleration(b, 9),
+    y: parseAcceleration(b, 11),
+    z: parseAcceleration(b, 13),
   }),
-  power: (b) => ({
-    voltage: parseBatteryVoltage(b, 14),
-    tx: parseTxPower(b, 14),
-  }),
-  movementCounter: (b) => parseMovementCounter(b, 15),
-  measurementSequence: (b) => parseMeasurementSequenceNumber(b, 17),
-  mac: (b) => b.toString("hex"),
+  power: (b) => parsePower(b, 15),
+  movementCounter: (b) => parseMovementCounter(b, 17),
+  measurementSequence: (b) => parseMeasurementSequenceNumber(b, 18),
+  mac: parseMac,
 } satisfies Specification<Format>;
 
 const spec = Object.entries(specification);
@@ -62,7 +57,7 @@ export function parseTemperature(input: Buffer, offset: number = 0): Temperature
 
 export function parseHumidity(input: Buffer, offset: number = 0): Humidity {
   const num = input.readUInt16BE(offset) / 400.0;
-  return 0 <= num && num <= 100 ? num : NaN;
+  return 0 <= num && num <= 163.835 ? num : NaN;
 }
 
 export function parsePressure(input: Buffer, offset: number = 0): Pressure {
@@ -72,7 +67,7 @@ export function parsePressure(input: Buffer, offset: number = 0): Pressure {
 
 export function parseAcceleration(input: Buffer, offset: number = 0): AccelerationValue {
   const num = input.readInt16BE(offset);
-  return -32768 < num && num < 32767 ? num : NaN;
+  return -32768 < num && num <= 32767 ? num / 1000.0 : NaN;
 }
 
 export function parseMovementCounter(input: Buffer, offset: number = 0): MovementCounter {
@@ -80,14 +75,22 @@ export function parseMovementCounter(input: Buffer, offset: number = 0): Movemen
   return num < 255 ? num : NaN;
 }
 
-export function parseBatteryVoltage(input: Buffer, offset: number = 0): BatteryVoltage {
-  const num = input.readUInt16BE(offset) + 1600;
-  return num <= 3600 ? num : NaN;
-}
+export function parsePower(input: Buffer, offset: number = 0): Power {
+  const leftByte = input[offset];
+  const rightByte = input[offset + 1];
 
-export function parseTxPower(input: Buffer, offset: number = 0): TxPower {
-  const num = input.readUInt8(offset) / 0.5 - 40;
-  return -40 <= num && num < 22 ? num : NaN;
+  if (leftByte === undefined || rightByte === undefined) {
+    throw new Error("method=data-format-5.parsePower msg=input buffer out of range");
+  }
+
+  const info = (leftByte << 8) | rightByte;
+  const voltage = _.floor((info >>> 5) / 1000 + 1.6, 3);
+  const tx = (rightByte & 0b11111) * 2 - 40;
+
+  return {
+    voltage: voltage <= 3.646 ? voltage : NaN,
+    tx: tx < 22 ? tx : NaN,
+  };
 }
 
 export function parseMeasurementSequenceNumber(input: Buffer, offset: number = 0): MeasurementSequence {
@@ -98,4 +101,9 @@ export function parseMeasurementSequenceNumber(input: Buffer, offset: number = 0
 export function parse(input: Buffer): RuuviData {
   const dataEntries = spec.map(([key, fn]) => [key, fn(input)]);
   return Object.fromEntries(dataEntries);
+}
+
+function parseMac(buffer: Buffer): MACAddress | undefined {
+  const mac = buffer.toString("hex").slice(40).toUpperCase();
+  return /^F{12}$/.test(mac) ? undefined : mac;
 }

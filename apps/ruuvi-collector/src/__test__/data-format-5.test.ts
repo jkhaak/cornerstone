@@ -1,109 +1,95 @@
 import * as DataFormat5 from "../model/formats/data-format-5";
 import type { Format as TDataFormat5 } from "../model/formats/data-format-5";
-import { createTestValues, TestValuesHex, TestValuesNumber, testWith, toBuffer } from "./test-util";
+import {
+  createTestValues,
+  logInBinary,
+  TestValuesBufferObject,
+  TestValuesHex,
+  TestValuesNumber,
+  TestValuesNumberObject,
+  testWith,
+  testWithMatch,
+  toBuffer,
+} from "./test-util";
 
 type TestVector = [string, TDataFormat5];
 
+const validData: TestVector = [
+  "99040512FC5394C37C0004FFFC040CAC364200CDCBB8334C884F",
+  {
+    manufacturerId: "499",
+    version: 5,
+    temperature: 24.3,
+    pressure: 100_044,
+    humidity: 53.49,
+    acceleration: { x: 0.004, y: -0.004, z: 1.036 },
+    power: { voltage: 2.977, tx: 4 },
+    movementCounter: 66,
+    measurementSequence: 205,
+    mac: "CBB8334C884F",
+  },
+];
+const maximumData: TestVector = [
+  "9904057FFFFFFEFFFE7FFF7FFF7FFFFFDEFEFFFECBB8334C884F",
+  {
+    manufacturerId: "499",
+    version: 5,
+    temperature: 163.835,
+    pressure: 115_534,
+    humidity: 163.835,
+    acceleration: { x: 32.767, y: 32.767, z: 32.767 },
+    power: { voltage: 3.646, tx: 20 },
+    movementCounter: 254,
+    measurementSequence: 65_534,
+    mac: "CBB8334C884F",
+  },
+];
+const minimumData: TestVector = [
+  "9904058001000000008001800180010000000000CBB8334C884F",
+  {
+    manufacturerId: "499",
+    version: 5,
+    temperature: -163.835,
+    pressure: 50_000,
+    humidity: 0.0,
+    acceleration: { x: -32.767, y: -32.767, z: -32.767 },
+    power: { voltage: 1.6, tx: -40 },
+    movementCounter: 0,
+    measurementSequence: 0,
+    mac: "CBB8334C884F",
+  },
+];
+const invalidData: TestVector = [
+  "9904058000FFFFFFFF800080008000FFFFFFFFFFFFFFFFFFFFFF",
+  {
+    manufacturerId: "499",
+    version: 5,
+    temperature: NaN,
+    pressure: NaN,
+    humidity: NaN,
+    acceleration: { x: NaN, y: NaN, z: NaN },
+    power: { voltage: NaN, tx: NaN },
+    movementCounter: NaN,
+    measurementSequence: NaN,
+    mac: undefined,
+  },
+];
+
+const testVectors: TestVector[] = [validData, maximumData, minimumData, invalidData];
+
 describe("Data format 5 specs", () => {
-  const adData1 = Buffer.from("99040504aa7bb6c8f4fd0cfd4800007c76b92fa5f897846a37e6", "hex");
-  const adData2 = Buffer.from("99040511623a3fc8d601c80394ffe4b356988f7adb7a25194f70", "hex");
-
-  const validData: TestVector = [
-    "99040512FC5394C37C0004FFFC040CAC364200CDCBB8334C884F",
-    {
-      manufacturerId: "499",
-      version: 5,
-      temperature: 24.3,
-      pressure: 100_044,
-      humidity: 53.49,
-      acceleration: { x: 0.004, y: -0.004, z: 1.036 },
-      power: { voltage: 2.977, tx: 4 },
-      movementCounter: 66,
-      measurementSequence: 205,
-      mac: "CBB8334C884F",
-    },
-  ];
-  const maximumData: TestVector = [
-    "9904057FFFFFFEFFFE7FFF7FFF7FFFFFDEFEFFFECBB8334C884F",
-    {
-      manufacturerId: "499",
-      version: 5,
-      temperature: 163.835,
-      pressure: 115_534,
-      humidity: 163.835,
-      acceleration: { x: 32.767, y: 32.767, z: 32.767 },
-      power: { voltage: 3.646, tx: 20 },
-      movementCounter: 254,
-      measurementSequence: 65_534,
-      mac: "CBB8334C884F",
-    },
-  ];
-  const minimumData: TestVector = [
-    "9904058001000000008001800180010000000000CBB8334C884F",
-    {
-      manufacturerId: "499",
-      version: 5,
-      temperature: -163.835,
-      pressure: 50_000,
-      humidity: 0.0,
-      acceleration: { x: -32.767, y: -32.767, z: -32.767 },
-      power: { voltage: 1.6, tx: -40 },
-      movementCounter: 0,
-      measurementSequence: 0,
-      mac: "CBB8334C884F",
-    },
-  ];
-  const invalidData: TestVector = [
-    "9904058000FFFFFFFF800080008000FFFFFFFFFFFFFFFFFFFFFF",
-    {
-      manufacturerId: "499",
-      version: 5,
-      temperature: NaN,
-      pressure: NaN,
-      humidity: NaN,
-      acceleration: { x: NaN, y: NaN, z: NaN },
-      power: { voltage: NaN, tx: NaN },
-      movementCounter: NaN,
-      measurementSequence: NaN,
-      mac: undefined,
-    },
-  ];
-
-  const testVectors: TestVector[] = [validData, maximumData, minimumData, invalidData];
-
   it("should parse raw binary data", () => {
     testVectors.forEach(([hexData, expected]) => {
-      const data = Buffer.from(hexData);
+      const data = Buffer.from(hexData, "hex");
 
       expect(DataFormat5.parse(data)).toStrictEqual(expected);
-    });
-  });
-
-  it("should support temperature", () => {
-    expect(DataFormat5.parse(adData1)).toEqual({
-      manufacturerId: "499",
-      version: 5,
-      temperature: 0,
-      humidity: 0,
-      pressure: 0,
-      acceleration: {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      power: {
-        voltage: 0,
-        tx: 0,
-      },
-      movementCounter: 0,
-      measurementSequence: 0,
-      mac: "",
     });
   });
 
   it("should parse temperature", () => {
     const testValues = [
       ["0000", 0],
+      ["12FC", 24.3],
       ["01c3", 2.255],
       ["fe3d", -2.255],
       ["8000", NaN],
@@ -111,6 +97,8 @@ describe("Data format 5 specs", () => {
 
     const buffered = testValues.map(toBuffer(createTestValues("hex")));
     buffered.forEach(testWith(DataFormat5.parseTemperature));
+
+    expect(DataFormat5.parseTemperature(Buffer.from("99040512FC", "hex"), 3)).toBe(24.3);
   });
 
   it("should parse humidity", () => {
@@ -139,8 +127,8 @@ describe("Data format 5 specs", () => {
 
   it("should parse acceleration", () => {
     const testValues = [
-      ["fc18", -1000],
-      ["03e8", 1000],
+      ["fc18", -1],
+      ["03e8", 1],
       ["8000", NaN],
     ] satisfies TestValuesHex[];
 
@@ -160,25 +148,36 @@ describe("Data format 5 specs", () => {
   });
 
   it("should parse battery voltage", () => {
-    const testValues = [
-      [0, 1600],
-      [1400, 3000],
-      [2047, NaN],
-    ] satisfies TestValuesNumber[];
+    const testValues: TestValuesNumberObject[] = [
+      [0, { voltage: 1.6 }],
+      [1400, { voltage: 3.0 }],
+      [2047, { voltage: NaN }],
+    ] satisfies TestValuesNumberObject[];
 
-    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-    buffered.forEach(testWith(DataFormat5.parseBatteryVoltage));
+    const buffered: TestValuesBufferObject[] = testValues.map(([value, expected]) => {
+      const tmp = value << 5;
+      const buf = Buffer.alloc(2);
+      buf.writeUInt16BE(tmp);
+      return [buf, expected] satisfies TestValuesBufferObject;
+    });
+
+    buffered.forEach(testWithMatch(DataFormat5.parsePower));
   });
 
   it("should parse tx power", () => {
-    const testValues = [
-      [0, -40],
-      [22, 4],
-      [31, NaN],
-    ] satisfies TestValuesNumber[];
+    const testValues: TestValuesNumberObject[] = [
+      [0, { tx: -40 }],
+      [22, { tx: 4 }],
+      [31, { tx: NaN }],
+    ] satisfies TestValuesNumberObject[];
 
-    const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
-    buffered.forEach(testWith(DataFormat5.parseTxPower));
+    const buffered: TestValuesBufferObject[] = testValues.map(([value, expected]) => {
+      const buf = Buffer.alloc(2);
+      buf.writeUInt16BE(value);
+      return [buf, expected] satisfies TestValuesBufferObject;
+    });
+
+    buffered.forEach(testWithMatch(DataFormat5.parsePower));
   });
 
   it("should parse measurement sequence number", () => {
