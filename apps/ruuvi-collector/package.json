@@ -9,11 +9,14 @@
   "module": "dist/index.js",
   "scripts": {
     "build": "heft build --clean",
+    "bundle": "heft build --clean && esbuild src/index.ts --bundle --minify --external:ws --external:@abandonware/bluetooth-hci-socket --outfile=lib/ruuvi-collector.js --format=cjs --platform=node",
     "test": "heft test --clean"
   },
   "dependencies": {
+    "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
     "@abandonware/noble": "~1.9.2-20",
-    "lodash": "~4.17.21"
+    "lodash": "~4.17.21",
+    "pino": "~8.11.0"
   },
   "devDependencies": {
     "@rushstack/eslint-config": "~3.2.0",
@@ -23,8 +26,10 @@
     "@types/heft-jest": "~1.0.3",
     "@types/lodash": "~4.14.194",
     "@types/node": "~18.15.13",
+    "esbuild": "~0.17.18",
     "eslint": "~8.38.0",
     "expect-type": "~0.15.0",
+    "pino-pretty": "~10.0.0",
     "typescript": "~5.0.4"
   }
 }

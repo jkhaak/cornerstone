@@ -1,6 +1,7 @@
 import * as dataFormat5 from "./formats/data-format-5";
 import type { RuuviData, RuuviManufacturerId } from "./formats/ruuvi-data-types";
 import type { Either } from "./utils";
+import logger from "../logger";
 
 const ruuviManufacturerId = "499" satisfies RuuviManufacturerId;
 
@@ -31,7 +32,7 @@ export function parseGraceful(input: Buffer): RuuviData | undefined {
   const either = safeParse(input);
 
   if (either.type === "error") {
-    console.log(either.message);
+    logger.error({ message: either.message });
     return undefined;
   }
 
