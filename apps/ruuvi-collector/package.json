@@ -9,7 +9,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "heft build --clean && npm run bundle",
-    "bundle": "esbuild src/index.ts --bundle --minify --external:fsevents --external:ws --external:@abandonware/bluetooth-hci-socket --outfile=lib/ruuvi-collector.js --format=cjs --platform=node",
+    "bundle": "esbuild src/index.ts --bundle --minify --log-level=warning --external:fsevents --external:ws --external:@abandonware/bluetooth-hci-socket --outfile=lib/ruuvi-collector.js --format=cjs --platform=node",
     "test": "heft test --clean"
   },
   "dependencies": {
