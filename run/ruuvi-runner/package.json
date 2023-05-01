@@ -1,0 +1,17 @@
+{
+  "name": "ruuvi-runner",
+  "version": "1.0.0",
+  "description": "runner environment",
+  "author": "Jani Haakana",
+  "main": "index.js",
+  "scripts": {
+    "build": "",
+    "start": "node ./node_modules/ruuvi-collector/dist/index.js",
+    "test": ""
+  },
+  "dependencies": {
+    "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
+    "ruuvi-collector": "workspace:*",
+    "ws": "~8.13.0"
+  }
+}

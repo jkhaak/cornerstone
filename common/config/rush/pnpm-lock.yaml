@@ -7,7 +7,6 @@ importers:
 
   ../../apps/ruuvi-collector:
     specifiers:
-      '@abandonware/bluetooth-hci-socket': ~0.5.3-10
       '@abandonware/noble': ~1.9.2-20
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.0
@@ -24,7 +23,6 @@ importers:
       pino-pretty: ~10.0.0
       typescript: ~5.0.4
     dependencies:
-      '@abandonware/bluetooth-hci-socket': 0.5.3-10
       '@abandonware/noble': 1.9.2-20
       lodash: 4.17.21
       pino: 8.11.0
@@ -41,6 +39,16 @@ importers:
       expect-type: 0.15.0
       pino-pretty: 10.0.0
       typescript: 5.0.4
+
+  ../../run/ruuvi-runner:
+    specifiers:
+      '@abandonware/bluetooth-hci-socket': ~0.5.3-10
+      ruuvi-collector: workspace:*
+      ws: ~8.13.0
+    dependencies:
+      '@abandonware/bluetooth-hci-socket': 0.5.3-10
+      ruuvi-collector: link:../../apps/ruuvi-collector
+      ws: 8.13.0
 
 packages:
 
@@ -4385,6 +4393,19 @@ packages:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
     dev: true
+
+  /ws/8.13.0:
+    resolution: {integrity: sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
 
   /yallist/3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}

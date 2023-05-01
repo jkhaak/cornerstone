@@ -20,9 +20,14 @@
     "defaultRemote": "origin"
   },
 
-  "allowedProjectTags": ["tools", "library", "frontend", "serverless"],
+  "allowedProjectTags": ["tools", "runner", "library", "frontend", "serverless"],
 
   "projects": [
+    {
+      "packageName": "ruuvi-runner",
+      "projectFolder": "run/ruuvi-runner",
+      "tags": ["runner"]
+    },
     {
       "packageName": "ruuvi-collector",
       "projectFolder": "apps/ruuvi-collector",
