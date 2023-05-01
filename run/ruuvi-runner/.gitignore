@@ -1,4 +1,5 @@
 *
 
 !.gitignore
+!index.js
 !package.json

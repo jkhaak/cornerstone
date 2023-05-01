@@ -6,11 +6,12 @@
   "main": "index.js",
   "scripts": {
     "build": "",
-    "start": "node ./node_modules/ruuvi-collector/lib/ruuvi-collector.js",
+    "start": "node ./index.js",
     "test": ""
   },
   "dependencies": {
     "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
+    "@abandonware/noble": "1.9.2-21",
     "ruuvi-collector": "workspace:*",
     "ws": "~8.13.0"
   }

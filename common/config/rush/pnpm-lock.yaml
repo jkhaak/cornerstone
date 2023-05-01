@@ -43,10 +43,12 @@ importers:
   ../../run/ruuvi-runner:
     specifiers:
       '@abandonware/bluetooth-hci-socket': ~0.5.3-10
+      '@abandonware/noble': 1.9.2-21
       ruuvi-collector: workspace:*
       ws: ~8.13.0
     dependencies:
       '@abandonware/bluetooth-hci-socket': 0.5.3-10
+      '@abandonware/noble': 1.9.2-21
       ruuvi-collector: link:../../apps/ruuvi-collector
       ws: 8.13.0
 
