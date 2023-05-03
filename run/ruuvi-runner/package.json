@@ -12,7 +12,7 @@
   "dependencies": {
     "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
     "@abandonware/noble": "1.9.2-21",
-    "ruuvi-collector": "workspace:*",
+    "ruuvi-parser": "workspace:*",
     "ws": "~8.13.0"
   }
 }

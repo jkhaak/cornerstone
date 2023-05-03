@@ -29,8 +29,8 @@
       "tags": ["runner"]
     },
     {
-      "packageName": "ruuvi-collector",
-      "projectFolder": "apps/ruuvi-collector",
+      "packageName": "ruuvi-parser",
+      "projectFolder": "lib/ruuvi-parser",
       "tags": ["library"]
     }
   ]
