@@ -5,6 +5,18 @@ importers:
   .:
     specifiers: {}
 
+  ../../apps/ruuvi-runner:
+    specifiers:
+      '@abandonware/bluetooth-hci-socket': ~0.5.3-10
+      '@abandonware/noble': 1.9.2-21
+      ruuvi-parser: workspace:*
+      ws: ~8.13.0
+    dependencies:
+      '@abandonware/bluetooth-hci-socket': 0.5.3-10
+      '@abandonware/noble': 1.9.2-21
+      ruuvi-parser: link:../../lib/ruuvi-parser
+      ws: 8.13.0
+
   ../../lib/ruuvi-parser:
     specifiers:
       '@abandonware/noble': 1.9.2-21
@@ -39,18 +51,6 @@ importers:
       expect-type: 0.15.0
       pino-pretty: 10.0.0
       typescript: 5.0.4
-
-  ../../run/ruuvi-runner:
-    specifiers:
-      '@abandonware/bluetooth-hci-socket': ~0.5.3-10
-      '@abandonware/noble': 1.9.2-21
-      ruuvi-parser: workspace:*
-      ws: ~8.13.0
-    dependencies:
-      '@abandonware/bluetooth-hci-socket': 0.5.3-10
-      '@abandonware/noble': 1.9.2-21
-      ruuvi-parser: link:../../lib/ruuvi-parser
-      ws: 8.13.0
 
 packages:
 

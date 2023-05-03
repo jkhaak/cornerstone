@@ -20,13 +20,13 @@
     "defaultRemote": "origin"
   },
 
-  "allowedProjectTags": ["tools", "runner", "library", "frontend", "serverless"],
+  "allowedProjectTags": ["tools", "daemon", "library", "frontend", "serverless"],
 
   "projects": [
     {
       "packageName": "ruuvi-runner",
-      "projectFolder": "run/ruuvi-runner",
-      "tags": ["runner"]
+      "projectFolder": "apps/ruuvi-runner",
+      "tags": ["daemon"]
     },
     {
       "packageName": "ruuvi-parser",
