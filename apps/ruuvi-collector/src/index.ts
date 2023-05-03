@@ -1,4 +1,5 @@
 import type { on, startScanningAsync, Advertisement } from "@abandonware/noble";
+import * as ruuvi from "./model/ruuvi";
 import logger from "./logger";
 
 export type Noble = {
@@ -7,10 +8,35 @@ export type Noble = {
 };
 
 function peripheralToString({ id, advertisement }: { id: string; advertisement: Advertisement }) {
-  const manufacturerData = advertisement.manufacturerData
+  const manufacturerDataHex = advertisement.manufacturerData
     ? Buffer.from(advertisement.manufacturerData).toString("hex")
     : undefined;
-  return `${id}:${advertisement.localName}:${manufacturerData}:${JSON.stringify(advertisement.serviceData)}`;
+
+  const manufacturerData: Buffer | undefined = advertisement?.manufacturerData;
+
+  const info = {
+    id,
+    localName: advertisement.localName,
+    manufacturerDataHex,
+  };
+
+  if (manufacturerData === undefined) {
+    logger.debug({ ...info, error: `manufacturerData is undefined` });
+    return;
+  }
+
+  const data = ruuvi.safeParse(advertisement.manufacturerData);
+
+  if (data.type === "error") {
+    if (data.message === "Unknown manufacturer id") {
+      logger.debug({ ...info, error: data.message });
+      return;
+    }
+    logger.error({ ...info, error: data.message });
+    return;
+  }
+
+  return { ...info, data: data.value };
 }
 
 export function ruuviCollector({ noble }: { noble: Noble }) {
@@ -22,13 +48,9 @@ export function ruuviCollector({ noble }: { noble: Noble }) {
   });
 
   noble.on("discover", async (peripheral) => {
-    logger.info({ peripheral: peripheralToString(peripheral) });
-    // await noble.stopScanningAsync();
-    // await peripheral.connectAsync();
-    // const {characteristics} = await peripheral.discoverSomeServicesAndCharacteristicsAsync(['180f'], ['2a19']);
-    // const batteryLevel = (await characteristics[0].readAsync())[0];
-
-    // await peripheral.disconnectAsync();
-    // process.exit(0);
+    const data = peripheralToString(peripheral);
+    if (data) {
+      logger.info({ peripheral: data });
+    }
   });
 }
