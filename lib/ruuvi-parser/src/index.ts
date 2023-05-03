@@ -17,6 +17,7 @@ function peripheralToString({ id, advertisement }: { id: string; advertisement: 
   const info = {
     id,
     localName: advertisement.localName,
+    datetime: new Date(),
     manufacturerDataHex,
   };
 
