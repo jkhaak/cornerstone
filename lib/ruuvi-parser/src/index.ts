@@ -1,6 +1,7 @@
 import type { on, startScanningAsync, Advertisement } from "@abandonware/noble";
 import * as ruuvi from "./model/ruuvi";
 import logger from "./logger";
+import { format } from "./datetime";
 
 export type Noble = {
   on: typeof on;
@@ -17,7 +18,7 @@ function peripheralToString({ id, advertisement }: { id: string; advertisement: 
   const info = {
     id,
     localName: advertisement.localName,
-    datetime: new Date(),
+    datetime: format(new Date()),
     manufacturerDataHex,
   };
 

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@abandonware/noble": "1.9.2-21",
+    "date-fns": "~2.30.0",
     "lodash": "~4.17.21",
     "pino": "~8.11.0"
   },
