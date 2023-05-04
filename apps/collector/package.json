@@ -1,0 +1,25 @@
+{
+  "name": "collector",
+  "version": "1.0.0",
+  "description": "",
+  "license": "EUPL-1.2",
+  "author": "Jani Haakana",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "~4.18.2",
+    "pino": "~8.11.0"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-config": "~3.2.0",
+    "@rushstack/heft": "~0.50.2",
+    "@rushstack/heft-jest-plugin": "~0.5.8",
+    "@tsconfig/node18-strictest": "~1.0.0",
+    "@types/heft-jest": "~1.0.3",
+    "@types/node": "~18.16.3",
+    "eslint": "~8.39.0",
+    "typescript": "~5.0.4"
+  }
+}

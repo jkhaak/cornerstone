@@ -20,7 +20,7 @@
     "defaultRemote": "origin"
   },
 
-  "allowedProjectTags": ["tools", "daemon", "library", "frontend", "serverless"],
+  "allowedProjectTags": ["tools", "daemon", "library", "frontend", "backend"],
 
   "projects": [
     {
@@ -32,6 +32,11 @@
       "packageName": "ruuvi-parser",
       "projectFolder": "lib/ruuvi-parser",
       "tags": ["library"]
+    },
+    {
+      "packageName": "collector",
+      "projectFolder": "apps/collector",
+      "tags": ["backend"]
     }
   ]
 }

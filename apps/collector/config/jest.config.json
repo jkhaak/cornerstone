@@ -1,0 +1,13 @@
+{
+  "extends": "@rushstack/heft-jest-plugin/includes/jest-shared.config.json",
+  "collectCoverage": true,
+  "coveragePathIgnorePatterns": ["<rootDir>/src/__test__"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 50,
+      "functions": 50,
+      "lines": 50,
+      "statements": 50
+    }
+  }
+}
