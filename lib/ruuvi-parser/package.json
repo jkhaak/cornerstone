@@ -7,6 +7,7 @@
   "author": "Jani Haakana",
   "type": "commonjs",
   "main": "lib/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean && npm run bundle",
     "bundle": "esbuild src/index.ts --bundle --minify --log-level=warning --external:fsevents --external:ws --external:@abandonware/bluetooth-hci-socket --outfile=lib/index.js --format=cjs --platform=node",

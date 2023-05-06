@@ -3,6 +3,8 @@ import * as ruuvi from "./model/ruuvi";
 import logger from "./logger";
 import { format } from "./datetime";
 
+export type { Format as DataFormat5 } from "./model/formats/data-format-5";
+
 export type Noble = {
   on: typeof on;
   startScanningAsync: typeof startScanningAsync;
