@@ -2,6 +2,7 @@
   "name": "@cornerstone/ruuvi-runner",
   "version": "1.0.0",
   "description": "runner environment",
+  "license": "EUPL-1.2",
   "author": "Jani Haakana",
   "main": "index.js",
   "scripts": {
