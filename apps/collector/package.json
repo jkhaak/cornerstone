@@ -4,9 +4,11 @@
   "description": "",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "heft build --clean",
+    "test": "heft test --clean"
   },
   "dependencies": {
     "express": "~4.18.2",
