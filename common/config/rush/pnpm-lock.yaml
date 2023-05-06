@@ -7,6 +7,7 @@ importers:
 
   ../../apps/collector:
     specifiers:
+      '@cornerstone/ruuvi-parser': workspace:*
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
       '@rushstack/heft-jest-plugin': ~0.5.8
@@ -24,6 +25,7 @@ importers:
       pg-promise: 11.4.3
       pino: 8.11.0
     devDependencies:
+      '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.2_@types+node@18.16.3
       '@rushstack/heft-jest-plugin': 0.5.8_b3ojrsdcwfk4yzehq7jo543tj4
@@ -38,12 +40,12 @@ importers:
     specifiers:
       '@abandonware/bluetooth-hci-socket': ~0.5.3-10
       '@abandonware/noble': 1.9.2-21
-      ruuvi-parser: workspace:*
+      '@cornerstone/ruuvi-parser': workspace:*
       ws: ~8.13.0
     dependencies:
       '@abandonware/bluetooth-hci-socket': 0.5.3-10
       '@abandonware/noble': 1.9.2-21
-      ruuvi-parser: link:../../lib/ruuvi-parser
+      '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       ws: 8.13.0
 
   ../../lib/ruuvi-parser:

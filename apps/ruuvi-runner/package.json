@@ -1,5 +1,5 @@
 {
-  "name": "ruuvi-runner",
+  "name": "@cornerstone/ruuvi-runner",
   "version": "1.0.0",
   "description": "runner environment",
   "author": "Jani Haakana",
@@ -12,7 +12,7 @@
   "dependencies": {
     "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
     "@abandonware/noble": "1.9.2-21",
-    "ruuvi-parser": "workspace:*",
+    "@cornerstone/ruuvi-parser": "workspace:*",
     "ws": "~8.13.0"
   }
 }
