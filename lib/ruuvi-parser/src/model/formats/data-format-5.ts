@@ -102,7 +102,7 @@ export function parseMeasurementSequenceNumber(input: Buffer, offset: number = 0
 
 export function parse(input: Buffer): RuuviData {
   const dataEntries = spec.map(([key, fn]) => [key, fn(input)]);
-  return Object.fromEntries(dataEntries);
+  return Object.fromEntries(dataEntries) as RuuviData;
 }
 
 function parseMac(buffer: Buffer): MACAddress | undefined {

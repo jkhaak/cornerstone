@@ -1,6 +1,4 @@
-export type ValueOf<Obj> = Obj[keyof Obj];
-
-export type Either<T> = { type: "ok"; value: T } | { type: "error"; message: string };
+import type { ValueOf } from "@cornerstone/typing-tools";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GetFormats<Tuples extends [any, any]> = ValueOf<{
@@ -13,5 +11,6 @@ export type GetVersion<Tuples extends [any, any]> = ValueOf<{
 }>;
 
 export function exhausted(n: never): never {
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   throw new Error(`Should have been exhausted, but instead got "${n}"`);
 }
