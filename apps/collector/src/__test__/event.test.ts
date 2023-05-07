@@ -1,3 +1,4 @@
+import { db } from "../database";
 import * as service from "../service";
 
 const rawEvent = {
@@ -27,10 +28,18 @@ const rawEvent = {
 
 const expectedEvent = {};
 
+function truncateTables() {
+  return db.none(`truncate ruuvidata, ruuvitag;`);
+}
+
 describe("service", () => {
+  afterEach(async () => {
+    await truncateTables();
+  });
+
   it("should store event in the database", async () => {
-    const id = await service.saveEvent(rawEvent);
-    const result = service.getEvent(id);
+    const ruuviId = await service.saveEvent(rawEvent);
+    const result = service.getEvent(ruuviId);
 
     expect(result).toMatchObject(expectedEvent);
   });

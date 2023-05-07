@@ -1,11 +1,10 @@
 import { db } from "./database";
-import type { RuuviId } from "./model";
+import type { RuuviId, RawEvent } from "./model";
 
 const SQL_INSERT_RUUVITAG = `
 INSERT INTO ruuvitag
 (id, mac)
-VALUES($1, $2)
-RETURNING id;
+VALUES($1, $2);
 `;
 
 const SQL_INSERT_RUUVIEVENT = `
@@ -14,8 +13,17 @@ INSERT INTO public.ruuvidata
 VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
 `;
 
-export async function saveEvent(event: unknown): Promise<RuuviId> {
-  return `1234`;
+function parseId(strId: string) {
+  const found = strId.match(/\w{4}$/);
+  if (found) {
+    return found[0];
+  }
+
+  throw new Error("Cannot parse the ruuvi id");
+}
+
+export async function saveEvent(event: RawEvent) {
+  return db.none(SQL_INSERT_RUUVITAG, [parseId(event.data.mac), event.data.mac]);
 }
 
 export async function getEvent(id: RuuviId) {
