@@ -1,0 +1,11 @@
+*
+
+!.gitignore
+!package.json
+
+!config/
+!config/*.json
+
+!src/
+!src/**/
+!src/**/*.ts

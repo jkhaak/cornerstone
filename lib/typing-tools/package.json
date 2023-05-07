@@ -1,0 +1,21 @@
+{
+  "name": "@cornerstone/typing-tools",
+  "version": "1.0.0",
+  "description": "general typing tools",
+  "license": "EUPL-1.2",
+  "author": "Jani Haakana",
+  "typings": "src/index.d.ts",
+  "scripts": {
+    "build": "heft build --clean",
+    "test": ""
+  },
+  "devDependencies": {
+    "@rushstack/heft": "~0.50.2",
+    "@rushstack/heft-jest-plugin": "~0.5.8",
+    "@tsconfig/node18-strictest": "~1.0.0",
+    "@types/heft-jest": "~1.0.3",
+    "@types/node": "~18.16.3",
+    "eslint": "~8.39.0",
+    "typescript": "~5.0.4"
+  }
+}

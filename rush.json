@@ -20,18 +20,26 @@
     "defaultRemote": "origin"
   },
 
-  "allowedProjectTags": ["tools", "daemon", "library", "frontend", "backend"],
+  "allowedProjectTags": ["daemon", "library", "frontend", "backend"],
 
   "projects": [
+    // libraries
     {
-      "packageName": "@cornerstone/ruuvi-runner",
-      "projectFolder": "apps/ruuvi-runner",
-      "tags": ["daemon"]
+      "packageName": "@cornerstone/typing-tools",
+      "projectFolder": "lib/typing-tools",
+      "tags": ["library"]
     },
     {
       "packageName": "@cornerstone/ruuvi-parser",
       "projectFolder": "lib/ruuvi-parser",
       "tags": ["library"]
+    },
+
+    // apps
+    {
+      "packageName": "@cornerstone/ruuvi-runner",
+      "projectFolder": "apps/ruuvi-runner",
+      "tags": ["daemon"]
     },
     {
       "packageName": "@cornerstone/collector",

@@ -85,6 +85,24 @@ importers:
       pino-pretty: 10.0.0
       typescript: 5.0.4
 
+  ../../lib/typing-tools:
+    specifiers:
+      '@rushstack/heft': ~0.50.2
+      '@rushstack/heft-jest-plugin': ~0.5.8
+      '@tsconfig/node18-strictest': ~1.0.0
+      '@types/heft-jest': ~1.0.3
+      '@types/node': ~18.16.3
+      eslint: ~8.39.0
+      typescript: ~5.0.4
+    devDependencies:
+      '@rushstack/heft': 0.50.2_@types+node@18.16.3
+      '@rushstack/heft-jest-plugin': 0.5.8_b3ojrsdcwfk4yzehq7jo543tj4
+      '@tsconfig/node18-strictest': 1.0.0
+      '@types/heft-jest': 1.0.3
+      '@types/node': 18.16.3
+      eslint: 8.39.0
+      typescript: 5.0.4
+
 packages:
 
   /@abandonware/bluetooth-hci-socket/0.5.3-10:
