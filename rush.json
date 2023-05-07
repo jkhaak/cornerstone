@@ -20,9 +20,16 @@
     "defaultRemote": "origin"
   },
 
-  "allowedProjectTags": ["daemon", "library", "frontend", "backend"],
+  "allowedProjectTags": ["tools", "daemon", "library", "frontend", "backend"],
 
   "projects": [
+    // tools
+    {
+      "packageName": "@cornerstone/eslint-config",
+      "projectFolder": "tools/eslint-config",
+      "tags": ["tools"]
+    },
+
     // libraries
     {
       "packageName": "@cornerstone/typing-tools",
