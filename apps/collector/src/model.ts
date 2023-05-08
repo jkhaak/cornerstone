@@ -18,10 +18,12 @@ export type RuuviTag = {
   displayName: string | undefined;
 };
 
-export function dtoRuuviTag({ id, mac, display_name }: QueryResultRuuviTag): RuuviTag {
+export function dtoRuuviTag(queryResult: QueryResultRuuviTag): RuuviTag {
+  const { id, mac } = queryResult;
+
   return {
     id,
     mac,
-    displayName: display_name,
-  };
+    displayName: queryResult.display_name,
+  } satisfies RuuviTag;
 }
