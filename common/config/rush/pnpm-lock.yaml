@@ -8,6 +8,7 @@ importers:
   ../../apps/collector:
     specifiers:
       '@cornerstone/ruuvi-parser': workspace:*
+      '@cornerstone/typing-tools': workspace:*
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
       '@rushstack/heft-jest-plugin': ~0.5.8
@@ -26,6 +27,7 @@ importers:
       pino: 8.11.0
     devDependencies:
       '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
+      '@cornerstone/typing-tools': link:../../lib/typing-tools
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.2_@types+node@18.16.3
       '@rushstack/heft-jest-plugin': 0.5.8_b3ojrsdcwfk4yzehq7jo543tj4

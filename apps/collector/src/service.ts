@@ -1,5 +1,10 @@
 import { db } from "./database";
-import type { RuuviId, RawEvent } from "./model";
+import { RuuviId, RawEvent, RuuviTag, dtoRuuviTag } from "./model";
+
+const SQL_GET_RUUVITAGS = `
+SELECT *
+FROM ruuvitag;
+`;
 
 const SQL_INSERT_RUUVITAG = `
 INSERT INTO ruuvitag
@@ -28,4 +33,8 @@ export async function saveEvent(event: RawEvent) {
 
 export async function getEvent(id: RuuviId) {
   return {};
+}
+
+export async function getTags(): Promise<RuuviTag[]> {
+  return db.many(SQL_GET_RUUVITAGS).then((items) => items.map(dtoRuuviTag));
 }
