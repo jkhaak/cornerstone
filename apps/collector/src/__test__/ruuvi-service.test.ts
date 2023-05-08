@@ -1,7 +1,7 @@
-import { db } from "../database";
 import type { RawEvent } from "../model";
 import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
 import * as service from "../service";
+import { truncateTables } from "./test-utils";
 
 const rawData = {
   manufacturerId: "499",
@@ -30,13 +30,9 @@ const rawEvent = {
   data: rawData,
 } satisfies RawEvent;
 
-function truncateTables() {
-  return db.none(`truncate ruuvidata, ruuvitag;`);
-}
-
 describe("service", () => {
   afterEach(async () => {
-    await truncateTables();
+    await truncateTables(["ruuvidata", "ruuvitag"]);
   });
 
   it("should be able to retrieve new ruuvi tags from database after discovering new events", async () => {
