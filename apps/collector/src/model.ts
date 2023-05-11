@@ -13,7 +13,7 @@ export type RawEvent = {
 export type QueryResultRuuviTag = CamelToSnakeKeys<RuuviTag>;
 
 export type RuuviTag = {
-  id: string;
+  id: RuuviId;
   mac: string;
   displayName: string | undefined;
 };

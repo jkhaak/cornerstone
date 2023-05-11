@@ -7,9 +7,10 @@ FROM ruuvitag;
 `;
 
 const SQL_INSERT_RUUVITAG = `
-INSERT INTO ruuvitag
+insert into ruuvitag
 (id, mac)
-VALUES($1, $2);
+values($1, $2)
+on conflict (id) do nothing
 `;
 
 const SQL_INSERT_RUUVIEVENT = `

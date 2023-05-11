@@ -44,4 +44,22 @@ describe("service", () => {
     expect(ids).toContain("DEAD");
     expect(ids).toContain("BEEF");
   });
+
+  it("should create only one ruuvi tag during discovery", async () => {
+    const expectedId = "DEAD";
+    await service.saveEvent({ ...rawEvent, data: { ...rawData, mac: `1234BEEF${expectedId}` } });
+    await service.saveEvent({ ...rawEvent, data: { ...rawData, mac: `1234BEEF${expectedId}` } });
+    const result = await service.getTags();
+    expect(result.length).toBe(1);
+    const tag = result[0];
+
+    if (tag === undefined) {
+      expect(tag).not.toBeUndefined();
+      return;
+    }
+
+    const id = tag.id;
+
+    expect(id).toBe("DEAD");
+  });
 });
