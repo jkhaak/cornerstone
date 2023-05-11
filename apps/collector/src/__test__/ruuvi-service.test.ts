@@ -2,6 +2,7 @@ import type { RawEvent } from "../model";
 import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
 import * as service from "../service";
 import { truncateTables } from "./test-utils";
+import _ from "lodash/fp";
 
 const rawData = {
   manufacturerId: "499",
@@ -61,5 +62,24 @@ describe("service", () => {
     const id = tag.id;
 
     expect(id).toBe("DEAD");
+  });
+
+  it("should be able to retrieve events from database", async () => {
+    const id = "BEEF";
+    const testData = _.omit(["mac", "measurementSequence"], rawData);
+
+    await service.saveEvent({
+      ...rawEvent,
+      data: { ...testData, mac: `1234DEAD${id}`, measurementSequence: 1 },
+    });
+    await service.saveEvent({
+      ...rawEvent,
+      data: { ...rawData, mac: `1234DEAD${id}`, measurementSequence: 2 },
+    });
+    const result = await service.getEvents(id);
+
+    expect(result[0]).toMatchObject(_.omit(["mac", "manufacturerId"], testData));
+    expect(result[0]?.measurementSequence).toBe(1);
+    expect(result[1]?.measurementSequence).toBe(2);
   });
 });

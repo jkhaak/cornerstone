@@ -19,7 +19,7 @@ CREATE TABLE public.ruuvidata (
 	power_voltage real NULL,
 	power_tx smallint NULL,
 	movement_counter smallint NULL,
-	measurement_counter integer NULL,
+	measurement_sequence integer NULL,
 	CONSTRAINT ruuvidata_pk PRIMARY KEY (id),
 	CONSTRAINT ruuvidata_fk FOREIGN KEY (ruuvitag) REFERENCES public.ruuvitag(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
