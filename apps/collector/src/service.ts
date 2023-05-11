@@ -2,8 +2,8 @@ import { db } from "./database";
 import { RuuviId, RawEvent, RuuviTag, dtoRuuviTag } from "./model";
 
 const SQL_GET_RUUVITAGS = `
-SELECT *
-FROM ruuvitag;
+select *
+from ruuvitag
 `;
 
 const SQL_INSERT_RUUVITAG = `
@@ -14,9 +14,9 @@ on conflict (id) do nothing
 `;
 
 const SQL_INSERT_RUUVIEVENT = `
-INSERT INTO public.ruuvidata
+insert into public.ruuvidata
 (ruuvitag, "version", datetime, temperature, humidity, pressure, acceleration_x, acceleration_y, acceleration_z, power_voltage, power_tx, movement_counter, measurement_counter)
-VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
+values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
 function parseId(strId: string) {
