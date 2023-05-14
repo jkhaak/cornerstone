@@ -4,7 +4,7 @@ import * as service from "../service";
 import { truncateTables } from "./test-utils";
 import _ from "lodash/fp";
 
-const rawData = {
+export const rawData = {
   manufacturerId: "499",
   version: 5,
   temperature: 21.125,
@@ -24,16 +24,21 @@ const rawData = {
   mac: "DB7A25194F70",
 } satisfies DataFormat5;
 
-const rawEvent = {
+export const rawEvent = {
   id: "db7a25194f70",
   datetime: "2023-05-04T17:07:32.108Z",
   manufacturerDataHex: "99040510812c1acdb00378fdfcffd4b0b686573fdb7a25194f70",
   data: rawData,
 } satisfies RawEvent;
 
+export const ruuviTables = ["ruuvidata", "ruuvitag"];
+
 describe("service", () => {
-  afterEach(async () => {
-    await truncateTables(["ruuvidata", "ruuvitag"]);
+  beforeEach(async () => {
+    await truncateTables(ruuviTables);
+  });
+  afterAll(async () => {
+    await truncateTables(ruuviTables);
   });
 
   it("should be able to retrieve new ruuvi tags from database after discovering new events", async () => {
