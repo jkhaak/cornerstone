@@ -12,4 +12,13 @@ app.get("/ruuvi/tags", (__req, res, next) => {
     .catch(next);
 });
 
+app.get("/ruuvi/:id/events", (req, res, next) => {
+  const id = req.params.id.toUpperCase() as Uppercase<string>;
+
+  service
+    .getEvents(id)
+    .then((events) => res.send(events))
+    .catch(next);
+});
+
 export default app;
