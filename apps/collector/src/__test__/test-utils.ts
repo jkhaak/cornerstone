@@ -1,13 +1,27 @@
 import { db } from "../database";
 import type { Response } from "supertest";
+import logger from "../logger";
+
+/**
+ * Teardown database connection after test run. Should be called in afterAll stage
+ * outside of describe block.
+ */
+export function teardownTestConnection() {
+  if (!db.$pool.ended) {
+    db.$pool
+      .end()
+      .then(() => logger.info({ message: "DB connection closed succesfully" }))
+      .catch((error: unknown) =>
+        logger.error({ message: "Unexpected error happened while closing database connection.", error })
+      );
+  }
+}
 
 /**
  * Truncates given tables with cascade.
  */
-export function truncateTables(tables: string[]) {
-  return db.tx(async (tx) => {
-    await Promise.allSettled(tables.map((t) => tx.none("truncate table $1:name cascade", t)));
-  });
+export async function truncateTables(tables: string[]) {
+  await db.tx((tx) => Promise.allSettled(tables.map((t) => tx.none("truncate table $1:name cascade", t))));
 }
 
 /**

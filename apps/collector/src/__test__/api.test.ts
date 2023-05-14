@@ -4,9 +4,13 @@ import app from "../server";
 import * as service from "../service";
 
 import { rawData, rawEvent, ruuviTables } from "./ruuvi-service.test";
-import { getHeaders, truncateTables } from "./test-utils";
+import { getHeaders, teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash";
 import type { RuuviData } from "../model";
+
+afterAll(() => {
+  teardownTestConnection();
+});
 
 describe("rest api", () => {
   describe("get endpoints for ruuvi service", () => {

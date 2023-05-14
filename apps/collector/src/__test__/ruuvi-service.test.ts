@@ -1,7 +1,7 @@
 import type { RawEvent } from "../model";
 import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
 import * as service from "../service";
-import { truncateTables } from "./test-utils";
+import { teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash/fp";
 
 export const rawData = {
@@ -33,10 +33,15 @@ export const rawEvent = {
 
 export const ruuviTables = ["ruuvidata", "ruuvitag"];
 
+afterAll(() => {
+  teardownTestConnection();
+});
+
 describe("service", () => {
   beforeEach(async () => {
     await truncateTables(ruuviTables);
   });
+
   afterAll(async () => {
     await truncateTables(ruuviTables);
   });
