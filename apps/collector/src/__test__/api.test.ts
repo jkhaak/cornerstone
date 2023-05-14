@@ -73,4 +73,21 @@ describe("rest api", () => {
       expect(response.body).toMatchObject({ error: `Couldn't find events with id ${incorrectId}` });
     });
   });
+
+  describe("post endpoints for ruuvi service", () => {
+    afterAll(async () => {
+      await truncateTables(ruuviTables);
+    });
+
+    it("should consume ruuvi events", async () => {
+      const id = "DEAF";
+      const response = await request(app)
+        .post("/ruuvi/event")
+        .send({ ...rawEvent, data: { ...rawData, mac: `DEADBEEF${id}` } });
+      expect(response.status).toBe(200);
+
+      const events = await service.getEvents(id);
+      expect(events.length).toBe(1);
+    });
+  });
 });

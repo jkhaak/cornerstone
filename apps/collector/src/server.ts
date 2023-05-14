@@ -1,8 +1,10 @@
 import express from "express";
 import * as service from "./service";
 import pinoHttp from "pino-http";
+import type { RawEvent } from "./model";
 
 const app = express();
+app.use(express.json());
 app.use(pinoHttp());
 
 app.get("/ruuvi/tags", (__req, res, next) => {
@@ -23,6 +25,13 @@ app.get("/ruuvi/:id/events", (req, res, next) => {
       }
       return res.send(events);
     })
+    .catch(next);
+});
+
+app.post("/ruuvi/event", (req, res, next) => {
+  service
+    .saveEvent(req.body as RawEvent)
+    .then(() => res.send(200))
     .catch(next);
 });
 
