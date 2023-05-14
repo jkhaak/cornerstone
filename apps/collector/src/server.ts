@@ -31,7 +31,7 @@ app.get("/ruuvi/:id/events", (req, res, next) => {
 app.post("/ruuvi/event", (req, res, next) => {
   service
     .saveEvent(req.body as RawEvent)
-    .then(() => res.send(200))
+    .then(() => res.sendStatus(200))
     .catch(next);
 });
 
