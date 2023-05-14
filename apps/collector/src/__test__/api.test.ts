@@ -64,5 +64,13 @@ describe("rest api", () => {
 
       expect(responseMeasurementSequences).toMatchObject(measurementSequences);
     });
+
+    it("should fail fetching events if requested with an unknown ruuvi id", async () => {
+      const incorrectId = "TRSH";
+
+      const response = await request(app).get(`/ruuvi/${incorrectId}/events`);
+      expect(response.status).toBe(404);
+      expect(response.body).toMatchObject({ error: `Couldn't find events with id ${incorrectId}` });
+    });
   });
 });

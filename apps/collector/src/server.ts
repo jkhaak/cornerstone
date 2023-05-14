@@ -17,7 +17,12 @@ app.get("/ruuvi/:id/events", (req, res, next) => {
 
   service
     .getEvents(id)
-    .then((events) => res.send(events))
+    .then((events) => {
+      if (events.length === 0) {
+        return res.status(404).send({ error: `Couldn't find events with id ${id}` });
+      }
+      return res.send(events);
+    })
     .catch(next);
 });
 
