@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rest api post endpoints for ruuvi service should fail with invalid event 1`] = `
+Object {
+  "errorMessage": "Validation error: Required at \\"id\\"; Required at \\"datetime\\"; Required at \\"manufacturerDataHex\\"; Required at \\"data\\"",
+  "issues": Array [
+    Object {
+      "code": "invalid_type",
+      "expected": "string",
+      "message": "Required",
+      "path": Array [
+        "id",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "string",
+      "message": "Required",
+      "path": Array [
+        "datetime",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "string",
+      "message": "Required",
+      "path": Array [
+        "manufacturerDataHex",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "object",
+      "message": "Required",
+      "path": Array [
+        "data",
+      ],
+      "received": "undefined",
+    },
+  ],
+}
+`;
+
+exports[`rest api post endpoints for ruuvi service should fail with invalid event 2`] = `
+Object {
+  "errorMessage": "Validation error: Invalid literal value, expected \\"499\\" at \\"data.manufacturerId\\"; Invalid literal value, expected 5 at \\"data.version\\"; Required at \\"data.temperature\\"; Required at \\"data.humidity\\"; Required at \\"data.pressure\\"; Required at \\"data.acceleration\\"; Required at \\"data.power\\"; Required at \\"data.movementCounter\\"; Required at \\"data.measurementSequence\\"; Required at \\"data.mac\\"",
+  "issues": Array [
+    Object {
+      "code": "invalid_literal",
+      "expected": "499",
+      "message": "Invalid literal value, expected \\"499\\"",
+      "path": Array [
+        "data",
+        "manufacturerId",
+      ],
+    },
+    Object {
+      "code": "invalid_literal",
+      "expected": 5,
+      "message": "Invalid literal value, expected 5",
+      "path": Array [
+        "data",
+        "version",
+      ],
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "temperature",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "humidity",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "pressure",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "object",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "acceleration",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "object",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "power",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "movementCounter",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "measurementSequence",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "string",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "mac",
+      ],
+      "received": "undefined",
+    },
+  ],
+}
+`;
+
+exports[`rest api post endpoints for ruuvi service should fail with invalid event 3`] = `
+Object {
+  "errorMessage": "Validation error: Invalid literal value, expected \\"499\\" at \\"data.manufacturerId\\"; Required at \\"data.temperature\\"; Required at \\"data.humidity\\"; Required at \\"data.pressure\\"; Required at \\"data.acceleration\\"; Required at \\"data.power.voltage\\"; Required at \\"data.movementCounter\\"; Required at \\"data.measurementSequence\\"; Required at \\"data.mac\\"",
+  "issues": Array [
+    Object {
+      "code": "invalid_literal",
+      "expected": "499",
+      "message": "Invalid literal value, expected \\"499\\"",
+      "path": Array [
+        "data",
+        "manufacturerId",
+      ],
+      "received": "449",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "temperature",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "humidity",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "pressure",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "object",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "acceleration",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "power",
+        "voltage",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "movementCounter",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "number",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "measurementSequence",
+      ],
+      "received": "undefined",
+    },
+    Object {
+      "code": "invalid_type",
+      "expected": "string",
+      "message": "Required",
+      "path": Array [
+        "data",
+        "mac",
+      ],
+      "received": "undefined",
+    },
+  ],
+}
+`;

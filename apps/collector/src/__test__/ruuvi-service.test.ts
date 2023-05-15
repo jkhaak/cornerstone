@@ -1,4 +1,4 @@
-import type { RawEvent } from "../model";
+import type { Event } from "../model";
 import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
 import * as service from "../service";
 import { teardownTestConnection, truncateTables } from "./test-utils";
@@ -29,7 +29,7 @@ export const rawEvent = {
   datetime: "2023-05-04T17:07:32.108Z",
   manufacturerDataHex: "99040510812c1acdb00378fdfcffd4b0b686573fdb7a25194f70",
   data: rawData,
-} satisfies RawEvent;
+} satisfies Event;
 
 export const ruuviTables = ["ruuvidata", "ruuvitag"];
 

@@ -1,11 +1,36 @@
-import express from "express";
+import express, { NextFunction, Request, RequestHandler, Response } from "express";
+import type { ParamsDictionary } from "express-serve-static-core";
 import * as service from "./service";
 import pinoHttp from "pino-http";
-import type { RawEvent } from "./model";
+import { eventSchema } from "./model";
+import { z } from "zod";
+import { fromZodError } from "zod-validation-error";
+
+function zodErrorHandler(err: unknown, __req: Request, res: Response, next: NextFunction) {
+  if (err instanceof z.ZodError) {
+    const prettyError = fromZodError(err);
+    res.status(400).send({ errorMessage: prettyError.toString(), issues: err.issues });
+  } else {
+    next(err);
+  }
+}
 
 const app = express();
 app.use(express.json());
 app.use(pinoHttp());
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function validateBody<TBody>(schema: z.Schema<TBody>): RequestHandler<ParamsDictionary, any, TBody, any> {
+  return (req: Request, __res: Response, next: NextFunction) => {
+    const validation = schema.safeParse(req.body);
+
+    if (validation.success) {
+      next();
+    } else {
+      next(validation.error);
+    }
+  };
+}
 
 app.get("/ruuvi/tags", (__req, res, next) => {
   service
@@ -28,11 +53,14 @@ app.get("/ruuvi/:id/events", (req, res, next) => {
     .catch(next);
 });
 
-app.post("/ruuvi/event", (req, res, next) => {
+app.post("/ruuvi/event", validateBody(eventSchema), (req, res, next) => {
   service
-    .saveEvent(req.body as RawEvent)
+    .saveEvent(req.body)
     .then(() => res.sendStatus(200))
     .catch(next);
 });
+
+// Error handlers
+app.use(zodErrorHandler);
 
 export default app;

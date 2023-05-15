@@ -11,4 +11,5 @@
 
 !src/
 !src/**/
+!src/__test__/__snapshots__/**/*.snap
 !src/**/*.ts

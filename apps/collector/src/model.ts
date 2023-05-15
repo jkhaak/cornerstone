@@ -1,14 +1,36 @@
-import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
-import type { CamelToSnakeKeys, NonNullableObj } from "@cornerstone/typing-tools";
+import type { CamelToSnakeKeys } from "@cornerstone/typing-tools";
+import { z } from "zod";
 
 export type RuuviId = `${Uppercase<string>}`;
 
-export type RawEvent = {
-  id: string;
-  datetime: string;
-  manufacturerDataHex: string;
-  data: NonNullableObj<DataFormat5>;
-};
+export const dataFormat5Schema = z.object({
+  manufacturerId: z.literal("499"),
+  version: z.literal(5),
+  temperature: z.number(),
+  humidity: z.number(),
+  pressure: z.number(),
+  acceleration: z.object({
+    x: z.number(),
+    y: z.number(),
+    z: z.number(),
+  }),
+  power: z.object({
+    voltage: z.number(),
+    tx: z.number(),
+  }),
+  movementCounter: z.number(),
+  measurementSequence: z.number(),
+  mac: z.string().refine((s) => s.toUpperCase()),
+});
+
+export const eventSchema = z.object({
+  id: z.string(),
+  datetime: z.string().datetime(),
+  manufacturerDataHex: z.string(),
+  data: dataFormat5Schema,
+});
+
+export type Event = z.infer<typeof eventSchema>;
 
 export type RuuviData = {
   id: number;

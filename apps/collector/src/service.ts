@@ -1,5 +1,5 @@
 import { db } from "./database";
-import { RuuviId, RawEvent, RuuviTag, dtoRuuviTag, dtoRuuviData } from "./model";
+import { RuuviId, Event, RuuviTag, dtoRuuviTag, dtoRuuviData } from "./model";
 
 const SQL_GET_RUUVITAGS = `
 select *
@@ -58,7 +58,7 @@ function parseId(strId: string) {
   throw new Error("Cannot parse the ruuvi id");
 }
 
-export async function saveEvent(event: RawEvent) {
+export async function saveEvent(event: Event) {
   const data = event.data;
   const ruuviId = parseId(event.data.mac);
 

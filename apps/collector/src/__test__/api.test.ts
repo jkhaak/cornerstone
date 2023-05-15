@@ -93,5 +93,39 @@ describe("rest api", () => {
       const events = await service.getEvents(id);
       expect(events.length).toBe(1);
     });
+
+    it("should fail with invalid event", () => {
+      const invalidEvents = [
+        {},
+        { id: "DADA", datetime: new Date(), manufacturerDataHex: "123456789ABCDEF", data: {} },
+        {
+          id: "DADA",
+          datetime: new Date(),
+          manufacturerDataHex: "123456789ABCDEF",
+          data: {
+            manufacturerId: "449",
+            version: 5,
+            power: { tx: 5 },
+          },
+        },
+      ];
+
+      const expectedObject = {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        errorMessage: expect.stringMatching(/Validation error/),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        issues: expect.anything(),
+      };
+
+      return Promise.all(
+        invalidEvents.map(async (invalidEvent) => {
+          const response = await request(app).post("/ruuvi/event").send(invalidEvent);
+          expect(response.status).toBe(400);
+
+          expect(response.body).toMatchObject(expectedObject);
+          expect(response.body).toMatchSnapshot();
+        })
+      );
+    });
   });
 });
