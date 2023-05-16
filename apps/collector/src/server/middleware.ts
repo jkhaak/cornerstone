@@ -36,16 +36,14 @@ export type CacheItem<T> = {
   contentType: string | undefined;
 };
 
-export function cacheWithBody<TBody, ResBody, Locals>(
+export function cacheWithBody<ReqBody, ResBody, Locals>(
   memoryCache: CacheClass<string, CacheItem<ResBody>>,
-  fn: (t: TBody) => string,
+  fn: (t: ReqBody) => string,
   statusWithCacheResult: number,
   time: number
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): RequestHandler<core.ParamsDictionary, ResBody, TBody, Locals> {
+): RequestHandler<core.ParamsDictionary, ResBody, ReqBody, Locals> {
   return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    req: Request<core.ParamsDictionary, any, TBody, any>,
+    req: Request<core.ParamsDictionary, ResBody, ReqBody, Locals>,
     res: CacheResponse<ResBody>,
     next: NextFunction
   ) => {
