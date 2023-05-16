@@ -12,16 +12,19 @@ export function validateBody<TInputBody, TOutputBody>(
   transform?: Transform<TInputBody, TOutputBody>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): RequestHandler<core.ParamsDictionary, any, TOutputBody, any> {
+  const transformFn = transform === undefined ? identity : transform;
   return (req: Request, __res: Response, next: NextFunction) => {
-    const transformFn = transform === undefined ? identity : transform;
-    const validation = schema.safeParse(req.body);
-
-    if (validation.success) {
-      req.body = transformFn(validation.data);
-      next();
-    } else {
-      next(validation.error);
-    }
+    schema
+      .safeParseAsync(req.body)
+      .then((val) => {
+        if (val.success) {
+          req.body = transformFn(val.data);
+          next();
+        } else {
+          next(val.error);
+        }
+      })
+      .catch(next);
   };
 }
 
