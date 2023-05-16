@@ -18,12 +18,14 @@ importers:
       '@types/express-serve-static-core': ~4.17.35
       '@types/heft-jest': ~1.0.3
       '@types/lodash': ~4.14.194
+      '@types/memory-cache': ~0.2.2
       '@types/node': ~18.16.3
       '@types/supertest': ~2.0.12
       dotenv: ~16.0.3
       eslint: ~8.39.0
       express: ~4.18.2
       lodash: ~4.17.21
+      memory-cache: ~0.2.0
       pg-promise: ~11.4.3
       pino: ~8.11.0
       pino-http: ~8.3.3
@@ -34,6 +36,7 @@ importers:
     dependencies:
       express: 4.18.2
       lodash: 4.17.21
+      memory-cache: 0.2.0
       pg-promise: 11.4.3
       pino: 8.11.0
       pino-http: 8.3.3
@@ -51,6 +54,7 @@ importers:
       '@types/express-serve-static-core': 4.17.35
       '@types/heft-jest': 1.0.3
       '@types/lodash': 4.14.194
+      '@types/memory-cache': 0.2.2
       '@types/node': 18.16.3
       '@types/supertest': 2.0.12
       dotenv: 16.0.3
@@ -1366,6 +1370,10 @@ packages:
 
   /@types/lodash/4.14.194:
     resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==}
+    dev: true
+
+  /@types/memory-cache/0.2.2:
+    resolution: {integrity: sha512-xNnm6EkmYYhTnLiOHC2bdKgcYY5qjjrq5vl9KXD2nh0em0koZoFS500EL4Q4V/eW+A3P7NC7P7GIYzNOSQp7jQ==}
     dev: true
 
   /@types/mime/1.3.2:
@@ -3706,6 +3714,10 @@ packages:
   /media-typer/0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /memory-cache/0.2.0:
+    resolution: {integrity: sha512-OcjA+jzjOYzKmKS6IQVALHLVz+rNTMPoJvCztFaZxwG14wtAW7VRZjwTQu06vKCYOxh4jVnik7ya0SXTB0W+xA==}
     dev: false
 
   /merge-descriptors/1.0.1:

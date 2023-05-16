@@ -95,7 +95,7 @@ describe("rest api", () => {
     });
 
     it("should consume ruuvi events", async () => {
-      const ruuviId = "DEAF";
+      const ruuviId = "DEFA";
       const payload = { ...rawEvent, ruuviId, data: { ...rawData, mac: `DEADBEEF${ruuviId}` } };
       const response = await request(app).post("/ruuvi/event").send(payload);
       expect(response.status).toBe(201);
@@ -109,14 +109,35 @@ describe("rest api", () => {
         .post("/ruuvi/event")
         .send({ ...rawEvent, datetime: new Date() });
       expect(firstPostResponse.status).toBe(201);
-
-      const secondPostResponse = await request(app).post("/ruuvi/event").send(rawEvent);
-      expect(secondPostResponse.status).toBe(200);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { id }: { id: RuuviId } = secondPostResponse.body;
+      const { id }: { id: RuuviId } = firstPostResponse.body;
+
+      const secondPostResponse = await request(app)
+        .post("/ruuvi/event")
+        .send({ ...rawEvent, datetime: new Date() });
+      expect(secondPostResponse.status).toBe(200);
+      expect(secondPostResponse.body).toMatchObject({ id });
 
       const events = await service.getEvents(id);
       expect(events.length).toBe(1);
+    });
+
+    it("should consume multiple events (if they differ enough)", async () => {
+      const firstPostResponse = await request(app)
+        .post("/ruuvi/event")
+        .send({ ...rawEvent, datetime: new Date(), data: { ...rawData, temperature: 24 } });
+      expect(firstPostResponse.status).toBe(201);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { id }: { id: RuuviId } = firstPostResponse.body;
+
+      const secondPostResponse = await request(app)
+        .post("/ruuvi/event")
+        .send({ ...rawEvent, datetime: new Date(), data: { ...rawData, temperature: 25 } });
+      expect(secondPostResponse.status).toBe(201);
+      expect(secondPostResponse.body).toMatchObject({ id });
+
+      const events = await service.getEvents(id);
+      expect(events.length).toBe(2);
     });
 
     it("should fail with invalid event", () => {
