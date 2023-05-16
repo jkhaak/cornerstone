@@ -23,16 +23,24 @@ export const dataFormat5Schema = z.object({
   mac: z.string().transform((s) => s.toUpperCase()),
 });
 
-export const eventSchema = z
-  .object({
-    id: z.string(),
-    datetime: z.string().datetime(),
-    manufacturerDataHex: z.string(),
-    data: dataFormat5Schema,
-  })
-  .transform((event) => ({ ...event, ruuviId: parseRuuviId(event.data.mac) }));
+export const apiEventSchema = z.object({
+  id: z.string(),
+  datetime: z.string().datetime(),
+  manufacturerDataHex: z.string(),
+  data: dataFormat5Schema,
+});
 
-export type Event = z.infer<typeof eventSchema>;
+export function createDataEvent(apiEvent: APIEvent): DataEvent {
+  return {
+    ...apiEvent,
+    ruuviId: parseRuuviId(apiEvent.data.mac),
+  };
+}
+
+export type APIEvent = z.infer<typeof apiEventSchema>;
+export type DataEvent = APIEvent & {
+  ruuviId: RuuviId;
+};
 
 export type RuuviData = {
   id: number;

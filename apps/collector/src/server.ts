@@ -2,10 +2,10 @@ import express, { NextFunction, Request, RequestHandler, Response } from "expres
 import type { ParamsDictionary } from "express-serve-static-core";
 import * as service from "./service";
 import { pinoHttp } from "./logger";
-import { eventSchema } from "./model";
-import type { Event } from "./model";
+import { createDataEvent, apiEventSchema } from "./model";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { identity } from "lodash";
 
 function zodErrorHandler(err: unknown, __req: Request, res: Response, next: NextFunction) {
   if (err instanceof z.ZodError) {
@@ -20,13 +20,19 @@ const app = express();
 app.use(express.json());
 app.use(pinoHttp);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function validateBody<TBody>(schema: z.Schema<TBody>): RequestHandler<ParamsDictionary, any, TBody, any> {
+type Transform<A, B> = (a: A) => B;
+
+function validateBody<TInputBody, TOutputBody>(
+  schema: z.Schema<TInputBody>,
+  transform?: Transform<TInputBody, TOutputBody>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): RequestHandler<ParamsDictionary, any, TOutputBody, any> {
   return (req: Request, __res: Response, next: NextFunction) => {
+    const transformFn = transform === undefined ? identity : transform;
     const validation = schema.safeParse(req.body);
 
     if (validation.success) {
-      req.body = validation.data;
+      req.body = transformFn(validation.data);
       next();
     } else {
       next(validation.error);
@@ -55,9 +61,8 @@ app.get("/ruuvi/:id/events", (req, res, next) => {
     .catch(next);
 });
 
-app.post("/ruuvi/event", validateBody(eventSchema), (req, res, next) => {
-  // zod transformation isn't working as it should in type level
-  const event = req.body as Event;
+app.post("/ruuvi/event", validateBody(apiEventSchema, createDataEvent), (req, res, next) => {
+  const event = req.body;
 
   service
     .saveEvent(event)

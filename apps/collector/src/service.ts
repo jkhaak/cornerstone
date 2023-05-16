@@ -1,5 +1,5 @@
 import { db } from "./database";
-import { RuuviId, Event, RuuviTag, dtoRuuviTag, dtoRuuviData } from "./model";
+import { RuuviId, RuuviTag, dtoRuuviTag, dtoRuuviData, DataEvent } from "./model";
 
 const SQL_GET_RUUVITAGS = `
 select *
@@ -49,15 +49,15 @@ insert into public.ruuvidata (ruuvitag
 values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
-export async function saveEvent(event: Event): Promise<RuuviId> {
-  const { data, ruuviId } = event;
+export async function saveEvent(event: DataEvent): Promise<RuuviId> {
+  const { data, ruuviId, datetime } = event;
 
   await db.tx(async (tx) => {
     await tx.none(SQL_INSERT_RUUVITAG, [ruuviId, event.data.mac]);
     await tx.none(SQL_INSERT_RUUVIEVENT, [
       ruuviId,
       data.version,
-      event.datetime,
+      datetime,
       data.temperature,
       data.humidity,
       data.pressure,

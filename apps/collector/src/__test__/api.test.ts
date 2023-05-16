@@ -104,6 +104,21 @@ describe("rest api", () => {
       expect(events.length).toBe(1);
     });
 
+    it("should prevent duplicate events", async () => {
+      const firstPostResponse = await request(app)
+        .post("/ruuvi/event")
+        .send({ ...rawEvent, datetime: new Date() });
+      expect(firstPostResponse.status).toBe(201);
+
+      const secondPostResponse = await request(app).post("/ruuvi/event").send(rawEvent);
+      expect(secondPostResponse.status).toBe(200);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { id }: { id: RuuviId } = secondPostResponse.body;
+
+      const events = await service.getEvents(id);
+      expect(events.length).toBe(1);
+    });
+
     it("should fail with invalid event", () => {
       const invalidEvents = [
         {},
