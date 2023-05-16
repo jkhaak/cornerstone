@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("rest api", () => {
-  describe("get endpoints for ruuvi service", () => {
+  describe("get endpoints", () => {
     const ids = ["DEAD", "BEEF", "DADA"] as RuuviId[];
     const sequenceStart = _.random(20, 150);
     const measurementSequences = _.range(sequenceStart, sequenceStart + _.random(2, 7));
@@ -80,7 +80,7 @@ describe("rest api", () => {
     });
   });
 
-  describe("post endpoints for ruuvi service", () => {
+  describe("post endpoints", () => {
     afterEach(async () => {
       await truncateTables(ruuviTables);
     });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rest api post endpoints for ruuvi service should fail with invalid event 1`] = `
+exports[`rest api post endpoints should fail with invalid event 1`] = `
 Object {
   "errorMessage": "Validation error: Required at \\"id\\"; Required at \\"datetime\\"; Required at \\"manufacturerDataHex\\"; Required at \\"data\\"",
   "issues": Array [
@@ -44,7 +44,7 @@ Object {
 }
 `;
 
-exports[`rest api post endpoints for ruuvi service should fail with invalid event 2`] = `
+exports[`rest api post endpoints should fail with invalid event 2`] = `
 Object {
   "errorMessage": "Validation error: Invalid literal value, expected \\"499\\" at \\"data.manufacturerId\\"; Invalid literal value, expected 5 at \\"data.version\\"; Required at \\"data.temperature\\"; Required at \\"data.humidity\\"; Required at \\"data.pressure\\"; Required at \\"data.acceleration\\"; Required at \\"data.power\\"; Required at \\"data.movementCounter\\"; Required at \\"data.measurementSequence\\"; Required at \\"data.mac\\"",
   "issues": Array [
@@ -150,7 +150,7 @@ Object {
 }
 `;
 
-exports[`rest api post endpoints for ruuvi service should fail with invalid event 3`] = `
+exports[`rest api post endpoints should fail with invalid event 3`] = `
 Object {
   "errorMessage": "Validation error: Invalid literal value, expected \\"499\\" at \\"data.manufacturerId\\"; Required at \\"data.temperature\\"; Required at \\"data.humidity\\"; Required at \\"data.pressure\\"; Required at \\"data.acceleration\\"; Required at \\"data.power.voltage\\"; Required at \\"data.movementCounter\\"; Required at \\"data.measurementSequence\\"; Required at \\"data.mac\\"",
   "issues": Array [
