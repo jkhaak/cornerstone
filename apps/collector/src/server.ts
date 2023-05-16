@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, RequestHandler, Response } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 import * as service from "./service";
-import pinoHttp from "pino-http";
+import { pinoHttp } from "./logger";
 import { eventSchema } from "./model";
 import type { Event } from "./model";
 import { z } from "zod";
@@ -18,7 +18,7 @@ function zodErrorHandler(err: unknown, __req: Request, res: Response, next: Next
 
 const app = express();
 app.use(express.json());
-app.use(pinoHttp());
+app.use(pinoHttp);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function validateBody<TBody>(schema: z.Schema<TBody>): RequestHandler<ParamsDictionary, any, TBody, any> {
