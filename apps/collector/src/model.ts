@@ -20,15 +20,17 @@ export const dataFormat5Schema = z.object({
   }),
   movementCounter: z.number(),
   measurementSequence: z.number(),
-  mac: z.string().refine((s) => s.toUpperCase()),
+  mac: z.string().transform((s) => s.toUpperCase()),
 });
 
-export const eventSchema = z.object({
-  id: z.string(),
-  datetime: z.string().datetime(),
-  manufacturerDataHex: z.string(),
-  data: dataFormat5Schema,
-});
+export const eventSchema = z
+  .object({
+    id: z.string(),
+    datetime: z.string().datetime(),
+    manufacturerDataHex: z.string(),
+    data: dataFormat5Schema,
+  })
+  .transform((event) => ({ ...event, ruuviId: parseRuuviId(event.data.mac) }));
 
 export type Event = z.infer<typeof eventSchema>;
 
@@ -77,6 +79,15 @@ export type RuuviTag = {
 };
 
 export type QueryResultRuuviTag = CamelToSnakeKeys<RuuviTag>;
+
+export function parseRuuviId(strId: string): RuuviId {
+  const found = strId.match(/\w{4}$/);
+  if (found) {
+    return found[0].toUpperCase() as RuuviId;
+  }
+
+  throw new Error("Cannot parse the ruuvi id");
+}
 
 export function dtoRuuviTag(queryResult: QueryResultRuuviTag): RuuviTag {
   const { id, mac } = queryResult;

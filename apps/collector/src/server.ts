@@ -3,6 +3,7 @@ import type { ParamsDictionary } from "express-serve-static-core";
 import * as service from "./service";
 import pinoHttp from "pino-http";
 import { eventSchema } from "./model";
+import type { Event } from "./model";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
 
@@ -25,6 +26,7 @@ function validateBody<TBody>(schema: z.Schema<TBody>): RequestHandler<ParamsDict
     const validation = schema.safeParse(req.body);
 
     if (validation.success) {
+      req.body = validation.data;
       next();
     } else {
       next(validation.error);
@@ -54,9 +56,12 @@ app.get("/ruuvi/:id/events", (req, res, next) => {
 });
 
 app.post("/ruuvi/event", validateBody(eventSchema), (req, res, next) => {
+  // zod transformation isn't working as it should in type level
+  const event = req.body as Event;
+
   service
-    .saveEvent(req.body)
-    .then(() => res.sendStatus(200))
+    .saveEvent(event)
+    .then((id) => res.status(201).send({ id }))
     .catch(next);
 });
 

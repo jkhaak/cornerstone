@@ -28,6 +28,7 @@ export const rawEvent = {
   id: "db7a25194f70",
   datetime: "2023-05-04T17:07:32.108Z",
   manufacturerDataHex: "99040510812c1acdb00378fdfcffd4b0b686573fdb7a25194f70",
+  ruuviId: "DADA",
   data: rawData,
 } satisfies Event;
 
@@ -47,8 +48,8 @@ describe("service", () => {
   });
 
   it("should be able to retrieve new ruuvi tags from database after discovering new events", async () => {
-    await service.saveEvent({ ...rawEvent, data: { ...rawData, mac: "1234BEEFDEAD" } });
-    await service.saveEvent({ ...rawEvent, data: { ...rawData, mac: "1234DEADBEEF" } });
+    await service.saveEvent({ ...rawEvent, ruuviId: "DEAD" });
+    await service.saveEvent({ ...rawEvent, ruuviId: "BEEF" });
     const result = await service.getTags();
     const ids = result.map((r) => r.id);
 
@@ -58,8 +59,8 @@ describe("service", () => {
 
   it("should create only one ruuvi tag during discovery", async () => {
     const expectedId = "DEAD";
-    await service.saveEvent({ ...rawEvent, data: { ...rawData, mac: `1234BEEF${expectedId}` } });
-    await service.saveEvent({ ...rawEvent, data: { ...rawData, mac: `1234BEEF${expectedId}` } });
+    await service.saveEvent({ ...rawEvent, ruuviId: expectedId });
+    await service.saveEvent({ ...rawEvent, ruuviId: expectedId });
     const result = await service.getTags();
     expect(result.length).toBe(1);
     const tag = result[0];
@@ -76,15 +77,17 @@ describe("service", () => {
 
   it("should be able to retrieve events from database", async () => {
     const id = "BEEF";
-    const testData = _.omit(["mac", "measurementSequence"], rawData);
+    const testData = _.omit(["measurementSequence"], rawData);
 
     await service.saveEvent({
       ...rawEvent,
-      data: { ...testData, mac: `1234DEAD${id}`, measurementSequence: 1 },
+      ruuviId: id,
+      data: { ...testData, measurementSequence: 1 },
     });
     await service.saveEvent({
       ...rawEvent,
-      data: { ...rawData, mac: `1234DEAD${id}`, measurementSequence: 2 },
+      ruuviId: id,
+      data: { ...rawData, measurementSequence: 2 },
     });
     const result = await service.getEvents(id);
 

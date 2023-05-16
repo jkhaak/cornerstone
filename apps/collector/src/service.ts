@@ -49,20 +49,10 @@ insert into public.ruuvidata (ruuvitag
 values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
-function parseId(strId: string) {
-  const found = strId.match(/\w{4}$/);
-  if (found) {
-    return found[0];
-  }
+export async function saveEvent(event: Event): Promise<RuuviId> {
+  const { data, ruuviId } = event;
 
-  throw new Error("Cannot parse the ruuvi id");
-}
-
-export async function saveEvent(event: Event) {
-  const data = event.data;
-  const ruuviId = parseId(event.data.mac);
-
-  return db.tx(async (tx) => {
+  await db.tx(async (tx) => {
     await tx.none(SQL_INSERT_RUUVITAG, [ruuviId, event.data.mac]);
     await tx.none(SQL_INSERT_RUUVIEVENT, [
       ruuviId,
@@ -80,6 +70,8 @@ export async function saveEvent(event: Event) {
       data.measurementSequence,
     ]);
   });
+
+  return ruuviId satisfies RuuviId;
 }
 
 export async function getEvents(id: RuuviId) {

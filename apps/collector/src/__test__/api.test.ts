@@ -6,7 +6,7 @@ import * as service from "../service";
 import { rawData, rawEvent, ruuviTables } from "./ruuvi-service.test";
 import { getHeaders, teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash";
-import type { RuuviData } from "../model";
+import type { RuuviData, RuuviId } from "../model";
 
 afterAll(() => {
   teardownTestConnection();
@@ -14,7 +14,7 @@ afterAll(() => {
 
 describe("rest api", () => {
   describe("get endpoints for ruuvi service", () => {
-    const ids = ["DEAD", "BEEF", "DADA"];
+    const ids = ["DEAD", "BEEF", "DADA"] as RuuviId[];
     const sequenceStart = _.random(20, 150);
     const measurementSequences = _.range(sequenceStart, sequenceStart + _.random(2, 7));
 
@@ -26,7 +26,8 @@ describe("rest api", () => {
           measurementSequences.map((measurementSequence) =>
             service.saveEvent({
               ...rawEvent,
-              data: { ...rawData, measurementSequence, mac: `12345678${id}` },
+              ruuviId: id,
+              data: { ...rawData, measurementSequence },
             })
           )
         )
@@ -64,7 +65,8 @@ describe("rest api", () => {
       expect(headers["content-type"]).toMatch(/json/);
 
       const responseEvents = response.body as RuuviData[];
-      const responseMeasurementSequences = responseEvents.map((event) => event.measurementSequence).sort();
+      const responseMeasurementSequences = responseEvents.map((event) => event.measurementSequence);
+      responseMeasurementSequences.sort();
 
       expect(responseMeasurementSequences).toMatchObject(measurementSequences);
     });
@@ -79,18 +81,26 @@ describe("rest api", () => {
   });
 
   describe("post endpoints for ruuvi service", () => {
-    afterAll(async () => {
+    afterEach(async () => {
       await truncateTables(ruuviTables);
     });
 
-    it("should consume ruuvi events", async () => {
+    it("should return resource id with created status", async () => {
       const id = "DEAF";
       const response = await request(app)
         .post("/ruuvi/event")
         .send({ ...rawEvent, data: { ...rawData, mac: `DEADBEEF${id}` } });
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(201);
+      expect(response.body).toMatchObject({ id });
+    });
 
-      const events = await service.getEvents(id);
+    it("should consume ruuvi events", async () => {
+      const ruuviId = "DEAF";
+      const payload = { ...rawEvent, ruuviId, data: { ...rawData, mac: `DEADBEEF${ruuviId}` } };
+      const response = await request(app).post("/ruuvi/event").send(payload);
+      expect(response.status).toBe(201);
+
+      const events = await service.getEvents(ruuviId);
       expect(events.length).toBe(1);
     });
 
