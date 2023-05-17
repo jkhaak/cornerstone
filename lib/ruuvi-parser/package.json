@@ -15,10 +15,7 @@
     "test": "heft test --clean"
   },
   "dependencies": {
-    "@abandonware/noble": "1.9.2-21",
-    "date-fns": "~2.30.0",
-    "lodash": "~4.17.21",
-    "pino": "~8.11.0"
+    "lodash": "~4.17.21"
   },
   "devDependencies": {
     "@cornerstone/eslint-config": "workspace:*",
@@ -33,11 +30,6 @@
     "esbuild": "~0.17.18",
     "eslint": "~8.39.0",
     "expect-type": "~0.15.0",
-    "pino-pretty": "~10.0.0",
     "typescript": "~5.0.4"
-  },
-  "peerDependencies": {
-    "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
-    "ws": "~8.13.0"
   }
 }
