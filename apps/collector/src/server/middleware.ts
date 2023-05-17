@@ -15,14 +15,10 @@ export function validateBody<TInputBody, TOutputBody>(
   const transformFn = transform === undefined ? identity : transform;
   return (req: Request, __res: Response, next: NextFunction) => {
     schema
-      .safeParseAsync(req.body)
+      .parseAsync(req.body)
       .then((val) => {
-        if (val.success) {
-          req.body = transformFn(val.data);
-          next();
-        } else {
-          next(val.error);
-        }
+        req.body = transformFn(val);
+        next();
       })
       .catch(next);
   };
