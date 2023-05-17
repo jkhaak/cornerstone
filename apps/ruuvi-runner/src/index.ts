@@ -1,7 +1,7 @@
 import * as noble from "@abandonware/noble";
 import type { on, startScanningAsync, Advertisement } from "@abandonware/noble";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
-import type { RuuviData, DataFormat5 } from "@cornerstone/ruuvi-parser";
+import type { RuuviData } from "@cornerstone/ruuvi-parser";
 import logger from "./logger";
 import { format } from "./datetime";
 

@@ -4,7 +4,8 @@
   "description": "runner environment",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "main": "index.js",
+  "type": "module",
+  "module": "dist/index.js",
   "scripts": {
     "build": "heft build --clean",
     "start": "node ./dist/index.js",
