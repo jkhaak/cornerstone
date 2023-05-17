@@ -6,14 +6,26 @@
   "author": "Jani Haakana",
   "main": "index.js",
   "scripts": {
-    "build": "",
-    "start": "node ./index.js",
-    "test": ""
+    "build": "heft build --clean",
+    "start": "node ./dist/index.js",
+    "test": "heft test --clean"
   },
   "dependencies": {
     "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
     "@abandonware/noble": "1.9.2-21",
+    "@cornerstone/collector": "workspace:*",
+    "@cornerstone/eslint-config": "workspace:*",
     "@cornerstone/ruuvi-parser": "workspace:*",
+    "@rushstack/eslint-config": "~3.2.0",
+    "@rushstack/heft": "~0.50.2",
+    "@rushstack/heft-jest-plugin": "~0.5.8",
+    "@tsconfig/node18-strictest": "~1.0.0",
+    "@types/heft-jest": "~1.0.3",
+    "@types/node": "~18.16.3",
+    "axios": "~1.4.0",
+    "eslint": "~8.39.0",
+    "pino": "~8.11.0",
+    "typescript": "~5.0.4",
     "ws": "~8.13.0"
   }
 }
