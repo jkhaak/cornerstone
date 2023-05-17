@@ -4,6 +4,14 @@ import { ruuvi } from "@cornerstone/ruuvi-parser";
 import type { RuuviData } from "@cornerstone/ruuvi-parser";
 import logger from "./logger";
 import { format } from "./datetime";
+import { Endpoint } from "./endpoint";
+import { getEnvOrElseGet } from "./environment";
+
+const service = new Endpoint(
+  getEnvOrElseGet("SERVICE_ENDPOINT_URL", () => {
+    throw new Error("Should set environment variable SERVICE_ENDPOINT_URL");
+  })
+);
 
 export type Noble = {
   on: typeof on;
@@ -69,10 +77,14 @@ function ruuviCollector({ noble }: { noble: Noble }) {
   noble.on("discover", (peripheral) => {
     peripheralToString(peripheral)
       .then((data) => {
-        logger.info({ peripheral: data });
+        logger.debug({ message: "parsed peripheral data", peripheral: data });
+        return service
+          .sendEvent(data)
+          .then(() => logger.debug({ message: "event sent succesfully" }))
+          .catch((error: unknown) => logger.error({ message: "Unable to send event", error }));
       })
       .catch(() => {
-        logger.error({ message: `unable to parse data from: ${peripheral.id}` });
+        logger.error({ message: `Unable to parse data from: ${peripheral.id}` });
       });
   });
 }
