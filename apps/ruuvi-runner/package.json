@@ -7,8 +7,7 @@
   "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {
-    "build": "heft build --clean && npm run bundle",
-    "bundle": "esbuild src/index.ts --bundle --log-level=warning --external:fsevents --external:ws --external:@abandonware/bluetooth-hci-socket --outfile=lib/index.js --format=cjs --platform=node",
+    "build": "heft build --clean",
     "start": "node ./dist/index.js",
     "test": "heft test --clean"
   },
@@ -26,7 +25,6 @@
     "@types/node": "~18.16.3",
     "axios": "~1.4.0",
     "date-fns": "~2.30.0",
-    "esbuild": "~0.17.18",
     "eslint": "~8.39.0",
     "pino": "~8.11.0",
     "typescript": "~5.0.4",
