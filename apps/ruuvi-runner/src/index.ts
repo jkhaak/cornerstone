@@ -12,6 +12,7 @@ const SERVICE_ENDPOINT_URL = getEnv(envServiceEndpointUrl);
 
 if (SERVICE_ENDPOINT_URL === undefined) {
   logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
+  logger.debug({ env: process.env });
   process.exit(0);
 }
 
