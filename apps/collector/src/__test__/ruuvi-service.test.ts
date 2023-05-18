@@ -1,8 +1,19 @@
-import type { DataEvent } from "../model";
+import { Event, DataEvent, parseRuuviId, RuuviId } from "../model";
 import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
 import * as service from "../service";
 import { teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash/fp";
+
+function fromOldEventToDataEvent(event: Event, ruuviId?: RuuviId): DataEvent {
+  const thatRuuviId = ruuviId === undefined ? parseRuuviId(event.data.mac) : ruuviId;
+  return {
+    type: "dataEvent",
+    event: {
+      ...event,
+      ruuviId: thatRuuviId,
+    },
+  };
+}
 
 export const rawData = {
   manufacturerId: "499",
@@ -28,9 +39,8 @@ export const rawEvent = {
   id: "db7a25194f70",
   datetime: "2023-05-04T17:07:32.108Z",
   manufacturerDataHex: "99040510812c1acdb00378fdfcffd4b0b686573fdb7a25194f70",
-  ruuviId: "DADA",
   data: rawData,
-} satisfies DataEvent;
+} satisfies Event;
 
 export const ruuviTables = ["ruuvidata", "ruuvitag"];
 
@@ -53,8 +63,8 @@ describe("service", () => {
   });
 
   it("should be able to retrieve new ruuvi tags from database after discovering new events", async () => {
-    await service.saveEvent({ ...rawEvent, ruuviId: "DEAD" });
-    await service.saveEvent({ ...rawEvent, ruuviId: "BEEF" });
+    await service.saveEvent(fromOldEventToDataEvent(rawEvent, "DEAD"));
+    await service.saveEvent(fromOldEventToDataEvent(rawEvent, "BEEF"));
     const result = await service.getTags();
     const ids = result.map((r) => r.id);
 
@@ -64,8 +74,8 @@ describe("service", () => {
 
   it("should create only one ruuvi tag during discovery", async () => {
     const expectedId = "DEAD";
-    await service.saveEvent({ ...rawEvent, ruuviId: expectedId });
-    await service.saveEvent({ ...rawEvent, ruuviId: expectedId });
+    await service.saveEvent(fromOldEventToDataEvent(rawEvent, expectedId));
+    await service.saveEvent(fromOldEventToDataEvent(rawEvent, expectedId));
     const result = await service.getTags();
     expect(result.length).toBe(1);
     const tag = result[0];
@@ -84,16 +94,24 @@ describe("service", () => {
     const id = "BEEF";
     const testData = _.omit(["measurementSequence"], rawData);
 
-    await service.saveEvent({
-      ...rawEvent,
-      ruuviId: id,
-      data: { ...testData, measurementSequence: 1 },
-    });
-    await service.saveEvent({
-      ...rawEvent,
-      ruuviId: id,
-      data: { ...rawData, measurementSequence: 2 },
-    });
+    await service.saveEvent(
+      fromOldEventToDataEvent(
+        {
+          ...rawEvent,
+          data: { ...testData, measurementSequence: 1 },
+        },
+        id
+      )
+    );
+    await service.saveEvent(
+      fromOldEventToDataEvent(
+        {
+          ...rawEvent,
+          data: { ...testData, measurementSequence: 2 },
+        },
+        id
+      )
+    );
     const result = await service.getEvents(id);
 
     expect(result[0]).toMatchObject(_.omit(["mac", "manufacturerId"], testData));

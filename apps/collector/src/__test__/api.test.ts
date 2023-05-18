@@ -13,6 +13,9 @@ function compareNumbers(a: number, b: number) {
   return a - b;
 }
 
+const exampleManufacturerDataHex = "99040504aa7bb6c8f4fd0cfd4800007c76b92fa5f897846a37e6";
+const exampleManufacturerDataBase64 = Buffer.from(exampleManufacturerDataHex, "hex").toString("base64");
+
 afterAll(() => {
   teardownTestConnection();
   cacheManager.destroyCaches();
@@ -31,9 +34,12 @@ describe("rest api", () => {
         ids.flatMap((id) =>
           measurementSequences.map((measurementSequence) =>
             service.saveEvent({
-              ...rawEvent,
-              ruuviId: id,
-              data: { ...rawData, measurementSequence },
+              type: "dataEvent",
+              event: {
+                ...rawEvent,
+                ruuviId: id,
+                data: { ...rawData, measurementSequence },
+              },
             })
           )
         )
@@ -103,6 +109,12 @@ describe("rest api", () => {
         .send({ ...rawEvent, data: { ...rawData, mac: `DEADBEEF${id}` } });
       expect(response.status).toBe(201);
       expect(response.body).toMatchObject({ id });
+    });
+
+    it("should consume ruuvi advertisement", async () => {
+      const payload = { manufacturerDataBase64: exampleManufacturerDataBase64 };
+      const response = await request(app).post("/ruuvi/event").send(payload);
+      expect(response.status).toBe(201);
     });
 
     it("should consume ruuvi events", async () => {

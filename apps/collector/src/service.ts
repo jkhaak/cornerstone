@@ -1,5 +1,6 @@
+import { logger } from "@cornerstone/core";
 import { db } from "./database";
-import { RuuviId, RuuviTag, dtoRuuviTag, dtoRuuviData, DataEvent } from "./model";
+import { RuuviId, RuuviTag, dtoRuuviTag, dtoRuuviData, DataEvent, parseRuuviId } from "./model";
 
 const SQL_GET_RUUVITAGS = `
 select *
@@ -49,11 +50,27 @@ insert into public.ruuvidata (ruuvitag
 values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
+function purgeDataEvent(event: DataEvent) {
+  if (event.type === "dataEvent") {
+    return event.event;
+  }
+  const { data } = event;
+  const mac = data.mac;
+  if (!mac) {
+    logger.error({ message: "Event didn't include mac address", data });
+    throw new Error("Event didn't include mac address");
+  }
+  const ruuviId = parseRuuviId(mac);
+  const datetime = new Date();
+
+  return { data, ruuviId, datetime };
+}
+
 export async function saveEvent(event: DataEvent): Promise<RuuviId> {
-  const { data, ruuviId, datetime } = event;
+  const { data, ruuviId, datetime } = purgeDataEvent(event);
 
   await db.tx(async (tx) => {
-    await tx.none(SQL_INSERT_RUUVITAG, [ruuviId, event.data.mac]);
+    await tx.none(SQL_INSERT_RUUVITAG, [ruuviId, data.mac]);
     await tx.none(SQL_INSERT_RUUVIEVENT, [
       ruuviId,
       data.version,

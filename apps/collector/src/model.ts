@@ -1,5 +1,7 @@
 import type { CamelToSnakeKeys } from "@cornerstone/typing-tools";
+import { ruuvi } from "@cornerstone/ruuvi-parser";
 import { z } from "zod";
+import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
 
 export type RuuviId = `${Uppercase<string>}`;
 
@@ -23,24 +25,50 @@ export const dataFormat5Schema = z.object({
   mac: z.string().transform((s) => s.toUpperCase()),
 });
 
-export const apiEventSchema = z.object({
+export const manufacturerDataBase64Schema = z.object({
+  manufacturerDataBase64: z.string(),
+});
+
+export const eventSchema = z.object({
   id: z.string(),
   datetime: z.string().datetime(),
   manufacturerDataHex: z.string(),
   data: dataFormat5Schema,
 });
 
-export function createDataEvent(apiEvent: APIEvent): DataEvent {
+export type Event = z.infer<typeof eventSchema>;
+
+export const apiEventSchema = eventSchema.or(manufacturerDataBase64Schema);
+
+export async function createDataEvent(apiEvent: APIEvent): Promise<DataEvent> {
+  if ("manufacturerDataBase64" in apiEvent) {
+    const buffer = Buffer.from(apiEvent.manufacturerDataBase64, "base64");
+    const data = await ruuvi.parseAsync(buffer);
+    return {
+      type: "data",
+      data,
+    };
+  }
+
   return {
-    ...apiEvent,
-    ruuviId: parseRuuviId(apiEvent.data.mac),
+    type: "dataEvent",
+    event: {
+      ...apiEvent,
+      data: apiEvent.data,
+      ruuviId: parseRuuviId(apiEvent.data.mac),
+    },
   };
 }
 
+export type RuuviEvent = Event & { ruuviId: RuuviId; data: DataFormat5 };
+
 export type APIEvent = z.infer<typeof apiEventSchema>;
-export type DataEvent = APIEvent & {
-  ruuviId: RuuviId;
-};
+export type DataEvent =
+  | {
+      type: "dataEvent";
+      event: RuuviEvent;
+    }
+  | { data: DataFormat5; type: "data" };
 
 export type RuuviData = {
   id: number;

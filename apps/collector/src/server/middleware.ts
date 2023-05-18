@@ -2,22 +2,22 @@ import type { NextFunction, Request, RequestHandler, Response } from "express";
 import type { z } from "zod";
 import type { MemoryCache } from "memory-cache-node";
 import type * as core from "express-serve-static-core";
-import { identity } from "lodash";
 import { logger } from "@cornerstone/core";
 
-export type Transform<A, B> = (a: A) => B;
+export type Transform<A, B> = (a: A) => Promise<B>;
 
 export function validateBody<TInputBody, TOutputBody>(
   schema: z.Schema<TInputBody>,
   transform?: Transform<TInputBody, TOutputBody>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): RequestHandler<core.ParamsDictionary, any, TOutputBody, any> {
-  const transformFn = transform === undefined ? identity : transform;
+  const transformFn = transform === undefined ? <T>(val: T) => Promise.resolve(val) : transform;
   return (req: Request, __res: Response, next: NextFunction) => {
     schema
       .parseAsync(req.body)
+      .then(transformFn)
       .then((val) => {
-        req.body = transformFn(val);
+        req.body = val;
         next();
       })
       .catch(next);
