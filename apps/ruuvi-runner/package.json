@@ -23,7 +23,6 @@
     "@rushstack/heft-jest-plugin": "~0.5.8",
     "axios": "~1.4.0",
     "date-fns": "~2.30.0",
-    "pino": "~8.11.0",
     "ws": "~8.13.0"
   },
   "devDependencies": {

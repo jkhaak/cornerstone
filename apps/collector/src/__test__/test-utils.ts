@@ -1,6 +1,6 @@
 import { db } from "../database";
 import type { Response } from "supertest";
-import { logger } from "../logger";
+import { logger } from "@cornerstone/core";
 
 /**
  * Teardown database connection after test run. Should be called in afterAll stage

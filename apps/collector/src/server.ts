@@ -1,11 +1,11 @@
 import express from "express";
-import { pinoHttp } from "./logger";
+import { httpLogger } from "@cornerstone/core";
 import ruuviRouter from "./routes/ruuvi";
 import { zodErrorHandler } from "./server/error-handler";
 
 const app = express();
 app.use(express.json());
-app.use(pinoHttp);
+app.use(httpLogger);
 
 app.use("/ruuvi", ruuviRouter);
 

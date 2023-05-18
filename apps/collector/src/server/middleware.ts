@@ -3,7 +3,7 @@ import type { z } from "zod";
 import type { MemoryCache } from "memory-cache-node";
 import type * as core from "express-serve-static-core";
 import { identity } from "lodash";
-import { logger } from "../logger";
+import { logger } from "@cornerstone/core";
 
 export type Transform<A, B> = (a: A) => B;
 

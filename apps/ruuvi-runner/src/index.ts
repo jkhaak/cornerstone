@@ -2,7 +2,7 @@ import noble = require("@abandonware/noble");
 import type { on, startScanningAsync, Advertisement } from "@abandonware/noble";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
 import type { RuuviData } from "@cornerstone/ruuvi-parser";
-import logger from "./logger";
+import { logger } from "@cornerstone/core";
 import { format } from "./datetime";
 import { Endpoint } from "./endpoint";
 import { environment } from "@cornerstone/core";
