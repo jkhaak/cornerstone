@@ -3,7 +3,7 @@ import { createHash } from "crypto";
 import * as service from "../service";
 import { DataEvent, apiEventSchema, createDataEvent } from "../model";
 import { cacheWithBody, validateBody } from "../server/middleware";
-import { Cache } from "memory-cache";
+import { MemoryCache } from "memory-cache-node";
 import _ from "lodash";
 
 const router = express.Router();
@@ -65,7 +65,7 @@ router.get("/:id/events", (req, res, next) => {
 router.post(
   "/event",
   validateBody(apiEventSchema, createDataEvent),
-  cacheWithBody(new Cache(), createCacheKey, 200, 30),
+  cacheWithBody(new MemoryCache(60, 100000), createCacheKey, 200, 60),
   (req, res, next) => {
     const event = req.body;
 

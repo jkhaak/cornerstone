@@ -1,6 +1,6 @@
 import type { NextFunction, Request, RequestHandler, Response } from "express";
 import type { z } from "zod";
-import type { CacheClass } from "memory-cache";
+import type { MemoryCache } from "memory-cache-node";
 import type * as core from "express-serve-static-core";
 import { identity } from "lodash";
 import { logger } from "../logger";
@@ -36,10 +36,10 @@ export type CacheItem<T> = {
 };
 
 export function cacheWithBody<ReqBody, ResBody, Locals>(
-  memoryCache: CacheClass<string, CacheItem<ResBody>>,
+  memoryCache: MemoryCache<string, CacheItem<ResBody>>,
   fn: (t: ReqBody) => string,
   statusWithCacheResult: number,
-  time: number
+  cacheTtl: number
 ): RequestHandler<core.ParamsDictionary, ResBody, ReqBody, Locals> {
   return (
     req: Request<core.ParamsDictionary, ResBody, ReqBody, Locals>,
@@ -47,7 +47,7 @@ export function cacheWithBody<ReqBody, ResBody, Locals>(
     next: NextFunction
   ) => {
     const key = fn(req.body);
-    const cacheItem = memoryCache.get(key);
+    const cacheItem = memoryCache.retrieveItemValue(key);
 
     if (cacheItem) {
       logger.debug({ message: "used cached item", key, cacheItem });
@@ -65,7 +65,7 @@ export function cacheWithBody<ReqBody, ResBody, Locals>(
           return res;
         }
         if (body) {
-          memoryCache.put(key, { body, contentType: res.get("Content-type") }, time);
+          memoryCache.storeExpiringItem(key, { body, contentType: res.get("Content-type") }, cacheTtl);
           logger.debug({ message: "caching item", key, cacheItem: body });
           res.oldSend(body);
         } else {
