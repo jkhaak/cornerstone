@@ -25,6 +25,11 @@
   "projects": [
     // tools
     {
+      "packageName": "@cornerstone/core",
+      "projectFolder": "lib/core",
+      "tags": ["library", "tools"]
+    },
+    {
       "packageName": "@cornerstone/node-rig",
       "projectFolder": "tools/node-rig",
       "tags": ["tools"]

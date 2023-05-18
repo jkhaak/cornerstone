@@ -15,6 +15,7 @@
     "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
     "@abandonware/noble": "1.9.2-21",
     "@cornerstone/collector": "workspace:*",
+    "@cornerstone/core": "workspace:*",
     "@cornerstone/node-rig": "workspace:*",
     "@cornerstone/ruuvi-parser": "workspace:*",
     "@rushstack/eslint-config": "~3.2.0",

@@ -63,6 +63,7 @@ importers:
       '@abandonware/bluetooth-hci-socket': ~0.5.3-10
       '@abandonware/noble': 1.9.2-21
       '@cornerstone/collector': workspace:*
+      '@cornerstone/core': workspace:*
       '@cornerstone/node-rig': workspace:*
       '@cornerstone/ruuvi-parser': workspace:*
       '@rushstack/eslint-config': ~3.2.0
@@ -80,6 +81,7 @@ importers:
       '@abandonware/bluetooth-hci-socket': 0.5.3-10
       '@abandonware/noble': 1.9.2-21
       '@cornerstone/collector': link:../collector
+      '@cornerstone/core': link:../../lib/core
       '@cornerstone/node-rig': link:../../tools/node-rig
       '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
@@ -92,6 +94,27 @@ importers:
     devDependencies:
       '@types/heft-jest': 1.0.3
       '@types/node': 18.16.3
+      eslint: 8.39.0
+      typescript: 5.0.4
+
+  ../../lib/core:
+    specifiers:
+      '@cornerstone/node-rig': workspace:*
+      '@rushstack/eslint-config': ~3.2.0
+      '@rushstack/heft': ~0.50.2
+      '@rushstack/heft-jest-plugin': ~0.5.8
+      '@types/heft-jest': ~1.0.3
+      '@types/node': ~18.16.3
+      eslint: ~8.39.0
+      typescript: ~5.0.4
+    dependencies:
+      '@cornerstone/node-rig': link:../../tools/node-rig
+      '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
+      '@rushstack/heft': 0.50.2_@types+node@18.16.3
+      '@rushstack/heft-jest-plugin': 0.5.8_b3ojrsdcwfk4yzehq7jo543tj4
+      '@types/heft-jest': 1.0.3
+      '@types/node': 18.16.3
+    devDependencies:
       eslint: 8.39.0
       typescript: 5.0.4
 
@@ -1357,7 +1380,6 @@ packages:
     resolution: {integrity: sha512-Z8u264kbGYY4+NER7zMox9OKp270/igaHqhLnCvNJ8CrFl/CTC8zUE4V3c6FDjN/rukIVreuhkfLlbchTcW9Vg==}
     dependencies:
       '@types/jest': 29.5.0
-    dev: true
 
   /@types/istanbul-lib-coverage/2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
@@ -1377,7 +1399,6 @@ packages:
     dependencies:
       expect: 29.5.0
       pretty-format: 29.5.0
-    dev: true
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}

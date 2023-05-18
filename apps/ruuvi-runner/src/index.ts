@@ -5,10 +5,10 @@ import type { RuuviData } from "@cornerstone/ruuvi-parser";
 import logger from "./logger";
 import { format } from "./datetime";
 import { Endpoint } from "./endpoint";
-import { getEnv } from "./environment";
+import { environment } from "@cornerstone/core";
 
 const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
-const SERVICE_ENDPOINT_URL = getEnv(envServiceEndpointUrl);
+const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
 
 if (SERVICE_ENDPOINT_URL === undefined) {
   logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
