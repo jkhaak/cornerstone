@@ -7,6 +7,7 @@ import { rawData, rawEvent, ruuviTables } from "./ruuvi-service.test";
 import { getHeaders, teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash";
 import type { RuuviData, RuuviId } from "../model";
+import { cacheManager } from "../cache-manager";
 
 function compareNumbers(a: number, b: number) {
   return a - b;
@@ -14,6 +15,7 @@ function compareNumbers(a: number, b: number) {
 
 afterAll(() => {
   teardownTestConnection();
+  cacheManager.destroyCaches();
 });
 
 describe("rest api", () => {
@@ -40,6 +42,10 @@ describe("rest api", () => {
 
     afterAll(async () => {
       await truncateTables(ruuviTables);
+    });
+
+    afterEach(() => {
+      cacheManager.clearCaches();
     });
 
     it("should return all known ruuvi tags", async () => {
@@ -87,6 +93,7 @@ describe("rest api", () => {
   describe("post endpoints", () => {
     afterEach(async () => {
       await truncateTables(ruuviTables);
+      cacheManager.clearCaches();
     });
 
     it("should return resource id with created status", async () => {
