@@ -1,7 +1,9 @@
 *
 
+!.eslintrc.cjs
 !.gitignore
 !package.json
+!tsconfig.json
 
 !config/
 !config/*.json

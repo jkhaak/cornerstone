@@ -21,7 +21,7 @@
     "zod-validation-error": "~1.3.0"
   },
   "devDependencies": {
-    "@cornerstone/eslint-config": "workspace:*",
+    "@cornerstone/node-rig": "workspace:*",
     "@cornerstone/ruuvi-parser": "workspace:*",
     "@cornerstone/typing-tools": "workspace:*",
     "@rushstack/eslint-config": "~3.2.0",

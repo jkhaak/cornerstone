@@ -7,7 +7,7 @@ importers:
 
   ../../apps/collector:
     specifiers:
-      '@cornerstone/eslint-config': workspace:*
+      '@cornerstone/node-rig': workspace:*
       '@cornerstone/ruuvi-parser': workspace:*
       '@cornerstone/typing-tools': workspace:*
       '@rushstack/eslint-config': ~3.2.0
@@ -42,7 +42,7 @@ importers:
       zod: 3.21.4
       zod-validation-error: 1.3.0_zod@3.21.4
     devDependencies:
-      '@cornerstone/eslint-config': link:../../tools/eslint-config
+      '@cornerstone/node-rig': link:../../tools/node-rig
       '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       '@cornerstone/typing-tools': link:../../lib/typing-tools
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
@@ -65,7 +65,7 @@ importers:
       '@abandonware/bluetooth-hci-socket': ~0.5.3-10
       '@abandonware/noble': 1.9.2-21
       '@cornerstone/collector': workspace:*
-      '@cornerstone/eslint-config': workspace:*
+      '@cornerstone/node-rig': workspace:*
       '@cornerstone/ruuvi-parser': workspace:*
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
@@ -83,7 +83,7 @@ importers:
       '@abandonware/bluetooth-hci-socket': 0.5.3-10
       '@abandonware/noble': 1.9.2-21
       '@cornerstone/collector': link:../collector
-      '@cornerstone/eslint-config': link:../../tools/eslint-config
+      '@cornerstone/node-rig': link:../../tools/node-rig
       '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.2_@types+node@18.16.3
@@ -100,7 +100,7 @@ importers:
 
   ../../lib/ruuvi-parser:
     specifiers:
-      '@cornerstone/eslint-config': workspace:*
+      '@cornerstone/node-rig': workspace:*
       '@cornerstone/typing-tools': workspace:*
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
@@ -117,7 +117,7 @@ importers:
     dependencies:
       lodash: 4.17.21
     devDependencies:
-      '@cornerstone/eslint-config': link:../../tools/eslint-config
+      '@cornerstone/node-rig': link:../../tools/node-rig
       '@cornerstone/typing-tools': link:../typing-tools
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.2_@types+node@18.16.3
@@ -133,6 +133,8 @@ importers:
 
   ../../lib/typing-tools:
     specifiers:
+      '@cornerstone/node-rig': workspace:*
+      '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
       '@rushstack/heft-jest-plugin': ~0.5.8
       '@tsconfig/node18-strictest': ~1.0.0
@@ -141,6 +143,8 @@ importers:
       eslint: ~8.39.0
       typescript: ~5.0.4
     devDependencies:
+      '@cornerstone/node-rig': link:../../tools/node-rig
+      '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.2_@types+node@18.16.3
       '@rushstack/heft-jest-plugin': 0.5.8_b3ojrsdcwfk4yzehq7jo543tj4
       '@tsconfig/node18-strictest': 1.0.0
@@ -149,13 +153,19 @@ importers:
       eslint: 8.39.0
       typescript: 5.0.4
 
-  ../../tools/eslint-config:
+  ../../tools/node-rig:
     specifiers:
       '@rushstack/eslint-config': ~3.2.0
+      '@rushstack/heft': ~0.50.2
+      '@rushstack/heft-jest-plugin': ~0.5.8
+      '@tsconfig/node18-strictest': ~1.0.0
       eslint: ~8.39.0
       typescript: ~5.0.4
     dependencies:
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
+      '@rushstack/heft': 0.50.2
+      '@rushstack/heft-jest-plugin': 0.5.8_@rushstack+heft@0.50.2
+      '@tsconfig/node18-strictest': 1.0.0
     devDependencies:
       eslint: 8.39.0
       typescript: 5.0.4
@@ -1104,6 +1114,17 @@ packages:
       - supports-color
       - typescript
 
+  /@rushstack/heft-config-file/0.11.11:
+    resolution: {integrity: sha512-itxbvlJ71tOVy6xlbu/gS/O+zDsCxWG+qfuWL9UuV3uRuvN9uI0e8/13YqcFBUq6VoI+I3BrwksyvhdCNcid1A==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      '@rushstack/node-core-library': 3.57.0
+      '@rushstack/rig-package': 0.3.18
+      jsonpath-plus: 4.0.0
+    transitivePeerDependencies:
+      - '@types/node'
+    dev: false
+
   /@rushstack/heft-config-file/0.11.11_@types+node@18.16.3:
     resolution: {integrity: sha512-itxbvlJ71tOVy6xlbu/gS/O+zDsCxWG+qfuWL9UuV3uRuvN9uI0e8/13YqcFBUq6VoI+I3BrwksyvhdCNcid1A==}
     engines: {node: '>=10.13.0'}
@@ -1113,6 +1134,28 @@ packages:
       jsonpath-plus: 4.0.0
     transitivePeerDependencies:
       - '@types/node'
+
+  /@rushstack/heft-jest-plugin/0.5.8_@rushstack+heft@0.50.2:
+    resolution: {integrity: sha512-il2oGZv691Hpi3sQxkj4HSGrcHFX09WMroBlwixCFgbR8hJBBDLLptl8UvAXsH3/0YJRvo/XhwViMVnqAv7fqQ==}
+    peerDependencies:
+      '@rushstack/heft': ^0.50.2
+    dependencies:
+      '@jest/core': 29.5.0
+      '@jest/reporters': 29.5.0
+      '@jest/transform': 29.5.0
+      '@rushstack/heft': 0.50.2
+      '@rushstack/heft-config-file': 0.11.11
+      '@rushstack/node-core-library': 3.57.0
+      jest-config: 29.5.0
+      jest-resolve: 29.5.0
+      jest-snapshot: 29.5.0
+      lodash: 4.17.21
+    transitivePeerDependencies:
+      - '@types/node'
+      - node-notifier
+      - supports-color
+      - ts-node
+    dev: false
 
   /@rushstack/heft-jest-plugin/0.5.8_b3ojrsdcwfk4yzehq7jo543tj4:
     resolution: {integrity: sha512-il2oGZv691Hpi3sQxkj4HSGrcHFX09WMroBlwixCFgbR8hJBBDLLptl8UvAXsH3/0YJRvo/XhwViMVnqAv7fqQ==}
@@ -1135,6 +1178,29 @@ packages:
       - supports-color
       - ts-node
 
+  /@rushstack/heft/0.50.2:
+    resolution: {integrity: sha512-kb5QaZiHkmcrmuFxcJiAJA1c+d/FxQBqBya0D/AuhbWzUAfk2oexw6TWUr8T0Wv1jN2UTzq9juzy2Zhan0mMIw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dependencies:
+      '@rushstack/heft-config-file': 0.11.11
+      '@rushstack/node-core-library': 3.57.0
+      '@rushstack/rig-package': 0.3.18
+      '@rushstack/ts-command-line': 4.13.2
+      '@types/tapable': 1.0.6
+      argparse: 1.0.10
+      chokidar: 3.4.3
+      fast-glob: 3.2.12
+      glob: 7.0.6
+      glob-escape: 0.0.2
+      prettier: 2.3.2
+      semver: 7.3.8
+      tapable: 1.1.3
+      true-case-path: 2.2.1
+    transitivePeerDependencies:
+      - '@types/node'
+    dev: false
+
   /@rushstack/heft/0.50.2_@types+node@18.16.3:
     resolution: {integrity: sha512-kb5QaZiHkmcrmuFxcJiAJA1c+d/FxQBqBya0D/AuhbWzUAfk2oexw6TWUr8T0Wv1jN2UTzq9juzy2Zhan0mMIw==}
     engines: {node: '>=10.13.0'}
@@ -1156,6 +1222,23 @@ packages:
       true-case-path: 2.2.1
     transitivePeerDependencies:
       - '@types/node'
+
+  /@rushstack/node-core-library/3.57.0:
+    resolution: {integrity: sha512-uR5I9vLJuknliZXDDqW7nBtiKSO0fYOnvNEUNPQ84rmFYbvDWQGTDx7MREMVGXhfEN5J50xzAtGTPC9xdbia6g==}
+    peerDependencies:
+      '@types/node': '*'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+    dependencies:
+      colors: 1.2.5
+      fs-extra: 7.0.1
+      import-lazy: 4.0.0
+      jju: 1.4.0
+      resolve: 1.22.1
+      semver: 7.3.8
+      z-schema: 5.0.5
+    dev: false
 
   /@rushstack/node-core-library/3.57.0_@types+node@18.16.3:
     resolution: {integrity: sha512-uR5I9vLJuknliZXDDqW7nBtiKSO0fYOnvNEUNPQ84rmFYbvDWQGTDx7MREMVGXhfEN5J50xzAtGTPC9xdbia6g==}
@@ -3079,6 +3162,44 @@ packages:
       stack-utils: 2.0.6
     transitivePeerDependencies:
       - supports-color
+
+  /jest-config/29.5.0:
+    resolution: {integrity: sha512-kvDUKBnNJPNBmFFOhDbm59iu1Fii1Q6SxyhXfvylq3UTHbg6o7j/g8k2dZyXWLvfdKB1vAPxNZnMgtKJcmu3kA==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      '@types/node': '*'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      '@babel/core': 7.21.3
+      '@jest/test-sequencer': 29.5.0
+      '@jest/types': 29.5.0
+      babel-jest: 29.5.0_@babel+core@7.21.3
+      chalk: 4.1.2
+      ci-info: 3.8.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.5.0
+      jest-environment-node: 29.5.0
+      jest-get-type: 29.4.3
+      jest-regex-util: 29.4.3
+      jest-resolve: 29.5.0
+      jest-runner: 29.5.0
+      jest-util: 29.5.0
+      jest-validate: 29.5.0
+      micromatch: 4.0.5
+      parse-json: 5.2.0
+      pretty-format: 29.5.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /jest-config/29.5.0_@types+node@18.16.3:
     resolution: {integrity: sha512-kvDUKBnNJPNBmFFOhDbm59iu1Fii1Q6SxyhXfvylq3UTHbg6o7j/g8k2dZyXWLvfdKB1vAPxNZnMgtKJcmu3kA==}

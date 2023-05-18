@@ -1,13 +1,4 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/node18-strictest/tsconfig.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "sourceMap": true,
-    "ignoreDeprecations": "5.0",
-    // "verbatimModuleSyntax": true,
-    "types": ["heft-jest", "node"]
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "extends": "./node_modules/@cornerstone/node-rig/profiles/default/tsconfig-base.json"
 }

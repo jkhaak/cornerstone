@@ -1,0 +1,10 @@
+*
+
+!.gitignore
+!package.json
+
+!profiles/
+!profiles/**/
+!profiles/*/*.json
+!profiles/*/*.js
+!profiles/**/config/*.json

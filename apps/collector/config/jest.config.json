@@ -1,14 +1,4 @@
 {
-  "extends": "@rushstack/heft-jest-plugin/includes/jest-shared.config.json",
-  "collectCoverage": true,
-  "coveragePathIgnorePatterns": ["<rootDir>/src/__test__"],
-  "setupFiles": ["dotenv/config"],
-  "coverageThreshold": {
-    "global": {
-      "branches": 50,
-      "functions": 50,
-      "lines": 50,
-      "statements": 50
-    }
-  }
+  "extends": "@cornerstone/node-rig/profiles/default/config/jest.config.json",
+  "setupFiles": ["dotenv/config"]
 }

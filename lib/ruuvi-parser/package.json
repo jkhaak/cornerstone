@@ -18,7 +18,7 @@
     "lodash": "~4.17.21"
   },
   "devDependencies": {
-    "@cornerstone/eslint-config": "workspace:*",
+    "@cornerstone/node-rig": "workspace:*",
     "@cornerstone/typing-tools": "workspace:*",
     "@rushstack/eslint-config": "~3.2.0",
     "@rushstack/heft": "~0.50.2",
