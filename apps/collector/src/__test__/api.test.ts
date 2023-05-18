@@ -8,6 +8,10 @@ import { getHeaders, teardownTestConnection, truncateTables } from "./test-utils
 import _ from "lodash";
 import type { RuuviData, RuuviId } from "../model";
 
+function compareNumbers(a: number, b: number) {
+  return a - b;
+}
+
 afterAll(() => {
   teardownTestConnection();
 });
@@ -66,7 +70,7 @@ describe("rest api", () => {
 
       const responseEvents = response.body as RuuviData[];
       const responseMeasurementSequences = responseEvents.map((event) => event.measurementSequence);
-      responseMeasurementSequences.sort();
+      responseMeasurementSequences.sort(compareNumbers);
 
       expect(responseMeasurementSequences).toMatchObject(measurementSequences);
     });
