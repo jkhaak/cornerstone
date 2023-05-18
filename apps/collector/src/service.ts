@@ -79,5 +79,5 @@ export async function getEvents(id: RuuviId) {
 }
 
 export async function getTags(): Promise<RuuviTag[]> {
-  return db.many(SQL_GET_RUUVITAGS).then((items) => items.map(dtoRuuviTag));
+  return db.manyOrNone(SQL_GET_RUUVITAGS).then((items) => items.map(dtoRuuviTag));
 }

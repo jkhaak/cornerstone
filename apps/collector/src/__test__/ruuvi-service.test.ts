@@ -47,6 +47,11 @@ describe("service", () => {
     await truncateTables(ruuviTables);
   });
 
+  it("should return empty array if no tags are found", async () => {
+    const emptyArray = await service.getTags();
+    expect(emptyArray).toStrictEqual([]);
+  });
+
   it("should be able to retrieve new ruuvi tags from database after discovering new events", async () => {
     await service.saveEvent({ ...rawEvent, ruuviId: "DEAD" });
     await service.saveEvent({ ...rawEvent, ruuviId: "BEEF" });
