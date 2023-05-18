@@ -5,13 +5,17 @@ import type { RuuviData } from "@cornerstone/ruuvi-parser";
 import logger from "./logger";
 import { format } from "./datetime";
 import { Endpoint } from "./endpoint";
-import { getEnvOrElseGet } from "./environment";
+import { getEnv } from "./environment";
 
-const service = new Endpoint(
-  getEnvOrElseGet("SERVICE_ENDPOINT_URL", () => {
-    throw new Error("Should set environment variable SERVICE_ENDPOINT_URL");
-  })
-);
+const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
+const SERVICE_ENDPOINT_URL = getEnv(envServiceEndpointUrl);
+
+if (SERVICE_ENDPOINT_URL === undefined) {
+  logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
+  process.exit(0);
+}
+
+const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
 export type Noble = {
   on: typeof on;
