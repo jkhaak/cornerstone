@@ -11,9 +11,5 @@ export function getEnvOrElse(env: string, or: string) {
 export function getEnvOrElseGet(env: string, orElse: () => string) {
   const result = getEnv(env);
 
-  if (result) {
-    return result;
-  }
-
-  return orElse();
+  return result ?? orElse();
 }
