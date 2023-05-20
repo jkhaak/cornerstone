@@ -2,10 +2,8 @@ import noble = require("@abandonware/noble");
 import type { on, startScanningAsync, Advertisement } from "@abandonware/noble";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
 import type { RuuviData } from "@cornerstone/ruuvi-parser";
-import { logger } from "@cornerstone/core";
-import { format } from "./datetime";
 import { Endpoint } from "./endpoint";
-import { environment } from "@cornerstone/core";
+import { environment, logger, datetimeTools } from "@cornerstone/core";
 
 const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
 const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
@@ -46,7 +44,7 @@ function peripheralToString({ id, advertisement }: NobleAdvertisement): Promise<
   const info = {
     id,
     localName: advertisement.localName,
-    datetime: format(new Date()),
+    datetime: datetimeTools.format(new Date()),
     manufacturerDataHex,
   };
 

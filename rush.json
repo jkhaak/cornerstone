@@ -49,6 +49,11 @@
 
     // apps
     {
+      "packageName": "@cornerstone/ble-reader",
+      "projectFolder": "apps/ble-reader",
+      "tags": ["daemon"]
+    },
+    {
       "packageName": "@cornerstone/ruuvi-runner",
       "projectFolder": "apps/ruuvi-runner",
       "tags": ["daemon"]
