@@ -14,7 +14,7 @@ import type {
   Temperature,
 } from "./ruuvi-data-types";
 
-export type Format = {
+export type DecodedFormat = {
   manufacturerId: RuuviManufacturerId;
   version: DataFormatVersion;
   temperature: Temperature;
@@ -31,56 +31,56 @@ type Specification<Obj> = {
   [Key in keyof Obj]: (b: Buffer) => Obj[Key];
 };
 
-const specification: Specification<Format> = {
+const specification: Specification<DecodedFormat> = {
   manufacturerId: () => "499",
   version: () => 5,
-  temperature: (b) => parseTemperature(b, 3),
-  humidity: (b) => parseHumidity(b, 5),
-  pressure: (b) => parsePressure(b, 7),
+  temperature: (b) => decodeTemperature(b, 3),
+  humidity: (b) => decodeHumidity(b, 5),
+  pressure: (b) => decodePressure(b, 7),
   acceleration: (b) => ({
-    x: parseAcceleration(b, 9),
-    y: parseAcceleration(b, 11),
-    z: parseAcceleration(b, 13),
+    x: decodeAcceleration(b, 9),
+    y: decodeAcceleration(b, 11),
+    z: decodeAcceleration(b, 13),
   }),
-  power: (b) => parsePower(b, 15),
-  movementCounter: (b) => parseMovementCounter(b, 17),
-  measurementSequence: (b) => parseMeasurementSequenceNumber(b, 18),
-  mac: parseMac,
-} satisfies Specification<Format>;
+  power: (b) => decodePower(b, 15),
+  movementCounter: (b) => decodeMovementCounter(b, 17),
+  measurementSequence: (b) => decodeMeasurementSequenceNumber(b, 18),
+  mac: decodeMac,
+} satisfies Specification<DecodedFormat>;
 
-const spec = Object.entries(specification);
+const decodeSpec = Object.entries(specification);
 
-export function parseTemperature(input: Buffer, offset: number = 0): Temperature {
+export function decodeTemperature(input: Buffer, offset: number = 0): Temperature {
   const num = input.readInt16BE(offset) / 200.0;
   return -163.84 < num && num < 163.84 ? num : NaN;
 }
 
-export function parseHumidity(input: Buffer, offset: number = 0): Humidity {
+export function decodeHumidity(input: Buffer, offset: number = 0): Humidity {
   const num = input.readUInt16BE(offset) / 400.0;
   return 0 <= num && num <= 163.835 ? num : NaN;
 }
 
-export function parsePressure(input: Buffer, offset: number = 0): Pressure {
+export function decodePressure(input: Buffer, offset: number = 0): Pressure {
   const num = input.readUInt16BE(offset) + 50_000;
   return num < 115_535 ? num : NaN;
 }
 
-export function parseAcceleration(input: Buffer, offset: number = 0): AccelerationValue {
+export function decodeAcceleration(input: Buffer, offset: number = 0): AccelerationValue {
   const num = input.readInt16BE(offset);
   return -32768 < num && num <= 32767 ? num / 1000.0 : NaN;
 }
 
-export function parseMovementCounter(input: Buffer, offset: number = 0): MovementCounter {
+export function decodeMovementCounter(input: Buffer, offset: number = 0): MovementCounter {
   const num = input.readUInt8(offset);
   return num < 255 ? num : NaN;
 }
 
-export function parsePower(input: Buffer, offset: number = 0): Power {
+export function decodePower(input: Buffer, offset: number = 0): Power {
   const leftByte = input[offset];
   const rightByte = input[offset + 1];
 
   if (leftByte === undefined || rightByte === undefined) {
-    throw new Error("method=data-format-5.parsePower msg=input buffer out of range");
+    throw new Error("method=data-format-5.decodePower msg=input buffer out of range");
   }
 
   // eslint-disable-next-line no-bitwise
@@ -95,17 +95,17 @@ export function parsePower(input: Buffer, offset: number = 0): Power {
   };
 }
 
-export function parseMeasurementSequenceNumber(input: Buffer, offset: number = 0): MeasurementSequence {
+export function decodeMeasurementSequenceNumber(input: Buffer, offset: number = 0): MeasurementSequence {
   const num = input.readUInt16BE(offset);
   return num < 65535 ? num : NaN;
 }
 
-export function parse(input: Buffer): RuuviData {
-  const dataEntries = spec.map(([key, fn]) => [key, fn(input)]);
+export function decode(input: Buffer): RuuviData {
+  const dataEntries = decodeSpec.map(([key, fn]) => [key, fn(input)]);
   return Object.fromEntries(dataEntries) as RuuviData;
 }
 
-function parseMac(buffer: Buffer): MACAddress | undefined {
+function decodeMac(buffer: Buffer): MACAddress | undefined {
   const mac = buffer.toString("hex").slice(40).toUpperCase();
   return /^F{12}$/.test(mac) ? undefined : mac;
 }

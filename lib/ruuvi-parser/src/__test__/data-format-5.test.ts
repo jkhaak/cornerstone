@@ -1,5 +1,5 @@
 import * as DataFormat5 from "../model/formats/data-format-5";
-import type { Format as TDataFormat5 } from "../model/formats/data-format-5";
+import type { DecodedFormat as DecodedFormat5 } from "../model/formats/data-format-5";
 import {
   createTestValues,
   TestValuesBufferObject,
@@ -11,7 +11,7 @@ import {
   toBuffer,
 } from "./test-util";
 
-type TestVector = [string, TDataFormat5];
+type TestVector = [string, DecodedFormat5];
 
 const validData: TestVector = [
   "99040512FC5394C37C0004FFFC040CAC364200CDCBB8334C884F",
@@ -78,15 +78,15 @@ const testVectors: TestVector[] = [validData, maximumData, minimumData, invalidD
 
 describe("Data format 5 specs", () => {
   describe("decoder", () => {
-    it("should parse raw binary data", () => {
+    it("should decode raw binary data", () => {
       testVectors.forEach(([hexData, expected]) => {
         const data = Buffer.from(hexData, "hex");
 
-        expect(DataFormat5.parse(data)).toStrictEqual(expected);
+        expect(DataFormat5.decode(data)).toStrictEqual(expected);
       });
     });
 
-    it("should parse temperature", () => {
+    it("should decode temperature", () => {
       const testValues = [
         ["0000", 0],
         ["12FC", 24.3],
@@ -96,12 +96,12 @@ describe("Data format 5 specs", () => {
       ] satisfies TestValuesHex[];
 
       const buffered = testValues.map(toBuffer(createTestValues("hex")));
-      buffered.forEach(testWith(DataFormat5.parseTemperature));
+      buffered.forEach(testWith(DataFormat5.decodeTemperature));
 
-      expect(DataFormat5.parseTemperature(Buffer.from("99040512FC", "hex"), 3)).toBe(24.3);
+      expect(DataFormat5.decodeTemperature(Buffer.from("99040512FC", "hex"), 3)).toBe(24.3);
     });
 
-    it("should parse humidity", () => {
+    it("should decode humidity", () => {
       const testValues = [
         [0, 0],
         [10_010, 25.025],
@@ -110,10 +110,10 @@ describe("Data format 5 specs", () => {
       ] satisfies TestValuesNumber[];
 
       const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-      buffered.forEach(testWith(DataFormat5.parseHumidity));
+      buffered.forEach(testWith(DataFormat5.decodeHumidity));
     });
 
-    it("should parse atmospheric pressure", () => {
+    it("should decode atmospheric pressure", () => {
       const testValues = [
         [0, 50_000],
         [51_325, 10_1325],
@@ -122,10 +122,10 @@ describe("Data format 5 specs", () => {
       ] satisfies TestValuesNumber[];
 
       const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-      buffered.forEach(testWith(DataFormat5.parsePressure));
+      buffered.forEach(testWith(DataFormat5.decodePressure));
     });
 
-    it("should parse acceleration", () => {
+    it("should decode acceleration", () => {
       const testValues = [
         ["fc18", -1],
         ["03e8", 1],
@@ -133,10 +133,10 @@ describe("Data format 5 specs", () => {
       ] satisfies TestValuesHex[];
 
       const buffered = testValues.map(toBuffer(createTestValues("hex")));
-      buffered.forEach(testWith(DataFormat5.parseAcceleration));
+      buffered.forEach(testWith(DataFormat5.decodeAcceleration));
     });
 
-    it("should parse movement counter", () => {
+    it("should decode movement counter", () => {
       const testValues = [
         [0, 0],
         [100, 100],
@@ -144,10 +144,10 @@ describe("Data format 5 specs", () => {
       ] satisfies TestValuesNumber[];
 
       const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
-      buffered.forEach(testWith(DataFormat5.parseMovementCounter));
+      buffered.forEach(testWith(DataFormat5.decodeMovementCounter));
     });
 
-    it("should parse battery voltage", () => {
+    it("should decode battery voltage", () => {
       const testValues: TestValuesNumberObject[] = [
         [0, { voltage: 1.6 }],
         [1400, { voltage: 3.0 }],
@@ -161,10 +161,10 @@ describe("Data format 5 specs", () => {
         return [buf, expected] satisfies TestValuesBufferObject;
       });
 
-      buffered.forEach(testWithMatch(DataFormat5.parsePower));
+      buffered.forEach(testWithMatch(DataFormat5.decodePower));
     });
 
-    it("should parse tx power", () => {
+    it("should decode tx power", () => {
       const testValues: TestValuesNumberObject[] = [
         [0, { tx: -40 }],
         [22, { tx: 4 }],
@@ -177,10 +177,10 @@ describe("Data format 5 specs", () => {
         return [buf, expected] satisfies TestValuesBufferObject;
       });
 
-      buffered.forEach(testWithMatch(DataFormat5.parsePower));
+      buffered.forEach(testWithMatch(DataFormat5.decodePower));
     });
 
-    it("should parse measurement sequence number", () => {
+    it("should decode measurement sequence number", () => {
       const testValues = [
         [0, 0],
         [1000, 1000],
@@ -188,7 +188,7 @@ describe("Data format 5 specs", () => {
       ] satisfies TestValuesNumber[];
 
       const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-      buffered.forEach(testWith(DataFormat5.parseMeasurementSequenceNumber));
+      buffered.forEach(testWith(DataFormat5.decodeMeasurementSequenceNumber));
     });
   });
 });

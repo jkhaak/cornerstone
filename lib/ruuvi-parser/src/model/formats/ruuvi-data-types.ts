@@ -1,5 +1,5 @@
 import type { GetFormats, GetVersion } from "../utils";
-import type { Format as DataFormat5 } from "./data-format-5";
+import type { DecodedFormat as DecodedFormat5 } from "./data-format-5";
 
 /**
  * Ruuvi manufacturer id. Id is 0x0499, which is transmitted as 0x9904.
@@ -89,6 +89,6 @@ export type MeasurementSequence = number;
  */
 export type MACAddress = string;
 
-export type DataFormats = [5, DataFormat5];
+export type DataFormats = [5, DecodedFormat5];
 export type DataFormatVersion = GetVersion<DataFormats>;
 export type RuuviData = GetFormats<DataFormats>;
