@@ -16,7 +16,7 @@ type TestVector = [string, DecodedFormat5];
 const validData: TestVector = [
   "99040512FC5394C37C0004FFFC040CAC364200CDCBB8334C884F",
   {
-    manufacturerId: "499",
+    manufacturerId: "0499",
     version: 5,
     temperature: 24.3,
     pressure: 100_044,
@@ -31,7 +31,7 @@ const validData: TestVector = [
 const maximumData: TestVector = [
   "9904057FFFFFFEFFFE7FFF7FFF7FFFFFDEFEFFFECBB8334C884F",
   {
-    manufacturerId: "499",
+    manufacturerId: "0499",
     version: 5,
     temperature: 163.835,
     pressure: 115_534,
@@ -46,7 +46,7 @@ const maximumData: TestVector = [
 const minimumData: TestVector = [
   "9904058001000000008001800180010000000000CBB8334C884F",
   {
-    manufacturerId: "499",
+    manufacturerId: "0499",
     version: 5,
     temperature: -163.835,
     pressure: 50_000,
@@ -61,7 +61,7 @@ const minimumData: TestVector = [
 const invalidData: TestVector = [
   "9904058000FFFFFFFF800080008000FFFFFFFFFFFFFFFFFFFFFF",
   {
-    manufacturerId: "499",
+    manufacturerId: "0499",
     version: 5,
     temperature: NaN,
     pressure: NaN,
@@ -70,7 +70,7 @@ const invalidData: TestVector = [
     power: { voltage: NaN, tx: NaN },
     movementCounter: NaN,
     measurementSequence: NaN,
-    mac: undefined,
+    mac: "FFFFFFFFFFFF",
   },
 ];
 

@@ -4,7 +4,7 @@ import type { DecodedFormat as DecodedFormat5 } from "./data-format-5";
 /**
  * Ruuvi manufacturer id. Id is 0x0499, which is transmitted as 0x9904.
  */
-export type RuuviManufacturerId = "499";
+export type RuuviManufacturerId = "0499";
 
 /**
  * Temperature (16bit signed integer) in 0.005 degrees.

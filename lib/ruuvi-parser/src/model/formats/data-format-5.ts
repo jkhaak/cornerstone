@@ -24,7 +24,7 @@ export type DecodedFormat = {
   power: Power;
   movementCounter: MovementCounter;
   measurementSequence: MeasurementSequence;
-  mac: MACAddress | undefined;
+  mac: MACAddress;
 };
 
 type Specification<Obj> = {
@@ -32,7 +32,7 @@ type Specification<Obj> = {
 };
 
 const specification: Specification<DecodedFormat> = {
-  manufacturerId: () => "499",
+  manufacturerId: () => "0499",
   version: () => 5,
   temperature: (b) => decodeTemperature(b, 3),
   humidity: (b) => decodeHumidity(b, 5),

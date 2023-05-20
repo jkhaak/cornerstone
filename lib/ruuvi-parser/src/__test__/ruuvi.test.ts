@@ -8,7 +8,7 @@ describe("Ruuvi tag advertisement data parser", () => {
   it("should be able to parse advertisement data", async () => {
     const data = await Ruuvi.decodeAsync(adData1);
     expect(data).toMatchObject({
-      manufacturerId: "499",
+      manufacturerId: "0499",
       version: 5,
     });
   });

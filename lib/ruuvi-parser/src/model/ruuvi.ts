@@ -1,10 +1,12 @@
+import _ from "lodash";
 import * as dataFormat5 from "./formats/data-format-5";
 import type { RuuviData, RuuviManufacturerId } from "./formats/ruuvi-data-types";
 
-const ruuviManufacturerId = "499" satisfies RuuviManufacturerId;
+const ruuviManufacturerId = "0499" satisfies RuuviManufacturerId;
 
 export function decodeAsync(input: Buffer): Promise<RuuviData> {
-  const manufacturerId = input.readInt16LE(0).toString(16);
+  const manufacturerId = _.padStart(input.readInt16LE(0).toString(16), 4, "0");
+
   if (manufacturerId !== ruuviManufacturerId) {
     return Promise.reject(new Error("Unknown manufacturer id"));
   }
