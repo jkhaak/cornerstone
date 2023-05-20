@@ -1,11 +1,11 @@
 import pino from "pino";
-import { getEnv } from "../environment";
+import { getEnvOrElse } from "../environment";
 
 let opts = {};
 
-if (getEnv("DEV") || getEnv("DEBUG")) {
-  opts = { ...opts, level: "debug" };
-}
+const level = getEnvOrElse("LOG_LEVEL", "info");
+
+opts = { ...opts, level };
 
 export { opts };
 
