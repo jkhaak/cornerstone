@@ -1,23 +1,17 @@
 import express from "express";
 import { createHash } from "crypto";
 import * as service from "../service";
-import { DataEvent, apiEventSchema, createDataEvent } from "../model";
+import { RuuviEvent, apiEventSchema, createDataEvent } from "../model";
 import { cacheWithBody, validateBody } from "../server/middleware";
 import _ from "lodash";
 import { cacheManager } from "../cache-manager";
-import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
+import type { DecodedFormat5 } from "@cornerstone/ruuvi-parser";
 
 const router = express.Router();
 
-function createCacheKey(event: DataEvent) {
-  if (event.type === "dataEvent") {
-    return createCacheKeyFromRuuviEvent(event.event.data);
-  }
-  return createCacheKeyFromRuuviEvent(event.data);
-}
-function createCacheKeyFromRuuviEvent(event: DataFormat5) {
+function createCacheKey(event: RuuviEvent) {
   const hash = createHash("sha256");
-  const data = event;
+  const { data }: { data: DecodedFormat5 } = event;
 
   const paths = [
     "manufacturerId",

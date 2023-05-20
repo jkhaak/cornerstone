@@ -1,22 +1,19 @@
-import { Event, DataEvent, parseRuuviId, RuuviId } from "../model";
-import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
+import { RuuviEvent, parseRuuviId, RuuviId } from "../model";
+import type { DecodedFormat5 } from "@cornerstone/ruuvi-parser";
 import * as service from "../service";
 import { teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash/fp";
 
-function fromOldEventToDataEvent(event: Event, ruuviId?: RuuviId): DataEvent {
-  const thatRuuviId = ruuviId === undefined ? parseRuuviId(event.data.mac) : ruuviId;
+function dataToRuuviEvent(data: DecodedFormat5, ruuviId?: RuuviId): RuuviEvent {
+  const thatRuuviId = ruuviId === undefined ? parseRuuviId(data.mac) : ruuviId;
   return {
-    type: "dataEvent",
-    event: {
-      ...event,
-      ruuviId: thatRuuviId,
-    },
+    data,
+    ruuviId: thatRuuviId,
   };
 }
 
 export const rawData = {
-  manufacturerId: "499",
+  manufacturerId: "0499",
   version: 5,
   temperature: 21.125,
   humidity: 28.225,
@@ -33,14 +30,7 @@ export const rawData = {
   movementCounter: 134,
   measurementSequence: 22335,
   mac: "DB7A25194F70",
-} satisfies DataFormat5;
-
-export const rawEvent = {
-  id: "db7a25194f70",
-  datetime: "2023-05-04T17:07:32.108Z",
-  manufacturerDataHex: "99040510812c1acdb00378fdfcffd4b0b686573fdb7a25194f70",
-  data: rawData,
-} satisfies Event;
+} satisfies DecodedFormat5;
 
 export const ruuviTables = ["ruuvidata", "ruuvitag"];
 
@@ -63,8 +53,8 @@ describe("service", () => {
   });
 
   it("should be able to retrieve new ruuvi tags from database after discovering new events", async () => {
-    await service.saveEvent(fromOldEventToDataEvent(rawEvent, "DEAD"));
-    await service.saveEvent(fromOldEventToDataEvent(rawEvent, "BEEF"));
+    await service.saveEvent(dataToRuuviEvent(rawData, "DEAD"));
+    await service.saveEvent(dataToRuuviEvent(rawData, "BEEF"));
     const result = await service.getTags();
     const ids = result.map((r) => r.id);
 
@@ -74,8 +64,8 @@ describe("service", () => {
 
   it("should create only one ruuvi tag during discovery", async () => {
     const expectedId = "DEAD";
-    await service.saveEvent(fromOldEventToDataEvent(rawEvent, expectedId));
-    await service.saveEvent(fromOldEventToDataEvent(rawEvent, expectedId));
+    await service.saveEvent(dataToRuuviEvent(rawData, expectedId));
+    await service.saveEvent(dataToRuuviEvent(rawData, expectedId));
     const result = await service.getTags();
     expect(result.length).toBe(1);
     const tag = result[0];
@@ -94,24 +84,8 @@ describe("service", () => {
     const id = "BEEF";
     const testData = _.omit(["measurementSequence"], rawData);
 
-    await service.saveEvent(
-      fromOldEventToDataEvent(
-        {
-          ...rawEvent,
-          data: { ...testData, measurementSequence: 1 },
-        },
-        id
-      )
-    );
-    await service.saveEvent(
-      fromOldEventToDataEvent(
-        {
-          ...rawEvent,
-          data: { ...testData, measurementSequence: 2 },
-        },
-        id
-      )
-    );
+    await service.saveEvent(dataToRuuviEvent({ ...rawData, measurementSequence: 1 }, id));
+    await service.saveEvent(dataToRuuviEvent({ ...rawData, measurementSequence: 2 }, id));
     const result = await service.getEvents(id);
 
     expect(result[0]).toMatchObject(_.omit(["mac", "manufacturerId"], testData));

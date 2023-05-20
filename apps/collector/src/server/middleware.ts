@@ -3,6 +3,7 @@ import type { z } from "zod";
 import type { MemoryCache } from "memory-cache-node";
 import type * as core from "express-serve-static-core";
 import { logger } from "@cornerstone/core";
+import { ValidationError } from "../errors";
 
 export type Transform<A, B> = (a: A) => Promise<B>;
 
@@ -15,7 +16,14 @@ export function validateBody<TInputBody, TOutputBody>(
   return (req: Request, __res: Response, next: NextFunction) => {
     schema
       .parseAsync(req.body)
-      .then(transformFn)
+      .then((validatedSchema) =>
+        transformFn(validatedSchema).catch((error: unknown) => {
+          logger.error({ message: "Error during transformation", error });
+          const errorMessage = error instanceof Error ? error.message : (error as string);
+
+          return Promise.reject(new ValidationError(errorMessage));
+        })
+      )
       .then((val) => {
         req.body = val;
         next();

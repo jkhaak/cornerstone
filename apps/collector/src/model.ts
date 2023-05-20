@@ -1,74 +1,24 @@
 import type { CamelToSnakeKeys } from "@cornerstone/typing-tools";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
 import { z } from "zod";
-import type { DataFormat5 } from "@cornerstone/ruuvi-parser";
+import type { DecodedFormat5 } from "@cornerstone/ruuvi-parser";
 
 export type RuuviId = `${Uppercase<string>}`;
 
-export const dataFormat5Schema = z.object({
-  manufacturerId: z.literal("499"),
-  version: z.literal(5),
-  temperature: z.number(),
-  humidity: z.number(),
-  pressure: z.number(),
-  acceleration: z.object({
-    x: z.number(),
-    y: z.number(),
-    z: z.number(),
-  }),
-  power: z.object({
-    voltage: z.number(),
-    tx: z.number(),
-  }),
-  movementCounter: z.number(),
-  measurementSequence: z.number(),
-  mac: z.string().transform((s) => s.toUpperCase()),
-});
-
-export const manufacturerDataBase64Schema = z.object({
+export const apiEventSchema = z.object({
   manufacturerDataBase64: z.string(),
 });
 
-export const eventSchema = z.object({
-  id: z.string(),
-  datetime: z.string().datetime(),
-  manufacturerDataHex: z.string(),
-  data: dataFormat5Schema,
-});
-
-export type Event = z.infer<typeof eventSchema>;
-
-export const apiEventSchema = eventSchema.or(manufacturerDataBase64Schema);
-
-export async function createDataEvent(apiEvent: APIEvent): Promise<DataEvent> {
-  if ("manufacturerDataBase64" in apiEvent) {
-    const buffer = Buffer.from(apiEvent.manufacturerDataBase64, "base64");
-    const data = await ruuvi.parseAsync(buffer);
-    return {
-      type: "data",
-      data,
-    };
-  }
-
-  return {
-    type: "dataEvent",
-    event: {
-      ...apiEvent,
-      data: apiEvent.data,
-      ruuviId: parseRuuviId(apiEvent.data.mac),
-    },
-  };
-}
-
-export type RuuviEvent = Event & { ruuviId: RuuviId; data: DataFormat5 };
+export type RuuviEvent = { ruuviId: RuuviId; data: DecodedFormat5 };
 
 export type APIEvent = z.infer<typeof apiEventSchema>;
-export type DataEvent =
-  | {
-      type: "dataEvent";
-      event: RuuviEvent;
-    }
-  | { data: DataFormat5; type: "data" };
+
+export async function createDataEvent(apiEvent: APIEvent): Promise<RuuviEvent> {
+  const buffer = Buffer.from(apiEvent.manufacturerDataBase64, "base64");
+  const data = await ruuvi.decodeAsync(buffer);
+
+  return { ruuviId: parseRuuviId(data.mac), data };
+}
 
 export type RuuviData = {
   id: number;

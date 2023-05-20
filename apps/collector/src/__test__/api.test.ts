@@ -1,12 +1,11 @@
 import request from "supertest";
 import app from "../server";
-
 import * as service from "../service";
-
-import { rawData, rawEvent, ruuviTables } from "./ruuvi-service.test";
+import { ruuvi, DecodedFormat5 } from "@cornerstone/ruuvi-parser";
+import { rawData, ruuviTables } from "./ruuvi-service.test";
 import { getHeaders, teardownTestConnection, truncateTables } from "./test-utils";
 import _ from "lodash";
-import type { RuuviData, RuuviId } from "../model";
+import type { APIEvent, RuuviData, RuuviId } from "../model";
 import { cacheManager } from "../cache-manager";
 
 function compareNumbers(a: number, b: number) {
@@ -15,6 +14,12 @@ function compareNumbers(a: number, b: number) {
 
 const exampleManufacturerDataHex = "99040504aa7bb6c8f4fd0cfd4800007c76b92fa5f897846a37e6";
 const exampleManufacturerDataBase64 = Buffer.from(exampleManufacturerDataHex, "hex").toString("base64");
+
+function dataToEvent(data: DecodedFormat5): APIEvent {
+  return {
+    manufacturerDataBase64: ruuvi.encode(data).toString("base64"),
+  };
+}
 
 afterAll(() => {
   teardownTestConnection();
@@ -33,14 +38,7 @@ describe("rest api", () => {
       await Promise.allSettled(
         ids.flatMap((id) =>
           measurementSequences.map((measurementSequence) =>
-            service.saveEvent({
-              type: "dataEvent",
-              event: {
-                ...rawEvent,
-                ruuviId: id,
-                data: { ...rawData, measurementSequence },
-              },
-            })
+            service.saveEvent({ ruuviId: id, data: { ...rawData, measurementSequence } })
           )
         )
       );
@@ -104,9 +102,8 @@ describe("rest api", () => {
 
     it("should return resource id with created status", async () => {
       const id = "DEAF";
-      const response = await request(app)
-        .post("/ruuvi/event")
-        .send({ ...rawEvent, data: { ...rawData, mac: `DEADBEEF${id}` } });
+      const payload = dataToEvent({ ...rawData, mac: `DEADBEEF${id}` });
+      const response = await request(app).post("/ruuvi/event").send(payload);
       expect(response.status).toBe(201);
       expect(response.body).toMatchObject({ id });
     });
@@ -119,7 +116,7 @@ describe("rest api", () => {
 
     it("should consume ruuvi events", async () => {
       const ruuviId = "DEFA";
-      const payload = { ...rawEvent, ruuviId, data: { ...rawData, mac: `DEADBEEF${ruuviId}` } };
+      const payload = dataToEvent({ ...rawData, mac: `DEADBEEF${ruuviId}` });
       const response = await request(app).post("/ruuvi/event").send(payload);
       expect(response.status).toBe(201);
 
@@ -128,16 +125,13 @@ describe("rest api", () => {
     });
 
     it("should prevent duplicate events", async () => {
-      const firstPostResponse = await request(app)
-        .post("/ruuvi/event")
-        .send({ ...rawEvent, datetime: new Date() });
+      const payload = dataToEvent(rawData);
+      const firstPostResponse = await request(app).post("/ruuvi/event").send(payload);
       expect(firstPostResponse.status).toBe(201);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { id }: { id: RuuviId } = firstPostResponse.body;
 
-      const secondPostResponse = await request(app)
-        .post("/ruuvi/event")
-        .send({ ...rawEvent, datetime: new Date() });
+      const secondPostResponse = await request(app).post("/ruuvi/event").send(payload);
       expect(secondPostResponse.status).toBe(200);
       expect(secondPostResponse.body).toMatchObject({ id });
 
@@ -146,16 +140,14 @@ describe("rest api", () => {
     });
 
     it("should consume multiple events (if they differ enough)", async () => {
-      const firstPostResponse = await request(app)
-        .post("/ruuvi/event")
-        .send({ ...rawEvent, datetime: new Date(), data: { ...rawData, temperature: 24 } });
+      const firstPayload = dataToEvent({ ...rawData, temperature: 23 });
+      const firstPostResponse = await request(app).post("/ruuvi/event").send(firstPayload);
       expect(firstPostResponse.status).toBe(201);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { id }: { id: RuuviId } = firstPostResponse.body;
 
-      const secondPostResponse = await request(app)
-        .post("/ruuvi/event")
-        .send({ ...rawEvent, datetime: new Date(), data: { ...rawData, temperature: 25 } });
+      const secondPayload = dataToEvent({ ...rawData, temperature: 26 });
+      const secondPostResponse = await request(app).post("/ruuvi/event").send(secondPayload);
       expect(secondPostResponse.status).toBe(201);
       expect(secondPostResponse.body).toMatchObject({ id });
 
@@ -165,25 +157,14 @@ describe("rest api", () => {
 
     it("should fail with invalid event", () => {
       const invalidEvents = [
-        {},
-        { id: "DADA", datetime: new Date(), manufacturerDataHex: "123456789ABCDEF", data: {} },
-        {
-          id: "DADA",
-          datetime: new Date(),
-          manufacturerDataHex: "123456789ABCDEF",
-          data: {
-            manufacturerId: "449",
-            version: 5,
-            power: { tx: 5 },
-          },
-        },
+        { manufacturerId: "helloworld" },
+        { manufacturerDataBase64: "" },
+        { manufacturerDataBase64: exampleManufacturerDataHex },
       ];
 
       const expectedObject = {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         errorMessage: expect.stringMatching(/Validation error/),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        issues: expect.anything(),
       };
 
       return Promise.all(
