@@ -77,116 +77,118 @@ const invalidData: TestVector = [
 const testVectors: TestVector[] = [validData, maximumData, minimumData, invalidData];
 
 describe("Data format 5 specs", () => {
-  it("should parse raw binary data", () => {
-    testVectors.forEach(([hexData, expected]) => {
-      const data = Buffer.from(hexData, "hex");
+  describe("decoder", () => {
+    it("should parse raw binary data", () => {
+      testVectors.forEach(([hexData, expected]) => {
+        const data = Buffer.from(hexData, "hex");
 
-      expect(DataFormat5.parse(data)).toStrictEqual(expected);
-    });
-  });
-
-  it("should parse temperature", () => {
-    const testValues = [
-      ["0000", 0],
-      ["12FC", 24.3],
-      ["01c3", 2.255],
-      ["fe3d", -2.255],
-      ["8000", NaN],
-    ] satisfies TestValuesHex[];
-
-    const buffered = testValues.map(toBuffer(createTestValues("hex")));
-    buffered.forEach(testWith(DataFormat5.parseTemperature));
-
-    expect(DataFormat5.parseTemperature(Buffer.from("99040512FC", "hex"), 3)).toBe(24.3);
-  });
-
-  it("should parse humidity", () => {
-    const testValues = [
-      [0, 0],
-      [10_010, 25.025],
-      [40_000, 100.0],
-      [65_535, NaN],
-    ] satisfies TestValuesNumber[];
-
-    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-    buffered.forEach(testWith(DataFormat5.parseHumidity));
-  });
-
-  it("should parse atmospheric pressure", () => {
-    const testValues = [
-      [0, 50_000],
-      [51_325, 10_1325],
-      [65_534, 11_5534],
-      [65_535, NaN],
-    ] satisfies TestValuesNumber[];
-
-    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-    buffered.forEach(testWith(DataFormat5.parsePressure));
-  });
-
-  it("should parse acceleration", () => {
-    const testValues = [
-      ["fc18", -1],
-      ["03e8", 1],
-      ["8000", NaN],
-    ] satisfies TestValuesHex[];
-
-    const buffered = testValues.map(toBuffer(createTestValues("hex")));
-    buffered.forEach(testWith(DataFormat5.parseAcceleration));
-  });
-
-  it("should parse movement counter", () => {
-    const testValues = [
-      [0, 0],
-      [100, 100],
-      [255, NaN],
-    ] satisfies TestValuesNumber[];
-
-    const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
-    buffered.forEach(testWith(DataFormat5.parseMovementCounter));
-  });
-
-  it("should parse battery voltage", () => {
-    const testValues: TestValuesNumberObject[] = [
-      [0, { voltage: 1.6 }],
-      [1400, { voltage: 3.0 }],
-      [2047, { voltage: NaN }],
-    ] satisfies TestValuesNumberObject[];
-
-    const buffered: TestValuesBufferObject[] = testValues.map(([value, expected]) => {
-      const tmp = value << 5;
-      const buf = Buffer.alloc(2);
-      buf.writeUInt16BE(tmp);
-      return [buf, expected] satisfies TestValuesBufferObject;
+        expect(DataFormat5.parse(data)).toStrictEqual(expected);
+      });
     });
 
-    buffered.forEach(testWithMatch(DataFormat5.parsePower));
-  });
+    it("should parse temperature", () => {
+      const testValues = [
+        ["0000", 0],
+        ["12FC", 24.3],
+        ["01c3", 2.255],
+        ["fe3d", -2.255],
+        ["8000", NaN],
+      ] satisfies TestValuesHex[];
 
-  it("should parse tx power", () => {
-    const testValues: TestValuesNumberObject[] = [
-      [0, { tx: -40 }],
-      [22, { tx: 4 }],
-      [31, { tx: NaN }],
-    ] satisfies TestValuesNumberObject[];
+      const buffered = testValues.map(toBuffer(createTestValues("hex")));
+      buffered.forEach(testWith(DataFormat5.parseTemperature));
 
-    const buffered: TestValuesBufferObject[] = testValues.map(([value, expected]) => {
-      const buf = Buffer.alloc(2);
-      buf.writeUInt16BE(value);
-      return [buf, expected] satisfies TestValuesBufferObject;
+      expect(DataFormat5.parseTemperature(Buffer.from("99040512FC", "hex"), 3)).toBe(24.3);
     });
 
-    buffered.forEach(testWithMatch(DataFormat5.parsePower));
-  });
+    it("should parse humidity", () => {
+      const testValues = [
+        [0, 0],
+        [10_010, 25.025],
+        [40_000, 100.0],
+        [65_535, NaN],
+      ] satisfies TestValuesNumber[];
 
-  it("should parse measurement sequence number", () => {
-    const testValues = [
-      [0, 0],
-      [1000, 1000],
-      [65_535, NaN],
-    ] satisfies TestValuesNumber[];
+      const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
+      buffered.forEach(testWith(DataFormat5.parseHumidity));
+    });
 
-    const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
-    buffered.forEach(testWith(DataFormat5.parseMeasurementSequenceNumber));
+    it("should parse atmospheric pressure", () => {
+      const testValues = [
+        [0, 50_000],
+        [51_325, 10_1325],
+        [65_534, 11_5534],
+        [65_535, NaN],
+      ] satisfies TestValuesNumber[];
+
+      const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
+      buffered.forEach(testWith(DataFormat5.parsePressure));
+    });
+
+    it("should parse acceleration", () => {
+      const testValues = [
+        ["fc18", -1],
+        ["03e8", 1],
+        ["8000", NaN],
+      ] satisfies TestValuesHex[];
+
+      const buffered = testValues.map(toBuffer(createTestValues("hex")));
+      buffered.forEach(testWith(DataFormat5.parseAcceleration));
+    });
+
+    it("should parse movement counter", () => {
+      const testValues = [
+        [0, 0],
+        [100, 100],
+        [255, NaN],
+      ] satisfies TestValuesNumber[];
+
+      const buffered = testValues.map(toBuffer(createTestValues("UInt8")));
+      buffered.forEach(testWith(DataFormat5.parseMovementCounter));
+    });
+
+    it("should parse battery voltage", () => {
+      const testValues: TestValuesNumberObject[] = [
+        [0, { voltage: 1.6 }],
+        [1400, { voltage: 3.0 }],
+        [2047, { voltage: NaN }],
+      ] satisfies TestValuesNumberObject[];
+
+      const buffered: TestValuesBufferObject[] = testValues.map(([value, expected]) => {
+        const tmp = value << 5;
+        const buf = Buffer.alloc(2);
+        buf.writeUInt16BE(tmp);
+        return [buf, expected] satisfies TestValuesBufferObject;
+      });
+
+      buffered.forEach(testWithMatch(DataFormat5.parsePower));
+    });
+
+    it("should parse tx power", () => {
+      const testValues: TestValuesNumberObject[] = [
+        [0, { tx: -40 }],
+        [22, { tx: 4 }],
+        [31, { tx: NaN }],
+      ] satisfies TestValuesNumberObject[];
+
+      const buffered: TestValuesBufferObject[] = testValues.map(([value, expected]) => {
+        const buf = Buffer.alloc(2);
+        buf.writeUInt16BE(value);
+        return [buf, expected] satisfies TestValuesBufferObject;
+      });
+
+      buffered.forEach(testWithMatch(DataFormat5.parsePower));
+    });
+
+    it("should parse measurement sequence number", () => {
+      const testValues = [
+        [0, 0],
+        [1000, 1000],
+        [65_535, NaN],
+      ] satisfies TestValuesNumber[];
+
+      const buffered = testValues.map(toBuffer(createTestValues("UInt16BE")));
+      buffered.forEach(testWith(DataFormat5.parseMeasurementSequenceNumber));
+    });
   });
 });
