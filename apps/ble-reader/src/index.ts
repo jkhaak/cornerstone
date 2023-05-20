@@ -16,14 +16,14 @@ const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
 function onDiscovery(peripheral: noble.Peripheral) {
   Promise.resolve(peripheral)
-    .then(({ advertisement }: NobleAdvertisement) => {
+    .then(({ id, advertisement }: NobleAdvertisement) => {
       const { manufacturerData, localName } = advertisement;
       const hexData = manufacturerData.toString("hex");
       if (hexData.startsWith("0499")) {
-        logger.info({ message: "Found Ruuvi advertisement", localName });
+        logger.info({ message: "Found Ruuvi advertisement", id, localName });
         return manufacturerData;
       }
-      logger.debug({ message: "unknown data", advertisement });
+      logger.debug({ message: "unknown data", id, localName, hexData });
       return undefined;
     })
     .then((manufacturerData) => {
