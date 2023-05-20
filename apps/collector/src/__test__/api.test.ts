@@ -1,5 +1,6 @@
 import request from "supertest";
-import app from "../server";
+import express from "express";
+import { initServer } from "../server";
 import * as service from "../service";
 import { ruuvi, DecodedFormat5 } from "@cornerstone/ruuvi-parser";
 import { rawData, ruuviTables } from "./ruuvi-service.test";
@@ -7,6 +8,9 @@ import { getHeaders, teardownTestConnection, truncateTables } from "./test-utils
 import _ from "lodash";
 import type { APIEvent, RuuviData, RuuviId } from "../model";
 import { cacheManager } from "../cache-manager";
+
+const app = express();
+initServer(app);
 
 function compareNumbers(a: number, b: number) {
   return a - b;
