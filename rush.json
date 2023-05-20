@@ -54,11 +54,6 @@
       "tags": ["daemon"]
     },
     {
-      "packageName": "@cornerstone/ruuvi-runner",
-      "projectFolder": "apps/ruuvi-runner",
-      "tags": ["daemon"]
-    },
-    {
       "packageName": "@cornerstone/collector",
       "projectFolder": "apps/collector",
       "tags": ["backend"]
