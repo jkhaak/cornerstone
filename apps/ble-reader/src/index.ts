@@ -19,7 +19,7 @@ function onDiscovery(peripheral: noble.Peripheral) {
     .then(({ id, advertisement }: NobleAdvertisement) => {
       const { manufacturerData, localName } = advertisement;
       const hexData = manufacturerData.toString("hex");
-      if (hexData.startsWith("0499")) {
+      if (hexData.startsWith("9904")) {
         logger.info({ message: "Found Ruuvi advertisement", id, localName });
         return manufacturerData;
       }
