@@ -15,6 +15,7 @@
     "test": "heft test --clean"
   },
   "dependencies": {
+    "@cornerstone/core": "workspace:*",
     "lodash": "~4.17.21"
   },
   "devDependencies": {

@@ -124,6 +124,7 @@ importers:
 
   ../../lib/ruuvi-parser:
     specifiers:
+      '@cornerstone/core': workspace:*
       '@cornerstone/node-rig': workspace:*
       '@cornerstone/typing-tools': workspace:*
       '@rushstack/eslint-config': ~3.2.0
@@ -138,6 +139,7 @@ importers:
       lodash: ~4.17.21
       typescript: ~5.0.4
     dependencies:
+      '@cornerstone/core': link:../core
       lodash: 4.17.21
     devDependencies:
       '@cornerstone/node-rig': link:../../tools/node-rig
