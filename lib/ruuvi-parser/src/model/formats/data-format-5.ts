@@ -105,7 +105,109 @@ export function decode(input: Buffer): RuuviData {
   return Object.fromEntries(dataEntries) as RuuviData;
 }
 
-function decodeMac(buffer: Buffer): MACAddress | undefined {
+function decodeMac(buffer: Buffer): MACAddress {
   const mac = buffer.toString("hex").slice(40).toUpperCase();
-  return /^F{12}$/.test(mac) ? undefined : mac;
+  return mac;
+}
+
+type EncodeFunction = (data: DecodedFormat, buffer: Buffer) => Buffer;
+
+function encodeManufacturerId(offset: number = 0): EncodeFunction {
+  return ({ manufacturerId }, buffer) => {
+    const num = parseInt(manufacturerId, 16);
+    buffer.writeInt16LE(num, offset);
+    return buffer;
+  };
+}
+
+function encodeVersion(offset: number = 0): EncodeFunction {
+  return ({ version }, buffer) => {
+    buffer.writeInt8(version, offset);
+    return buffer;
+  };
+}
+
+function encodeTemperature(offset: number = 0): EncodeFunction {
+  return ({ temperature }, buffer) => {
+    buffer.writeInt16BE(temperature * 200, offset);
+    return buffer;
+  };
+}
+
+function encodeHumidity(offset: number = 0): EncodeFunction {
+  return ({ humidity }, buffer) => {
+    buffer.writeUInt16BE(humidity * 400, offset);
+    return buffer;
+  };
+}
+
+function encodePressure(offset: number = 0): EncodeFunction {
+  return ({ pressure }, buffer) => {
+    buffer.writeUInt16BE(pressure - 50_000, offset);
+    return buffer;
+  };
+}
+
+function encodeAcceleration(offset: number = 0): EncodeFunction {
+  return ({ acceleration }, buffer) => {
+    buffer.writeInt16BE(_.round(acceleration.x * 1000.0), offset);
+    buffer.writeInt16BE(_.round(acceleration.y * 1000.0), offset + 2);
+    buffer.writeInt16BE(_.round(acceleration.z * 1000.0), offset + 4);
+    return buffer;
+  };
+}
+
+function encodePower(offset: number = 0): EncodeFunction {
+  return ({ power }, buffer) => {
+    const voltage = _.ceil((power.voltage - 1.6) * 1000);
+    const tx = (power.tx + 40) / 2;
+    // eslint-disable-next-line no-bitwise
+    const data = (voltage << 5) | (tx & 0b11111);
+
+    buffer.writeUInt16BE(data, offset);
+    return buffer;
+  };
+}
+
+function encodeMovementCounter(offset: number = 0): EncodeFunction {
+  return ({ movementCounter }, buffer) => {
+    buffer.writeUInt8(movementCounter, offset);
+    return buffer;
+  };
+}
+
+function encodeMeasurementSequence(offset: number = 0): EncodeFunction {
+  return ({ measurementSequence }, buffer) => {
+    buffer.writeUInt16BE(measurementSequence, offset);
+    return buffer;
+  };
+}
+
+function encodeMac(offset: number = 0): EncodeFunction {
+  return ({ mac }, buffer) => {
+    for (let i = 0, j = 0; i < 12; i += 2, j++) {
+      const digits = mac.slice(i, i + 2);
+      const num = parseInt(digits, 16);
+      buffer.writeUInt8(num, offset + j);
+    }
+    return buffer;
+  };
+}
+
+const encodeFns: EncodeFunction[] = [
+  encodeManufacturerId(0),
+  encodeVersion(2),
+  encodeTemperature(3),
+  encodeHumidity(5),
+  encodePressure(7),
+  encodeAcceleration(9),
+  encodePower(15),
+  encodeMovementCounter(17),
+  encodeMeasurementSequence(18),
+  encodeMac(20),
+];
+
+export function encode(data: DecodedFormat): Buffer {
+  const buffer = Buffer.alloc(26);
+  return encodeFns.reduce((buf, fn) => fn(data, buf), buffer);
 }

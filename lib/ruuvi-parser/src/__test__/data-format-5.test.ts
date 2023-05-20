@@ -77,6 +77,15 @@ const invalidData: TestVector = [
 const testVectors: TestVector[] = [validData, maximumData, minimumData, invalidData];
 
 describe("Data format 5 specs", () => {
+  describe("encoder", () => {
+    it("should encode data back to binary", () => {
+      testVectors.slice(0, 3).forEach(([hexData, decoded]) => {
+        const data = DataFormat5.encode(decoded);
+        expect(data.toString("hex").toLowerCase()).toBe(hexData.toLocaleLowerCase());
+      });
+    });
+  });
+
   describe("decoder", () => {
     it("should decode raw binary data", () => {
       testVectors.forEach(([hexData, expected]) => {
