@@ -7,7 +7,7 @@ import { RuuviTagConnectionManager } from "./ruuvitag-connection-manager";
 const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
 const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
 const findTag = environment.getEnvOrElse("CONNECT_TAGS", "").toLowerCase().split(",");
-const connections = findTag.map((tagId) => new RuuviTagConnectionManager(tagId));
+const connectionManagers = findTag.map((tagId) => new RuuviTagConnectionManager(tagId));
 
 if (SERVICE_ENDPOINT_URL === undefined) {
   logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
@@ -18,7 +18,7 @@ if (SERVICE_ENDPOINT_URL === undefined) {
 const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
 async function connect(peripheral: noble.Peripheral) {
-  connections.forEach((conn) => conn.connect(peripheral));
+  await Promise.all(connectionManagers.map((cm) => cm.connect(peripheral)));
 
   return peripheral;
 }
