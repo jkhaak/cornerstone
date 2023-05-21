@@ -2,9 +2,12 @@ import noble = require("@abandonware/noble");
 import { logger, environment } from "@cornerstone/core";
 import { Endpoint } from "./endpoint";
 import type { NobleAdvertisement } from "./model";
+import { RuuviTagConnectionManager } from "./ruuvitag-connection-manager";
 
 const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
 const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
+const findTag = environment.getEnvOrElse("CONNECT_TAGS", "").toLowerCase().split(",");
+const connections = findTag.map((tagId) => new RuuviTagConnectionManager(tagId));
 
 if (SERVICE_ENDPOINT_URL === undefined) {
   logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
@@ -14,8 +17,15 @@ if (SERVICE_ENDPOINT_URL === undefined) {
 
 const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
+async function connect(peripheral: noble.Peripheral) {
+  connections.forEach((conn) => conn.connect(peripheral));
+
+  return peripheral;
+}
+
 function onDiscovery(peripheral: noble.Peripheral) {
   Promise.resolve(peripheral)
+    .then(connect)
     .then(({ id, advertisement }: NobleAdvertisement) => {
       const { manufacturerData, localName } = advertisement;
       const hexData = manufacturerData.toString("hex");
