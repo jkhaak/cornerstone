@@ -8,7 +8,7 @@ export type ConnectionState =
   | { state: "connecting"; started: Date; peripheral: noble.Peripheral }
   | { state: "connected"; started: Date; peripheral: noble.Peripheral };
 
-type ConnStatus = { status: "timeout" } | { status: "success"; conn: unknown };
+type ConnStatus = { status: "timeout" } | { status: "success" };
 
 function createTagId(id: string) {
   return id.toLowerCase().slice(-4);
@@ -45,7 +45,7 @@ export class RuuviTagConnectionManager {
         this._connState = { state: "connecting", started: new Date(), peripheral };
 
         Promise.race([
-          peripheral.connectAsync().then((conn): ConnStatus => ({ status: "success", conn })),
+          peripheral.connectAsync().then((): ConnStatus => ({ status: "success" })),
           setTimeout(30 * 1000).then((): ConnStatus => ({ status: "timeout" })),
         ])
           .then((connStatus) => {
@@ -54,7 +54,6 @@ export class RuuviTagConnectionManager {
                 __filename,
                 message: "succesfully connected to peripheral",
                 ruuviTagId,
-                conn: connStatus.conn,
               });
               this._connState = { state: "connected", started: new Date(), peripheral };
             } else {
