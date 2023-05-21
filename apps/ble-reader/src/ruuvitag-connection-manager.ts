@@ -31,14 +31,15 @@ export class RuuviTagConnectionManager {
   }
 
   public connect(peripheral: noble.Peripheral) {
+    const peripheralId = peripheral.id;
     if (createTagId(peripheral.id) !== this._id) {
-      logger.debug({ __filename, message: "not my peripheral", id: this._id, peripheral });
+      logger.debug({ __filename, message: "not my peripheral", id: this._id, peripheralId });
       return;
     }
 
     switch (this._connState.state) {
       case "disconnected":
-        logger.info({ __filename, message: "attempting to connect to peripheral", peripheral });
+        logger.info({ __filename, message: "attempting to connect to peripheral", peripheralId });
         this._connState = { state: "connecting", started: new Date(), peripheral };
         Promise.race([
           peripheral.connectAsync().then(() => "success"),
@@ -46,10 +47,10 @@ export class RuuviTagConnectionManager {
         ])
           .then((status) => {
             if (status === "success") {
-              logger.info({ __filename, message: "succesfully connected to peripheral", peripheral });
+              logger.info({ __filename, message: "succesfully connected to peripheral", peripheralId });
               this._connState = { state: "connected", started: new Date(), peripheral };
             } else {
-              logger.warn({ __filename, message: "connection timed out", peripheral });
+              logger.warn({ __filename, message: "connection timed out", peripheralId });
               this._connState = { state: "disconnected" };
             }
           })
@@ -58,7 +59,7 @@ export class RuuviTagConnectionManager {
               __filename,
               message: "unknown error during connection to peripheral",
               error,
-              peripheral,
+              peripheralId,
             })
           );
         break;
@@ -67,7 +68,7 @@ export class RuuviTagConnectionManager {
           logger.warn({
             __filename,
             message: "been trying to connect to periheral too long aborting...",
-            peripheral,
+            peripheralId,
           });
           this.disconnect();
         }
@@ -81,12 +82,13 @@ export class RuuviTagConnectionManager {
   public disconnect() {
     if (this._connState.state !== "disconnected") {
       const peripheral = this._connState.peripheral;
+      const peripheralId = peripheral.id;
       this._connState = { state: "disconnected" };
       peripheral
         .disconnectAsync()
         .then(() => logger.info({ __filename, message: "disconnected succesfully" }))
         .catch((error: unknown) =>
-          logger.error({ __filename, message: "error during disconnection", peripheral, error })
+          logger.error({ __filename, message: "error during disconnection", peripheralId, error })
         );
     }
   }
