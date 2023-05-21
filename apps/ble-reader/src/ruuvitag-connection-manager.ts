@@ -50,7 +50,12 @@ export class RuuviTagConnectionManager {
         ])
           .then((connStatus) => {
             if (connStatus.status === "success") {
-              logger.info({ __filename, message: "succesfully connected to peripheral", ruuviTagId, conn });
+              logger.info({
+                __filename,
+                message: "succesfully connected to peripheral",
+                ruuviTagId,
+                conn: connStatus.conn,
+              });
               this._connState = { state: "connected", started: new Date(), peripheral };
             } else {
               logger.warn({ __filename, message: "connection timed out", ruuviTagId });
