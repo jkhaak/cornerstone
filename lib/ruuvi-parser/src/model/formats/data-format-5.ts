@@ -52,12 +52,12 @@ const decodeSpec = Object.entries(specification);
 
 export function decodeTemperature(input: Buffer, offset: number = 0): Temperature {
   const num = input.readInt16BE(offset) / 200.0;
-  return -163.84 < num && num < 163.84 ? num : NaN;
+  return -163.84 < num && num < 163.84 ? _.round(num, 3) : NaN;
 }
 
 export function decodeHumidity(input: Buffer, offset: number = 0): Humidity {
   const num = input.readUInt16BE(offset) / 400.0;
-  return 0 <= num && num <= 163.835 ? num : NaN;
+  return 0 <= num && num <= 163.835 ? _.round(num, 3) : NaN;
 }
 
 export function decodePressure(input: Buffer, offset: number = 0): Pressure {
@@ -67,7 +67,7 @@ export function decodePressure(input: Buffer, offset: number = 0): Pressure {
 
 export function decodeAcceleration(input: Buffer, offset: number = 0): AccelerationValue {
   const num = input.readInt16BE(offset);
-  return -32768 < num && num <= 32767 ? num / 1000.0 : NaN;
+  return -32768 < num && num <= 32767 ? _.round(num / 1000.0, 3) : NaN;
 }
 
 export function decodeMovementCounter(input: Buffer, offset: number = 0): MovementCounter {
@@ -90,7 +90,7 @@ export function decodePower(input: Buffer, offset: number = 0): Power {
   const tx = (rightByte & 0b11111) * 2 - 40;
 
   return {
-    voltage: voltage <= 3.646 ? voltage : NaN,
+    voltage: voltage <= 3.646 ? _.round(voltage, 3) : NaN,
     tx: tx < 22 ? tx : NaN,
   };
 }
