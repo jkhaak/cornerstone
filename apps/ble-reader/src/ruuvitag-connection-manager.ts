@@ -35,7 +35,7 @@ export class RuuviTagConnectionManager {
   public async connect(peripheral: noble.Peripheral) {
     const ruuviTagId = this._id;
     if (createTagId(peripheral.id) !== this._id) {
-      logger.debug({ __filename, message: "not my peripheral", id: this._id, ruuviTagId });
+      logger.debug({ __filename, message: "not my peripheral", myId: this._id, otherId: peripheral.id });
       return;
     }
 
