@@ -1,4 +1,4 @@
-import type { on, startScanningAsync, Advertisement } from "@abandonware/noble";
+import type { on, startScanningAsync, Peripheral } from "@abandonware/noble";
 
 export type Event = {
   manufacturerDataBase64: string;
@@ -9,7 +9,9 @@ export type Noble = {
   startScanningAsync: typeof startScanningAsync;
 };
 
-export type NobleAdvertisement = {
-  id: string;
-  advertisement: Advertisement;
-};
+export type DiscoveryData =
+  | {
+      peripheral: Peripheral;
+      manufacturerData: Buffer;
+    }
+  | undefined;
