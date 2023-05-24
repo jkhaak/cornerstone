@@ -26,7 +26,7 @@ function isSupported(peripheral: Peripheral): DiscoveryData {
   const { id, connectable } = peripheral;
 
   if (manufacturerData[0] === 0x99 && manufacturerData[1] === 0x04) {
-    logger.debug({ __filename, message: "Found Ruuvi advertisement", id, connectable, localName });
+    logger.info({ __filename, message: "Found Ruuvi advertisement", id, connectable, localName });
     return { peripheral, manufacturerData };
   }
 
