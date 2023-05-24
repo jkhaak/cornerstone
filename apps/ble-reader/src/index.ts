@@ -30,7 +30,7 @@ function isSupported(peripheral: Peripheral): DiscoveryData {
     return { peripheral, manufacturerData };
   }
 
-  logger.debug({ __filename, message: "unknown data", id, localName, manufacturerData });
+  logger.debug({ __filename, message: "unknown data", id, localName });
   return undefined;
 }
 
