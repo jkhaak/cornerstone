@@ -15,10 +15,12 @@ if (SERVICE_ENDPOINT_URL === undefined) {
 
 const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
-function logUnknownError(error: unknown) {
-  if (error !== undefined) {
-    logger.error({ error });
-  }
+function logUnknownError(fromFn: string) {
+  return (error: unknown) => {
+    if (error !== undefined) {
+      logger.error({ error, fromFn });
+    }
+  };
 }
 
 function isSupported(peripheral: Peripheral): DiscoveryData {
@@ -43,13 +45,9 @@ function handleAdvertisement(data: DiscoveryData): DiscoveryData {
   service
     .sendEvent({ manufacturerDataBase64 })
     .then(() => logger.info({ message: `data sent succesfully` }))
-    .catch(logUnknownError);
+    .catch(logUnknownError("index.handleAdvertisement"));
 
   return data;
-}
-
-function onDiscovery(peripheral: Peripheral) {
-  Promise.resolve(peripheral).then(isSupported).then(handleAdvertisement).catch(logUnknownError);
 }
 
 noble.on("stateChange", (state: string) => {
@@ -62,7 +60,12 @@ noble.on("stateChange", (state: string) => {
   }
 });
 
-noble.on("discover", onDiscovery);
+noble.on("discover", (peripheral: Peripheral) => {
+  Promise.resolve(peripheral)
+    .then(isSupported)
+    .then(handleAdvertisement)
+    .catch(logUnknownError("noble.on('discover')"));
+});
 
 noble.on("warning", (message: string) => {
   logger.warn({ message });
