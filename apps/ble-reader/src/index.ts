@@ -42,7 +42,7 @@ function handleAdvertisement(data: DiscoveryData): DiscoveryData {
   const manufacturerDataBase64 = manufacturerData.toString("base64");
   service
     .sendEvent({ manufacturerDataBase64 })
-    .then(() => logger.debug({ __filename, message: `data sent succesfully` }))
+    .then(() => logger.info({ __filename, message: `data sent succesfully` }))
     .catch(logUnknownError);
 
   return data;
