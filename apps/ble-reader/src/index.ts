@@ -22,15 +22,15 @@ function logUnknownError(error: unknown) {
 }
 
 function isSupported(peripheral: Peripheral): DiscoveryData {
-  const { manufacturerData, localName, txPowerLevel } = peripheral.advertisement;
-  const { id, connectable } = peripheral;
+  const { id, connectable, rssi, advertisement } = peripheral;
+  const { manufacturerData, localName, txPowerLevel } = advertisement;
 
   if (manufacturerData[0] === 0x99 && manufacturerData[1] === 0x04) {
-    logger.info({ message: "Found Ruuvi advertisement", id, txPowerLevel, connectable, localName });
+    logger.info({ message: "Found Ruuvi advertisement", id, txPowerLevel, rssi, connectable, localName });
     return { peripheral, manufacturerData };
   }
 
-  logger.debug({ message: "unknown data", id, txPowerLevel, localName });
+  logger.debug({ message: "unknown data", id, txPowerLevel, rssi, localName });
   return undefined;
 }
 
