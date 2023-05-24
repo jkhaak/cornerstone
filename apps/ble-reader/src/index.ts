@@ -8,8 +8,8 @@ const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
 const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
 
 if (SERVICE_ENDPOINT_URL === undefined) {
-  logger.error({ __filename, message: `Environment variable ${envServiceEndpointUrl} is not set` });
-  logger.debug({ __filename, env: process.env });
+  logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
+  logger.debug({ env: process.env });
   process.exit(0);
 }
 
@@ -17,20 +17,20 @@ const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
 function logUnknownError(error: unknown) {
   if (error !== undefined) {
-    logger.error({ __filename, error });
+    logger.error({ error });
   }
 }
 
 function isSupported(peripheral: Peripheral): DiscoveryData {
-  const { manufacturerData, localName } = peripheral.advertisement;
+  const { manufacturerData, localName, txPowerLevel } = peripheral.advertisement;
   const { id, connectable } = peripheral;
 
   if (manufacturerData[0] === 0x99 && manufacturerData[1] === 0x04) {
-    logger.info({ __filename, message: "Found Ruuvi advertisement", id, connectable, localName });
+    logger.info({ message: "Found Ruuvi advertisement", id, txPowerLevel, connectable, localName });
     return { peripheral, manufacturerData };
   }
 
-  logger.debug({ __filename, message: "unknown data", id, localName });
+  logger.debug({ message: "unknown data", id, txPowerLevel, localName });
   return undefined;
 }
 
@@ -42,7 +42,7 @@ function handleAdvertisement(data: DiscoveryData): DiscoveryData {
   const manufacturerDataBase64 = manufacturerData.toString("base64");
   service
     .sendEvent({ manufacturerDataBase64 })
-    .then(() => logger.info({ __filename, message: `data sent succesfully` }))
+    .then(() => logger.info({ message: `data sent succesfully` }))
     .catch(logUnknownError);
 
   return data;
@@ -53,21 +53,21 @@ function onDiscovery(peripheral: Peripheral) {
 }
 
 noble.on("stateChange", (state: string) => {
-  logger.info({ __filename, message: `Noble state changed to: ${state}` });
+  logger.info({ message: `Noble state changed to: ${state}` });
   if (state === "poweredOn") {
     noble
       .startScanningAsync([], false)
-      .then(() => logger.info({ __filename, message: "noble started scanning" }))
-      .catch(() => logger.error({ __filename, message: "noble failed to start scanning" }));
+      .then(() => logger.info({ message: "noble started scanning" }))
+      .catch(() => logger.error({ message: "noble failed to start scanning" }));
   }
 });
 
 noble.on("discover", onDiscovery);
 
 noble.on("warning", (message: string) => {
-  logger.warn({ __filename, message });
+  logger.warn({ message });
 });
 
 noble.on("scanStop", (state: string) => {
-  logger.warn({ __filename, message: "scanning stopped", state });
+  logger.warn({ message: "scanning stopped", state });
 });
