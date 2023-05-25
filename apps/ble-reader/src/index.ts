@@ -15,10 +15,10 @@ if (SERVICE_ENDPOINT_URL === undefined) {
 
 const service = new Endpoint(SERVICE_ENDPOINT_URL);
 
-function logUnknownError(fromFn: string) {
+function logUnknownError(fromFn: string, peripheral?: Peripheral) {
   return (error: unknown) => {
     if (error !== undefined) {
-      logger.error({ error, fromFn });
+      logger.error({ error, fromFn, peripheral });
     }
   };
 }
@@ -64,7 +64,7 @@ noble.on("discover", (peripheral: Peripheral) => {
   Promise.resolve(peripheral)
     .then(isSupported)
     .then(handleAdvertisement)
-    .catch(logUnknownError("noble.on('discover')"));
+    .catch(logUnknownError("noble.on('discover')", peripheral));
 });
 
 noble.on("warning", (message: string) => {
