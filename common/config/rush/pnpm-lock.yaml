@@ -110,6 +110,7 @@ importers:
       date-fns: ~2.30.0
       date-fns-tz: ~2.0.0
       eslint: ~8.39.0
+      expect-type: ~0.15.0
       pino: ~8.11.0
       pino-http: ~8.3.3
       typescript: ~5.0.4
@@ -126,6 +127,7 @@ importers:
       pino-http: 8.3.3
     devDependencies:
       eslint: 8.39.0
+      expect-type: 0.15.0
       typescript: 5.0.4
 
   ../../lib/ruuvi-parser:
