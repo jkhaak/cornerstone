@@ -1,5 +1,6 @@
-import { formatRFC3339 } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
-export function format(date: Date) {
-  return formatRFC3339(date, { fractionDigits: 3 });
+export function format(date: Date | number) {
+  const d = date instanceof Date ? date : new Date(date);
+  return formatInTimeZone(d, "UTC", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 }
