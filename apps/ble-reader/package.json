@@ -12,13 +12,11 @@
     "test": "heft test --clean"
   },
   "dependencies": {
-    "@abandonware/bluetooth-hci-socket": "~0.5.3-10",
-    "@abandonware/noble": "1.9.2-21",
     "@cornerstone/core": "workspace:*",
     "axios": "~1.4.0",
-    "date-fns": "~2.30.0",
+    "dbus-next": "~0.10.2",
     "lodash": "~4.17.21",
-    "ws": "~8.13.0"
+    "node-ble": "~1.9.0"
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",
@@ -26,6 +24,7 @@
     "@rushstack/heft": "~0.50.2",
     "@rushstack/heft-jest-plugin": "~0.5.8",
     "@types/heft-jest": "~1.0.3",
+    "@types/lodash": "~4.14.194",
     "@types/node": "~18.16.3",
     "eslint": "~8.39.0",
     "typescript": "~5.0.4"

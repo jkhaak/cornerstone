@@ -1,5 +1,8 @@
 import axios from "axios";
-import type { Event } from "./model";
+
+export type Event = {
+  manufacturerDataBase64: string;
+};
 
 export class Endpoint {
   private _endpoint: string;
