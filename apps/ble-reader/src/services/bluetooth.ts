@@ -5,6 +5,7 @@ import type { Adapter } from "node-ble";
 import EventEmitter from "node:events";
 import { setTimeout } from "node:timers/promises";
 import { randOffset } from "./timer";
+import { environment } from "@cornerstone/core";
 
 /**
  * Device checking interval in milliseconds.
@@ -104,10 +105,41 @@ export class Bluetooth extends EventEmitter {
   }
 
   private async _getAdapter(): Promise<Adapter> {
-    if (this._adapter === undefined) {
-      this._adapter = await this._bluetooth.defaultAdapter();
+    if (this._adapter) {
+      return this._adapter;
     }
 
+    const bluetoothAdapter = environment.getEnv("BLUETOOTH_ADAPTER")?.toLowerCase();
+
+    if (!bluetoothAdapter) {
+      // use default
+      this._adapter = await this._bluetooth.defaultAdapter();
+    } else {
+      const adapterNames: string[] = await this._bluetooth.adapters();
+      const lowerCaseAdapterNames = adapterNames.map((adapterName) => adapterName.toLowerCase());
+      if (lowerCaseAdapterNames.includes(bluetoothAdapter)) {
+        // check if adapter name is device name
+        this._adapter = await this._bluetooth.getAdapter(bluetoothAdapter);
+      } else {
+        // check if adapter name is a mac address
+        const adapters = await Promise.all(
+          adapterNames
+            .map(async (name) => ({ name, adapter: await this._bluetooth.getAdapter(name) }))
+            .map((promise) =>
+              promise.then(async ({ name, adapter }) => ({ name, adapter, mac: await adapter.getAddress() }))
+            )
+            .filter((promise) => promise.then((adapter) => adapter.mac.toLowerCase() === bluetoothAdapter))
+        );
+        const adapter = adapters.length > 0 ? adapters[0] : undefined;
+
+        if (adapter) {
+          this._adapter = adapter.adapter;
+        } else {
+          logger.error({ message: `adapter '${bluetoothAdapter}' could not be found` });
+          throw new Error("Adapter not found");
+        }
+      }
+    }
     return this._adapter;
   }
 }
