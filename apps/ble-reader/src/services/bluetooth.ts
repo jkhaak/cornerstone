@@ -27,7 +27,7 @@ export class Bluetooth extends EventEmitter {
   }
 
   public async startDiscovery() {
-    const adapter = await this._getAdapter();
+    const adapter = await this.getAdapter();
     if (!(await adapter.isDiscovering())) {
       logger.debug({ message: "start discovering" });
       await adapter.startDiscovery();
@@ -37,7 +37,7 @@ export class Bluetooth extends EventEmitter {
   }
 
   public async stopDiscovery() {
-    const adapter = await this._getAdapter();
+    const adapter = await this.getAdapter();
     if (await adapter.isDiscovering()) {
       logger.debug({ message: "stop discoveryng" });
       await this._stopDeviceChecking();
@@ -81,7 +81,7 @@ export class Bluetooth extends EventEmitter {
   }
 
   private async _checkDevices(): Promise<void> {
-    const adapter = await this._getAdapter();
+    const adapter = await this.getAdapter();
     const deviceIds = await adapter.devices();
     const newDeviceIds = deviceIds.filter((devId) => !this._deviceIds.includes(devId));
 
@@ -104,7 +104,7 @@ export class Bluetooth extends EventEmitter {
     }
   }
 
-  private async _getAdapter(): Promise<Adapter> {
+  public async getAdapter(): Promise<Adapter> {
     if (this._adapter) {
       return this._adapter;
     }
@@ -123,14 +123,17 @@ export class Bluetooth extends EventEmitter {
         this._adapter = await this._bluetooth.getAdapter(bluetoothAdapter);
       } else {
         // check if adapter name is a mac address
-        const adapters = await Promise.all(
-          adapterNames
-            .map(async (name) => ({ name, adapter: await this._bluetooth.getAdapter(name) }))
-            .map((promise) =>
-              promise.then(async ({ name, adapter }) => ({ name, adapter, mac: await adapter.getAddress() }))
-            )
-            .filter((promise) => promise.then((adapter) => adapter.mac.toLowerCase() === bluetoothAdapter))
-        );
+        const adapters = (
+          await Promise.all(
+            adapterNames
+              .map(async (name) => ({ name, adapter: await this._bluetooth.getAdapter(name) }))
+              .map(async (adapterPromise) => {
+                const { name, adapter } = await adapterPromise;
+                return { name, adapter, mac: await adapter.getAddress() };
+              })
+          )
+        ).filter((adapter) => adapter.mac.toLowerCase() === bluetoothAdapter);
+
         const adapter = adapters.length > 0 ? adapters[0] : undefined;
 
         if (adapter) {
