@@ -115,6 +115,7 @@ export class Bluetooth extends EventEmitter {
       // use default
       this._adapter = await this._bluetooth.defaultAdapter();
     } else {
+      logger.info({ message: "trying to find configured bluetooth adapter" });
       const adapterNames: string[] = await this._bluetooth.adapters();
       const lowerCaseAdapterNames = adapterNames.map((adapterName) => adapterName.toLowerCase());
       if (lowerCaseAdapterNames.includes(bluetoothAdapter)) {
@@ -139,6 +140,7 @@ export class Bluetooth extends EventEmitter {
           throw new Error("Adapter not found");
         }
       }
+      logger.info({ message: "found the bluetooth adapter", bluetoothAdapter });
     }
     return this._adapter;
   }
