@@ -18,6 +18,17 @@
       "shellCommand": "pretty-quick --staged"
     },
     {
+      "name": "prettier:all",
+      "commandKind": "global",
+      "summary": "This command invokes Prettier to reformat all files.",
+      "safeForSimultaneousRushProcesses": true,
+
+      "autoinstallerName": "rush-prettier",
+
+      // This will invoke common/autoinstallers/rush-prettier/node_modules/.bin/pretty-quick
+      "shellCommand": "pretty-quick"
+    },
+    {
       "name": "test",
       "commandKind": "bulk",
       "summary": "Run test in all projects",
