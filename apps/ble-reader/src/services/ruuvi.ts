@@ -6,6 +6,7 @@ import type { Event } from "./endpoint";
 import { environment } from "@cornerstone/core";
 import { setTimeout } from "node:timers/promises";
 import { randOffset } from "./timer";
+import { errorHandler } from "../util/error-handler";
 
 const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
 const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
@@ -41,7 +42,9 @@ async function ruuviTagListener(deviceId: string, device: any) {
   const event = propToEvent(prop);
   logger.info({ message: "sending event", deviceId });
   await service.sendEvent(event);
-  void setTimeout(CHECK_INTERVAL + randOffset(2 * 1000)).then(() => ruuviTagListener(deviceId, device));
+  setTimeout(CHECK_INTERVAL + randOffset(2 * 1000))
+    .then(() => ruuviTagListener(deviceId, device))
+    .catch(errorHandler(`ruuvi.${ruuviTagListener.name}`));
 }
 
 export function handleNewDevice(deviceId: string, device: Device) {
@@ -50,7 +53,7 @@ export function handleNewDevice(deviceId: string, device: Device) {
     .then((alias) => {
       if (alias.startsWith("Ruuvi")) {
         logger.info({ message: "start listener for ruuvi tag", deviceId, alias });
-        void ruuviTagListener(deviceId, device);
+        ruuviTagListener(deviceId, device).catch(errorHandler(`ruuvi.${handleNewDevice.name}`));
       }
       // ignore device
     })

@@ -6,6 +6,7 @@ import EventEmitter from "node:events";
 import { setTimeout } from "node:timers/promises";
 import { randOffset } from "./timer";
 import { environment } from "@cornerstone/core";
+import { errorHandler } from "../util/error-handler";
 
 /**
  * Device checking interval in milliseconds.
@@ -59,14 +60,15 @@ export class Bluetooth extends EventEmitter {
     }
     this._timerOn = false;
 
-    void this._checkDevices()
+    this._checkDevices()
       .then(() => setTimeout(5000 + randOffset(1000)))
       .then(() => this._checkDevices())
       .then(() => setTimeout(5000 + randOffset(1000)))
       .then(() => {
         this._timerOn = true;
         return this._checkDevices();
-      });
+      })
+      .catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}`));
   }
 
   private async _stopDeviceChecking() {
@@ -100,7 +102,9 @@ export class Bluetooth extends EventEmitter {
 
     // set new check
     if (this._timerOn) {
-      void setTimeout(DEVICE_CHECK_INTERVAL + randOffset(60 * 1000)).then(() => this._checkDevices());
+      setTimeout(DEVICE_CHECK_INTERVAL + randOffset(60 * 1000))
+        .then(() => this._checkDevices())
+        .catch(errorHandler(`bluetooth.${this._checkDevices.name}`));
     }
   }
 

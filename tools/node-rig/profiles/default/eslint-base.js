@@ -26,8 +26,5 @@ module.exports = {
 
     // prefer types
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-
-    // allow void in statements
-    "no-void": ["error", { allowAsStatement: true }],
   },
 };
