@@ -3,6 +3,7 @@ import { createBluetooth } from "./services/bluetooth";
 import { RuuviService } from "./services/ruuvi";
 import { Endpoint } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
+import { setTimeout } from "timers/promises";
 
 const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
 const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
@@ -21,6 +22,8 @@ function main() {
 
   bluetooth
     .startDiscovery()
+    .then(() => setTimeout(5000))
+    .then(() => bluetooth.startDeviceDiscovery())
     .then(() => {
       bluetooth.on("newDevice", (...args: NewDeviceEventParams) => ruuviService.handleNewDevice(...args));
     })

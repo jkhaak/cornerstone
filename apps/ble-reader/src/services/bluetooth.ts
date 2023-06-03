@@ -3,15 +3,14 @@ import { logger } from "@cornerstone/core";
 import type NodeBle from "node-ble";
 import type { Adapter, Device } from "node-ble";
 import EventEmitter from "node:events";
-import { setTimeout } from "node:timers/promises";
-import { randOffset } from "./timer";
 import { environment } from "@cornerstone/core";
 import { errorHandler } from "../util/error-handler";
+import { setInterval } from "node:timers";
 
 /**
  * Device checking interval in milliseconds.
  */
-const DEVICE_CHECK_INTERVAL = 10 * 60 * 1000;
+const DEVICE_CHECK_INTERVAL = 5 * 60 * 1000;
 
 export type NewDeviceEventParams = [string, Device];
 
@@ -20,8 +19,9 @@ export class Bluetooth extends EventEmitter {
   private _destroy: () => void;
 
   private _deviceIds: string[] = [];
-  private _timerOn: boolean = false;
   private _adapter: Adapter | undefined;
+
+  private _checkDevicesTimer: NodeJS.Timer | undefined;
 
   public constructor(bluetooth: NodeBle.Bluetooth, destroy: () => void) {
     super();
@@ -34,9 +34,12 @@ export class Bluetooth extends EventEmitter {
     if (!(await adapter.isDiscovering())) {
       logger.debug({ message: "start discovering" });
       await adapter.startDiscovery();
-      await this._startDeviceChecking();
     }
     return this;
+  }
+
+  public startDeviceDiscovery() {
+    this._startDeviceChecking();
   }
 
   public async stopDiscovery() {
@@ -55,33 +58,26 @@ export class Bluetooth extends EventEmitter {
     this._destroy();
   }
 
-  private async _startDeviceChecking() {
-    if (this._timerOn) {
+  private _startDeviceChecking() {
+    if (this._checkDevicesTimer) {
       logger.debug({ message: "device checking already running. do nothing." });
       return;
     }
-    this._timerOn = false;
 
-    this._checkDevices()
-      .then(() => setTimeout(5000 + randOffset(1000)))
-      .then(() => this._checkDevices())
-      .then(() => setTimeout(5000 + randOffset(1000)))
-      .then(() => {
-        this._timerOn = true;
-        return this._checkDevices();
-      })
-      .catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}`));
+    this._checkDevices().catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}.setInterval`));
+
+    this._checkDevicesTimer = setInterval(() => {
+      this._checkDevices().catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}.setInterval`));
+    }, DEVICE_CHECK_INTERVAL);
   }
 
   private async _stopDeviceChecking() {
-    if (!this._timerOn) {
+    if (!this._checkDevicesTimer) {
       logger.debug({ message: "device checking already stopped. do nothing." });
       return;
     }
-    this._timerOn = false;
-
-    // wait for timer to drain out
-    await setTimeout(DEVICE_CHECK_INTERVAL * 1.1);
+    clearInterval(this._checkDevicesTimer);
+    this._checkDevicesTimer = undefined;
   }
 
   private async _checkDevices(): Promise<void> {
@@ -101,13 +97,6 @@ export class Bluetooth extends EventEmitter {
       })
     );
     this._deviceIds = [...this._deviceIds, ...newDeviceIds];
-
-    // set new check
-    if (this._timerOn) {
-      setTimeout(DEVICE_CHECK_INTERVAL + randOffset(60 * 1000))
-        .then(() => this._checkDevices())
-        .catch(errorHandler(`bluetooth.${this._checkDevices.name}`));
-    }
   }
 
   public async getAdapter(): Promise<Adapter> {

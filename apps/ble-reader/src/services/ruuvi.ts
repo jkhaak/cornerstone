@@ -3,8 +3,6 @@ import { DBusError } from "dbus-next";
 import type { Device } from "node-ble";
 import type { Endpoint } from "./endpoint";
 import type { Event } from "./endpoint";
-import { setTimeout } from "node:timers/promises";
-import { randOffset } from "./timer";
 import { errorHandler } from "../util/error-handler";
 
 /**
@@ -14,6 +12,7 @@ const CHECK_INTERVAL = 60 * 1000;
 
 export class RuuviService {
   private _endpoint: Endpoint;
+  private _timers: [string, NodeJS.Timer][] = [];
 
   public constructor(endpoint: Endpoint) {
     this._endpoint = endpoint;
@@ -39,11 +38,15 @@ export class RuuviService {
     logger.info({ message: "sending event", deviceId });
 
     await this._endpoint.sendEvent(event);
+  }
 
-    // wait for new event
-    setTimeout(CHECK_INTERVAL + randOffset(2 * 1000))
-      .then(() => this._ruuviTagListener(deviceId, device))
-      .catch(errorHandler(`ruuvi.${this._ruuviTagListener.name}`));
+  public listDevices() {
+    return this._timers.map(([alias]) => alias);
+  }
+
+  public stopTimers() {
+    this._timers.forEach(([__, timer]) => clearInterval(timer));
+    this._timers = [];
   }
 
   public handleNewDevice(deviceId: string, device: Device) {
@@ -52,7 +55,14 @@ export class RuuviService {
       .then((alias) => {
         if (alias.startsWith("Ruuvi")) {
           logger.info({ message: "start listener for ruuvi tag", deviceId, alias });
-          this._ruuviTagListener(deviceId, device).catch(errorHandler(`ruuvi.${this.handleNewDevice.name}`));
+
+          const timer = setInterval(() => {
+            this._ruuviTagListener(deviceId, device).catch(
+              errorHandler(`ruuvi.${this.handleNewDevice.name}`)
+            );
+          }, CHECK_INTERVAL);
+
+          this._timers.push([alias, timer]);
         }
         // ignore device
       })

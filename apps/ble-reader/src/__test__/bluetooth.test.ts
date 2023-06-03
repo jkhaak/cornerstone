@@ -2,7 +2,7 @@ import { Bluetooth } from "../services/bluetooth";
 import type NodeBle from "node-ble";
 
 const adapterMock = {
-  isDiscovering: jest.fn().mockResolvedValue(true).mockResolvedValueOnce(false),
+  isDiscovering: jest.fn().mockResolvedValue(true),
   startDiscovery: jest.fn().mockResolvedValue(undefined),
   stopDiscovery: jest.fn().mockResolvedValue(undefined),
   devices: jest.fn().mockResolvedValue([]),
@@ -19,15 +19,20 @@ const destroyMock = jest.fn();
 const BLUETOOTH_ADAPTER_ENV = "BLUETOOTH_ADAPTER";
 
 describe("bluetooth wrapper", () => {
-  afterEach(() => {
-    delete process.env[BLUETOOTH_ADAPTER_ENV];
-  });
-
   describe("adapter", () => {
+    let bluetooth: Bluetooth;
+
+    afterEach(async () => {
+      delete process.env[BLUETOOTH_ADAPTER_ENV];
+      if (bluetooth) {
+        await bluetooth.stopDiscovery();
+      }
+    });
+
     it("should use fallback to default if no environment variable has been set", async () => {
       delete process.env[BLUETOOTH_ADAPTER_ENV];
 
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
       await bluetooth.getAdapter();
 
       expect(bluetoothMock.defaultAdapter.mock.calls).toStrictEqual([[]]);
@@ -38,7 +43,7 @@ describe("bluetooth wrapper", () => {
       process.env[BLUETOOTH_ADAPTER_ENV] = deviceName;
       bluetoothMock.adapters.mockResolvedValueOnce(["hci0", "hci1", deviceName, "hci30"]);
 
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
       await bluetooth.getAdapter();
 
       expect(bluetoothMock.getAdapter.mock.calls).toStrictEqual([[deviceName]]);
@@ -49,6 +54,8 @@ describe("bluetooth wrapper", () => {
       const macAddress = "00:11:22:33:44:55";
       const _adapterMock = {
         getAddress: jest.fn().mockResolvedValue(macAddress),
+        isDiscovering: jest.fn().mockResolvedValueOnce(true),
+        stopDiscovery: jest.fn().mockResolvedValue(undefined),
       };
       process.env[BLUETOOTH_ADAPTER_ENV] = macAddress;
 
@@ -60,7 +67,7 @@ describe("bluetooth wrapper", () => {
         return Promise.resolve(adapterMock);
       });
 
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
       await bluetooth.getAdapter();
 
       expect(bluetoothMock.getAdapter.mock.calls.length).toBe(4);
@@ -71,15 +78,24 @@ describe("bluetooth wrapper", () => {
     it("should throw error if no adapter has been found", async () => {
       process.env[BLUETOOTH_ADAPTER_ENV] = "DOES NOT EXIST";
 
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
       await expect(() => bluetooth.getAdapter()).rejects.toThrowError("");
       expect(adapterMock.getAddress.mock.calls).toStrictEqual([[]]);
     });
   });
 
   describe("features", () => {
+    let bluetooth: Bluetooth;
+
+    afterEach(async () => {
+      if (bluetooth) {
+        await bluetooth.stopDiscovery();
+      }
+    });
+
     it("should be able to start discovery", async () => {
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      adapterMock.isDiscovering.mockResolvedValueOnce(false);
       await bluetooth.startDiscovery();
 
       expect(bluetoothMock.defaultAdapter.mock.calls).toStrictEqual([[]]);
@@ -90,7 +106,7 @@ describe("bluetooth wrapper", () => {
     });
 
     it("should be able to stop discovery", async () => {
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
       await bluetooth.stopDiscovery();
 
       expect(bluetoothMock.defaultAdapter.mock.calls).toStrictEqual([[]]);
@@ -101,7 +117,7 @@ describe("bluetooth wrapper", () => {
     });
 
     it("should be able to destroy bluetooth connection", async () => {
-      const bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
+      bluetooth = new Bluetooth(bluetoothForConstructor, destroyMock);
       await bluetooth.destroy();
 
       expect(bluetoothMock.defaultAdapter.mock.calls).toStrictEqual([[]]);
