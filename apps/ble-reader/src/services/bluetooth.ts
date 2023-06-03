@@ -1,7 +1,7 @@
 import { createBluetooth as nodeBleCreateBluetooth } from "node-ble";
 import { logger } from "@cornerstone/core";
 import type NodeBle from "node-ble";
-import type { Adapter } from "node-ble";
+import type { Adapter, Device } from "node-ble";
 import EventEmitter from "node:events";
 import { setTimeout } from "node:timers/promises";
 import { randOffset } from "./timer";
@@ -12,6 +12,8 @@ import { errorHandler } from "../util/error-handler";
  * Device checking interval in milliseconds.
  */
 const DEVICE_CHECK_INTERVAL = 10 * 60 * 1000;
+
+export type NewDeviceEventParams = [string, Device];
 
 export class Bluetooth extends EventEmitter {
   private _bluetooth: NodeBle.Bluetooth;
