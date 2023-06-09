@@ -68,6 +68,8 @@ importers:
       zod: ~3.21.4
       zod-validation-error: ~1.3.0
     dependencies:
+      '@cornerstone/core': link:../../lib/core
+      '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       compression: 1.7.4
       express: 4.18.2
       lodash: 4.17.21
@@ -78,9 +80,7 @@ importers:
       zod: 3.21.4
       zod-validation-error: 1.3.0_zod@3.21.4
     devDependencies:
-      '@cornerstone/core': link:../../lib/core
       '@cornerstone/node-rig': link:../../tools/node-rig
-      '@cornerstone/ruuvi-parser': link:../../lib/ruuvi-parser
       '@cornerstone/typing-tools': link:../../lib/typing-tools
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.2_@types+node@18.16.3
