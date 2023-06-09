@@ -1,8 +1,17 @@
 import * as mqtt from "mqtt";
-import { getEnvOrThrow } from "@cornerstone/core/dist/environment";
+import { getEnv, getEnvOrThrow } from "@cornerstone/core/dist/environment";
 import { logger } from "@cornerstone/core";
+import _ from "lodash";
 
-const client = mqtt.connect(getEnvOrThrow("MQTT_URL"));
+const opts = _.omitBy(
+  {
+    username: getEnv("MQTT_USERNAME"),
+    password: getEnv("MQTT_PASSWORD"),
+  },
+  (prop) => _.isNil(prop)
+);
+
+const client = mqtt.connect(getEnvOrThrow("MQTT_URL"), opts);
 
 export function publish(topic: string, message: string) {
   logger.info(`Publishing message to ${topic}`);
