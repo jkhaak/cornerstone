@@ -1,5 +1,5 @@
 import pgPromise from "pg-promise";
-import { getEnvOrElseGet, getEnvOrElse } from "./environment";
+import { getEnvOrElseGet, getEnvOrElse } from "@cornerstone/core/dist/environment";
 
 const initOptions = {};
 
