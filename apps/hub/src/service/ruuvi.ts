@@ -56,16 +56,17 @@ function calcBatteryLevel(voltage: number): number {
 }
 
 export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
-  const topics = [
-    ["pressure", data.pressure],
-    ["humidity", data.humidity],
-    ["temperature", data.temperature],
-    ["batterylevel", calcBatteryLevel(data.power.voltage)],
-  ] satisfies [string, number][];
+  const { pressure, humidity, temperature } = data;
 
-  topics.forEach(([topic, value]) => {
-    mqtt.publish(`ruuvi/${ruuviId}/get/${topic}`, value.toString());
-  });
+  const dump = {
+    ruuviId,
+    pressure,
+    humidity,
+    temperature,
+    batterylevel: calcBatteryLevel(data.power.voltage),
+  };
+
+  mqtt.publish(`ruuvi/${ruuviId}/get`, JSON.stringify(dump));
 }
 
 export async function saveEvent({ data, ruuviId }: RuuviEvent): Promise<RuuviId> {
