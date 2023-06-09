@@ -13,3 +13,13 @@ export function getEnvOrElseGet(env: string, orElse: () => string) {
 
   return result ?? orElse();
 }
+
+export function getEnvOrThrow(env: string) {
+  const result = getEnv(env);
+
+  if (result === undefined) {
+    throw new Error(`Environment variable ${env} is not set`);
+  }
+
+  return result;
+}
