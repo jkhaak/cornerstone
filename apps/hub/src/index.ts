@@ -2,7 +2,10 @@ import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import fastify from "fastify";
 import { createContext } from "./context";
 import { appRouter } from "./routes/router";
+import type { AppRouter } from "./routes/router";
 import { logger } from "@cornerstone/core";
+
+export { AppRouter };
 
 const server = fastify({ maxParamLength: 5000, logger: true });
 

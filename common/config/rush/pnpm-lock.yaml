@@ -8,14 +8,16 @@ importers:
   ../../apps/ble-reader:
     specifiers:
       '@cornerstone/core': workspace:*
+      '@cornerstone/hub': workspace:*
       '@cornerstone/node-rig': workspace:*
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
       '@rushstack/heft-jest-plugin': ~0.5.8
+      '@trpc/client': ~10.29.1
+      '@trpc/server': ~10.29.1
       '@types/heft-jest': ~1.0.3
       '@types/lodash': ~4.14.194
       '@types/node': ~18.16.3
-      axios: ~1.4.0
       dbus-next: ~0.10.2
       eslint: ~8.39.0
       lodash: ~4.17.21
@@ -23,7 +25,9 @@ importers:
       typescript: ~5.0.4
     dependencies:
       '@cornerstone/core': link:../../lib/core
-      axios: 1.4.0
+      '@cornerstone/hub': link:../hub
+      '@trpc/client': 10.29.1_@trpc+server@10.29.1
+      '@trpc/server': 10.29.1
       dbus-next: 0.10.2
       lodash: 4.17.21
       node-ble: 1.9.0
@@ -1426,6 +1430,14 @@ packages:
       '@sinonjs/commons': 2.0.0
     dev: true
 
+  /@trpc/client/10.29.1_@trpc+server@10.29.1:
+    resolution: {integrity: sha512-+9Tifg6dtKsYLsqOW0wizqc3iILAkXxn16pyYAeMDPlulPEqNvnI85GDJ0zJOJLIkQnQefkRbtCmtDxLNtV9Eg==}
+    peerDependencies:
+      '@trpc/server': 10.29.1
+    dependencies:
+      '@trpc/server': 10.29.1
+    dev: false
+
   /@trpc/server/10.29.1:
     resolution: {integrity: sha512-kNXgMh5ya+awuz2tB4eIyVrRs7nVtqGXwSGabzH3l5ZLWz7rbKJquOJ7h6bjvIfWUpaFG62HJNWxxGUtXCRgRw==}
     dev: false
@@ -1987,16 +1999,6 @@ packages:
     resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
     dev: false
     optional: true
-
-  /axios/1.4.0:
-    resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
-    dependencies:
-      follow-redirects: 1.15.2
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
 
   /babel-jest/29.5.0_@babel+core@7.21.3:
     resolution: {integrity: sha512-mA4eCDh5mSo2EcA9xQjVTpmbbNk32Zb3Q3QFQsNhaK56Q+yoXowzFodLux30HRgyOho5rsQ6B0P9QpMkvvnJ0Q==}
@@ -3182,16 +3184,6 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /follow-redirects/1.15.2:
-    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dev: false
-
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
     dependencies:
@@ -3220,6 +3212,7 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
+    dev: true
 
   /formidable/2.1.2:
     resolution: {integrity: sha512-CM3GuJ57US06mlpQ47YcunuUZ9jpm8Vx+P2CGt2j7HpgkKZO/DJYQ0Bobim8G6PFQmK5lOqOOdUXboU+h73A4g==}
@@ -5065,10 +5058,6 @@ packages:
     dependencies:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
-    dev: false
-
-  /proxy-from-env/1.1.0:
-    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
     dev: false
 
   /psl/1.9.0:

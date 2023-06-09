@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@cornerstone/core": "workspace:*",
-    "axios": "~1.4.0",
+    "@cornerstone/hub": "workspace:*",
+    "@trpc/client": "~10.29.1",
+    "@trpc/server": "~10.29.1",
     "dbus-next": "~0.10.2",
     "lodash": "~4.17.21",
     "node-ble": "~1.9.0"
