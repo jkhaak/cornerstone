@@ -16,7 +16,9 @@
     "@cornerstone/core": "workspace:*",
     "@cornerstone/ruuvi-parser": "workspace:*",
     "@trpc/server": "~10.29.1",
+    "fastify": "~4.17.0",
     "lodash": "~4.17.21",
+    "pg-promise": "~11.4.3",
     "pino": "~8.11.0",
     "pino-http": "~8.3.3",
     "zod": "~3.21.4",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",
+    "@cornerstone/typing-tools": "workspace:*",
     "@rushstack/eslint-config": "~3.2.0",
     "@rushstack/heft": "~0.50.2",
     "@rushstack/heft-jest-plugin": "~0.5.8",
