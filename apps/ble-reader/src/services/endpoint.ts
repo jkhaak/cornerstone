@@ -10,7 +10,7 @@ export class Endpoint {
 
   public constructor(endpoint: string) {
     this._trpc = createTRPCProxyClient<AppRouter>({
-      links: [httpBatchLink({ url: endpoint })],
+      links: [httpBatchLink({ url: `${endpoint}/trpc` })],
     });
   }
 
