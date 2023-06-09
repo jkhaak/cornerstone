@@ -1,0 +1,4 @@
+{
+  "extends": "@cornerstone/node-rig/profiles/default/config/jest.config.json",
+  "setupFiles": ["dotenv/config"]
+}
