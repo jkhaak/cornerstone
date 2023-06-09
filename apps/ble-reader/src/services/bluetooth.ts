@@ -5,7 +5,7 @@ import type { Adapter, Device } from "node-ble";
 import EventEmitter from "node:events";
 import { environment } from "@cornerstone/core";
 import { errorHandler } from "../util/error-handler";
-import { setInterval } from "node:timers";
+import { setTimeout, setInterval } from "node:timers";
 
 /**
  * Device checking interval in milliseconds.
