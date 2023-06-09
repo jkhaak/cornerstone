@@ -7,6 +7,6 @@ export const ruuviSave = publicProcedure.input(apiEventSchema).mutation(async (o
   const { input } = opts;
 
   const data = await createDataEvent(input);
-  const result = await ruuviService.saveEvent(data);
+  const result = await ruuviService.handle(data);
   return result;
 });

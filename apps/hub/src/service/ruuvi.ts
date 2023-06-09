@@ -1,5 +1,7 @@
 import { db } from "../database";
 import { RuuviId, RuuviTag, dtoRuuviTag, dtoRuuviData, RuuviEvent } from "../model/ruuvi";
+import * as mqtt from "./mqtt";
+import _ from "lodash";
 
 const SQL_GET_RUUVITAGS = `
 select *
@@ -49,6 +51,23 @@ insert into public.ruuvidata (ruuvitag
 values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
+function calcBatteryLevel(voltage: number): number {
+  return _.round(((voltage - 1.6) / 1.4) * 100);
+}
+
+export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
+  const topics = [
+    ["pressure", data.pressure],
+    ["humidity", data.humidity],
+    ["temperature", data.temperature],
+    ["batterylevel", calcBatteryLevel(data.power.voltage)],
+  ] satisfies [string, number][];
+
+  topics.forEach(([topic, value]) => {
+    mqtt.publish(`ruuvi/${ruuviId}/get/${topic}`, value.toString());
+  });
+}
+
 export async function saveEvent({ data, ruuviId }: RuuviEvent): Promise<RuuviId> {
   const datetime = new Date();
 
@@ -72,6 +91,11 @@ export async function saveEvent({ data, ruuviId }: RuuviEvent): Promise<RuuviId>
   });
 
   return ruuviId satisfies RuuviId;
+}
+
+export function handle(data: RuuviEvent): Promise<RuuviId> {
+  publishMqttEvents(data);
+  return saveEvent(data);
 }
 
 export async function getEvents(id: RuuviId) {
