@@ -60,7 +60,7 @@ export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
 
   const dump = {
     ruuviId,
-    pressure,
+    pressure: pressure / 100,
     humidity,
     temperature,
     batterylevel: calcBatteryLevel(data.power.voltage),
