@@ -22,6 +22,7 @@ export class Bluetooth extends EventEmitter {
   private _adapter: Adapter | undefined;
 
   private _checkDevicesTimer: NodeJS.Timer | undefined;
+  private _currentCheckInterval: number = 1;
 
   public constructor(bluetooth: NodeBle.Bluetooth, destroy: () => void) {
     super();
@@ -64,11 +65,10 @@ export class Bluetooth extends EventEmitter {
       return;
     }
 
-    this._checkDevices().catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}.setInterval`));
-
-    this._checkDevicesTimer = setInterval(() => {
-      this._checkDevices().catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}.setInterval`));
-    }, DEVICE_CHECK_INTERVAL);
+    this._checkDevicesTimer = setTimeout(
+      () => this._startExponentialBackoffChecking(),
+      this._currentCheckInterval * 1000
+    );
   }
 
   private async _stopDeviceChecking() {
@@ -78,6 +78,26 @@ export class Bluetooth extends EventEmitter {
     }
     clearInterval(this._checkDevicesTimer);
     this._checkDevicesTimer = undefined;
+  }
+
+  private _startExponentialBackoffChecking() {
+    logger.info({ message: "Checking for new devices", intervalInSeconds: this._currentCheckInterval });
+    this._checkDevices().catch(
+      errorHandler(`bluetooth.${this._startExponentialBackoffChecking.name}.setInterval`)
+    );
+
+    this._currentCheckInterval = this._currentCheckInterval * 2;
+
+    if (this._currentCheckInterval < DEVICE_CHECK_INTERVAL) {
+      this._checkDevicesTimer = setTimeout(
+        () => this._startExponentialBackoffChecking(),
+        this._currentCheckInterval * 1000
+      );
+    } else {
+      this._checkDevicesTimer = setInterval(() => {
+        this._checkDevices().catch(errorHandler(`bluetooth.${this._startDeviceChecking.name}.setInterval`));
+      }, DEVICE_CHECK_INTERVAL);
+    }
   }
 
   private async _checkDevices(): Promise<void> {
