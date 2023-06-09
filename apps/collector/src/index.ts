@@ -1,4 +1,4 @@
-import { getEnvOrElse } from "./environment";
+import { getEnvOrElse } from "@cornerstone/core/dist/environment";
 import { logger } from "@cornerstone/core";
 import { initServer } from "./server";
 import express from "express";
