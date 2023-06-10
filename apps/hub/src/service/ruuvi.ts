@@ -52,7 +52,8 @@ values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
 function calcBatteryLevel(voltage: number): number {
-  return _.round(((voltage - 1.6) / 1.4) * 100);
+  const value = _.round(((voltage - 1.6) / 1.4) * 100);
+  return _.clamp(value, 0, 100);
 }
 
 export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
@@ -60,10 +61,10 @@ export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
 
   const dump = {
     ruuviId,
-    pressure: pressure / 100,
-    humidity,
+    pressure: _.clamp(pressure, 700, 1100),
+    humidity: _.clamp(humidity, 0, 100),
     temperature,
-    batterylevel: calcBatteryLevel(data.power.voltage),
+    batteryLevel: calcBatteryLevel(data.power.voltage),
   };
 
   mqtt.publish(`ruuvi/${ruuviId}/get`, JSON.stringify(dump));
