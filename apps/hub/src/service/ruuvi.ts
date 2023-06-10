@@ -57,7 +57,7 @@ function calcBatteryLevel(voltage: number): number {
 }
 
 function calcPressure(pressure: number): number {
-  const hPa = _.round(pressure / 100, 2);
+  const hPa = _.round(pressure / 100);
   return _.clamp(hPa, 700, 1100);
 }
 
