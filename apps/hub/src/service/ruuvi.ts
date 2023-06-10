@@ -52,8 +52,18 @@ values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 `;
 
 function calcBatteryLevel(voltage: number): number {
-  const value = _.round(((voltage - 1.6) / 1.4) * 100);
-  return _.clamp(value, 0, 100);
+  const percentage = _.round(((voltage - 1.6) / 1.4) * 100);
+  return _.clamp(percentage, 0, 100);
+}
+
+function calcPressure(pressure: number): number {
+  const hPa = _.round(pressure / 100, 2);
+  return _.clamp(hPa, 700, 1100);
+}
+
+function calcHumidity(humidity: number): number {
+  const roundedHumidity = _.round(humidity, 2);
+  return _.clamp(roundedHumidity, 0, 100);
 }
 
 export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
@@ -63,8 +73,8 @@ export function publishMqttEvents({ data, ruuviId }: RuuviEvent) {
 
   const dump = {
     ruuviId,
-    pressure: _.clamp(pressure, 700, 1100),
-    humidity: _.clamp(humidity, 0, 100),
+    pressure: calcPressure(pressure),
+    humidity: calcHumidity(humidity),
     temperature,
     batteryLevel,
     batteryLevelLow: batteryLevel < 20,
