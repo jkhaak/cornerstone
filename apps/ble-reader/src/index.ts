@@ -1,7 +1,7 @@
 import { environment, logger } from "@cornerstone/core";
 import { createBluetooth } from "./services/bluetooth";
 import { RuuviService } from "./services/ruuvi";
-import { Endpoint } from "./services/endpoint";
+import { sendEvent } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
 import { setTimeout } from "timers/promises";
 
@@ -14,11 +14,10 @@ if (SERVICE_ENDPOINT_URL === undefined) {
   process.exit(0);
 }
 
-const endpointService = new Endpoint(SERVICE_ENDPOINT_URL);
-
 function main() {
   const bluetooth = createBluetooth();
-  const ruuviService = new RuuviService(endpointService);
+  const ruuviService = new RuuviService();
+  ruuviService.setEndpoint(sendEvent);
 
   bluetooth
     .startDiscovery()

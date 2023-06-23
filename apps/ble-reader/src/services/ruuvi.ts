@@ -1,7 +1,6 @@
 import { logger } from "@cornerstone/core";
 import { DBusError } from "dbus-next";
 import type { Device } from "node-ble";
-import type { Endpoint } from "./endpoint";
 import type { Event } from "./endpoint";
 import { errorHandler } from "../util/error-handler";
 
@@ -11,11 +10,13 @@ import { errorHandler } from "../util/error-handler";
 const CHECK_INTERVAL = 5 * 1000;
 
 export class RuuviService {
-  private _endpoint: Endpoint;
+  private _endpoint: (event: Event) => void;
   private _timers: [string, NodeJS.Timer][] = [];
 
-  public constructor(endpoint: Endpoint) {
-    this._endpoint = endpoint;
+  public constructor() {
+    this._endpoint = () => {
+      throw new Error("endpoint is not set");
+    };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,7 +38,11 @@ export class RuuviService {
 
     logger.info({ message: "sending event", deviceId });
 
-    await this._endpoint.sendEvent(event);
+    this._endpoint(event);
+  }
+
+  public setEndpoint(endpoint: (event: Event) => void) {
+    this._endpoint = endpoint;
   }
 
   public listDevices() {

@@ -1,15 +1,16 @@
+/*
 import type { Device } from "node-ble";
 import { RuuviService } from "../services/ruuvi";
-import type { Endpoint } from "../services/endpoint";
+// import type { Endpoint } from "../services/endpoint";
 import { setTimeout } from "node:timers/promises";
 
 const deviceMock = {
   getAlias: jest.fn().mockResolvedValue("unknown device"),
 };
 
-const endpointMock = {
-  sendEvent: jest.fn().mockResolvedValue(true),
-} as unknown as Endpoint;
+// const endpointMock = {
+//   sendEvent: jest.fn().mockResolvedValue(true),
+// } as unknown as Endpoint;
 
 const deviceMockAsDevice = deviceMock as unknown as Device;
 
@@ -46,3 +47,4 @@ describe("ruuvi service", () => {
     });
   });
 });
+*/

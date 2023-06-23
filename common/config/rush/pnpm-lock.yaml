@@ -8,6 +8,7 @@ importers:
   ../../apps/ble-reader:
     specifiers:
       '@cornerstone/core': workspace:*
+      '@cornerstone/mqtt': workspace:*
       '@cornerstone/node-rig': workspace:*
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
@@ -23,6 +24,7 @@ importers:
       typescript: ~5.0.4
     dependencies:
       '@cornerstone/core': link:../../lib/core
+      '@cornerstone/mqtt': link:../../lib/mqtt
       axios: 1.4.0
       dbus-next: 0.10.2
       lodash: 4.17.21
