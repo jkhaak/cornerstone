@@ -37,6 +37,11 @@
 
     // libraries
     {
+      "packageName": "@cornerstone/mqtt",
+      "projectFolder": "lib/mqtt",
+      "tags": ["library"]
+    },
+    {
       "packageName": "@cornerstone/typing-tools",
       "projectFolder": "lib/typing-tools",
       "tags": ["library"]
