@@ -22,6 +22,10 @@
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",
+    "@rollup/plugin-commonjs": "~25.0.2",
+    "@rollup/plugin-json": "~6.0.0",
+    "@rollup/plugin-node-resolve": "~15.1.0",
+    "@rollup/plugin-typescript": "~11.1.2",
     "@rushstack/eslint-config": "~3.2.0",
     "@rushstack/heft": "~0.50.2",
     "@rushstack/heft-jest-plugin": "~0.5.8",
@@ -30,6 +34,7 @@
     "@types/node": "~18.16.3",
     "esbuild": "~0.17.18",
     "eslint": "~8.39.0",
+    "rollup": "~3.26.0",
     "typescript": "~5.0.4"
   }
 }

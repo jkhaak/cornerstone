@@ -1,6 +1,8 @@
 *
 
+!.eslintignore
 !.eslintrc.cjs
+!rollup.config.mjs
 !.gitignore
 !package.json
 !tsconfig.json
