@@ -5,15 +5,6 @@ import { sendEvent } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
 import { setTimeout } from "timers/promises";
 
-const envServiceEndpointUrl = "SERVICE_ENDPOINT_URL";
-const SERVICE_ENDPOINT_URL = environment.getEnv(envServiceEndpointUrl);
-
-if (SERVICE_ENDPOINT_URL === undefined) {
-  logger.error({ message: `Environment variable ${envServiceEndpointUrl} is not set` });
-  logger.debug({ env: process.env });
-  process.exit(0);
-}
-
 function main() {
   const bluetooth = createBluetooth();
   const ruuviService = new RuuviService();
