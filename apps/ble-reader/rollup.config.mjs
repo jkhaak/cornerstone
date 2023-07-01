@@ -10,5 +10,12 @@ export default {
     format: "cjs",
     sourcemap: true,
   },
-  plugins: [typescript(), json(), resolve(), commonjs()],
+  plugins: [
+    typescript(),
+    json(),
+    resolve({
+      preferBuiltins: true,
+    }),
+    commonjs(),
+  ],
 };
