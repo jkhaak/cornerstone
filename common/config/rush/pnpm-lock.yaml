@@ -153,10 +153,12 @@ importers:
       '@types/lodash': ~4.14.194
       '@types/node': ~18.16.3
       eslint: ~8.39.0
+      lodash: ~4.17.21
       mqtt: ~4.3.7
       typescript: ~5.0.4
     dependencies:
       '@cornerstone/core': link:../core
+      lodash: 4.17.21
       mqtt: 4.3.7
     devDependencies:
       '@cornerstone/node-rig': link:../../tools/node-rig
