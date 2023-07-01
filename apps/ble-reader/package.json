@@ -8,6 +8,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "heft build --clean",
+    "bundle": "rollup -c",
     "esbuild": "esbuild --bundle --platform=node --target=node18 --outdir=dist/ ./src/index.ts",
     "start": "node ./dist/index.js",
     "test": "heft test --clean"
