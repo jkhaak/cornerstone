@@ -27,6 +27,7 @@ importers:
       node-ble: ~1.9.0
       rollup: ~3.26.0
       typescript: ~5.0.4
+      x11: ~2.3.0
     dependencies:
       '@cornerstone/core': link:../../lib/core
       '@cornerstone/mqtt': link:../../lib/mqtt
@@ -34,6 +35,7 @@ importers:
       dbus-next: 0.10.2
       lodash: 4.17.21
       node-ble: 1.9.0
+      x11: 2.3.0
     devDependencies:
       '@cornerstone/node-rig': link:../../tools/node-rig
       '@rollup/plugin-commonjs': 25.0.2_rollup@3.26.0
@@ -4537,6 +4539,11 @@ packages:
       word-wrap: 1.2.3
     dev: true
 
+  /os-homedir/1.0.2:
+    resolution: {integrity: sha512-B5JU3cabzk8c67mRRd3ECmROafjYMXbuzlwtqdM8IbS8ktlTix8aFGb2bAGKrSRIlnfKwovGUUr72JUPyOb6kQ==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /p-limit/2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
     engines: {node: '>=6'}
@@ -5730,6 +5737,12 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  /x11/2.3.0:
+    resolution: {integrity: sha512-Ep4DbqZkVHvZNVht+vvELcfdpGKnfh2kZuKdXqyZdtJx3UdvgUGrMQ9lwPNV33tDs86MF4YagC6+E2fZXikF6A==}
+    dependencies:
+      os-homedir: 1.0.2
     dev: false
 
   /xml2js/0.4.23:
