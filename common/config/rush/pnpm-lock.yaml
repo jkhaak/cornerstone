@@ -13,6 +13,7 @@ importers:
       '@rollup/plugin-commonjs': ~25.0.2
       '@rollup/plugin-json': ~6.0.0
       '@rollup/plugin-node-resolve': ~15.1.0
+      '@rollup/plugin-terser': ~0.4.3
       '@rollup/plugin-typescript': ~11.1.2
       '@rushstack/eslint-config': ~3.2.0
       '@rushstack/heft': ~0.50.2
@@ -41,6 +42,7 @@ importers:
       '@rollup/plugin-commonjs': 25.0.2_rollup@3.26.0
       '@rollup/plugin-json': 6.0.0_rollup@3.26.0
       '@rollup/plugin-node-resolve': 15.1.0_rollup@3.26.0
+      '@rollup/plugin-terser': 0.4.3_rollup@3.26.0
       '@rollup/plugin-typescript': 11.1.2_ykkf5t3edxwmsunncm4ml5cdca
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.7_@types+node@18.16.18
@@ -891,6 +893,10 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: true
 
+  /@jridgewell/source-map/0.3.4:
+    resolution: {integrity: sha512-KE/SxsDqNs3rrWwFHcRh15ZLVFrI0YoZtgAdIyIq9k5hUNmiWRXXThPomIxHuL20sLdgzbDFyvkUMna14bvtrw==}
+    dev: true
+
   /@jridgewell/sourcemap-codec/1.4.14:
     resolution: {integrity: sha512-XPSJHWmi394fuUuzDnGz1wiKqWfo1yXecHQMRf2l6hztTO+nPru658AyDngaBe7isIxEkRsPR3FZh+s7iVa4Uw==}
     dev: true
@@ -992,6 +998,21 @@ packages:
       is-module: 1.0.0
       resolve: 1.22.2
       rollup: 3.26.0
+    dev: true
+
+  /@rollup/plugin-terser/0.4.3_rollup@3.26.0:
+    resolution: {integrity: sha512-EF0oejTMtkyhrkwCdg0HJ0IpkcaVg1MMSf2olHb2Jp+1mnLM04OhjpJWGma4HobiDTF0WCyViWuvadyE9ch2XA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^2.x || ^3.x
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      rollup: 3.26.0
+      serialize-javascript: 6.0.1
+      smob: 1.4.0
+      terser: 5.18.2
     dev: true
 
   /@rollup/plugin-typescript/11.1.2_ykkf5t3edxwmsunncm4ml5cdca:
@@ -2147,6 +2168,10 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
+
+  /commander/2.20.3:
+    resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+    dev: true
 
   /commander/9.5.0:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
@@ -4888,6 +4913,12 @@ packages:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
     dev: false
 
+  /randombytes/2.1.0:
+    resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
+    dependencies:
+      safe-buffer: 5.2.1
+    dev: true
+
   /range-parser/1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
@@ -5080,7 +5111,6 @@ packages:
 
   /safe-buffer/5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
-    dev: false
 
   /safe-regex-test/1.0.0:
     resolution: {integrity: sha512-JBUUzyOgEwXQY1NuPtvcj/qcBDbDmEvWufhlnXZIm75DEHp+afM1r1ujJpJsV/gSM4t59tpDyPi1sd6ZaPFfsA==}
@@ -5142,6 +5172,12 @@ packages:
       statuses: 2.0.1
     dev: false
 
+  /serialize-javascript/6.0.1:
+    resolution: {integrity: sha512-owoXEFjWRllis8/M1Q+Cw5k8ZH40e3zhp/ovX+Xr/vi1qj6QesbyXXViFbpNvWvPNAD62SutwEXavefrLJWj7w==}
+    dependencies:
+      randombytes: 2.1.0
+    dev: true
+
   /serve-static/1.15.0:
     resolution: {integrity: sha512-XGuRDNjXUijsUL0vl6nSD7cwURuzEgglbOaFuZM9g3kwDXOWVTck0jLzjPzGD+TazWbboZYu52/9/XPdUgne9g==}
     engines: {node: '>= 0.8.0'}
@@ -5188,6 +5224,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /smob/1.4.0:
+    resolution: {integrity: sha512-MqR3fVulhjWuRNSMydnTlweu38UhQ0HXM4buStD/S3mc/BzX3CuM9OmhyQpmtYCvoYdl5ris6TI0ZqH355Ymqg==}
+    dev: true
+
   /sonic-boom/3.3.0:
     resolution: {integrity: sha512-LYxp34KlZ1a2Jb8ZQgFCK3niIHzibdwtwNUWKg0qQRzsDoJ3Gfgkf8KdBTFU3SkejDEIlWwnSnpVdOZIhFMl/g==}
     dependencies:
@@ -5196,6 +5236,13 @@ packages:
 
   /source-map-support/0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
+    dependencies:
+      buffer-from: 1.1.2
+      source-map: 0.6.1
+    dev: true
+
+  /source-map-support/0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
@@ -5446,6 +5493,17 @@ packages:
       yallist: 4.0.0
     dev: false
     optional: true
+
+  /terser/5.18.2:
+    resolution: {integrity: sha512-Ah19JS86ypbJzTzvUCX7KOsEIhDaRONungA4aYBjEP3JZRf4ocuDzTg4QWZnPn9DEMiMYGJPiSOy7aykoCc70w==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      '@jridgewell/source-map': 0.3.4
+      acorn: 8.9.0
+      commander: 2.20.3
+      source-map-support: 0.5.21
+    dev: true
 
   /test-exclude/6.0.0:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}
