@@ -1,4 +1,4 @@
-import { getEnv, getEnvOrElse, getEnvOrElseGet } from "../environment";
+import { getEnv, getEnvOrElse, getEnvOrElseGet, setEnv } from "../environment";
 
 describe("environment", () => {
   describe("getEnv", () => {
@@ -133,6 +133,27 @@ describe("environment", () => {
       const result = fn();
       expect(result).toBe(val);
       expect(executed).toBeFalsy();
+    });
+  });
+
+  describe("setEnv", () => {
+    const env = "quux";
+
+    afterEach(() => {
+      delete process.env[env.toUpperCase()];
+      delete process.env[env.toLowerCase()];
+    });
+
+    it("should set env", () => {
+      const value = "baz";
+
+      expect(process.env[env.toUpperCase()]).toBeUndefined();
+      expect(process.env[env.toLowerCase()]).toBeUndefined();
+
+      setEnv(env, value);
+
+      expect(process.env[env.toUpperCase()]).toBe(value);
+      expect(process.env[env.toLowerCase()]).toBeUndefined();
     });
   });
 });

@@ -23,3 +23,7 @@ export function getEnvOrThrow(env: string) {
 
   return result;
 }
+
+export function setEnv(env: string, value: string) {
+  process.env[env.toUpperCase()] = value;
+}
