@@ -1,33 +1,41 @@
-import { environment } from "@cornerstone/core";
+import { logger } from "@cornerstone/core";
 import fs from "node:fs";
+import z from "zod";
 
-type Config = Record<string, string | number | boolean>;
+export const ConfigSchema = z.object({
+  mqtt: z.object({
+    url: z.string(),
+    username: z.string().optional(),
+    password: z.string().optional(),
+  }),
+});
 
-export function configToEnvironment(config: Config) {
-  for (const [key, val] of Object.entries(config)) {
-    if (typeof val === "string") {
-      environment.setEnv(key, val);
-    } else {
-      environment.setEnv(key, val.toString());
-    }
-  }
-}
+export type Config = z.infer<typeof ConfigSchema>;
 
 export function parseConfig(path: string) {
-  let rawString;
-  let obj;
+  let rawString: string;
+  let obj: unknown;
 
   try {
     rawString = fs.readFileSync(path, "utf-8");
   } catch (e: unknown) {
-    throw new Error(`Could not read config file at ${path}`);
+    logger.error({ message: `Could not read config file at ${path}` });
+    process.exit(1);
   }
 
   try {
-    obj = JSON.parse(rawString) as Config;
+    obj = JSON.parse(rawString) as unknown;
   } catch (e: unknown) {
-    throw new Error(`Could not parse config file at ${path}`);
+    logger.error({ message: `Could not parse config file at ${path}` });
+    process.exit(2);
   }
 
-  configToEnvironment(obj);
+  const result = ConfigSchema.safeParse(obj);
+
+  if (!result.success) {
+    logger.error({ message: "Invalid config file", error: result.error.format() });
+    process.exit(3);
+  }
+
+  return result.data;
 }

@@ -1,19 +1,26 @@
-import { parseConfig, configToEnvironment } from "../config";
+import { parseConfig } from "../config";
 import fs from "node:fs";
 import os from "node:os";
 
 describe("config", () => {
-  const config = { foo: "bar", bar: "baz", baz: true, quux: 123 };
+  const validConfigWithAuth = { mqtt: { url: "mqtt://localhost:1883", username: "user", password: "pass" } };
 
   it("should parse config file and produce config object", () => {
     const configPath = `${os.tmpdir()}/config.json`;
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    fs.writeFileSync(configPath, JSON.stringify(validConfigWithAuth, null, 2));
 
-    parseConfig(configPath);
+    const result = parseConfig(configPath);
 
-    for (const [key, val] of Object.entries(config)) {
-      expect(process.env[key.toUpperCase()]).toBe(val.toString());
-    }
+    expect(result).toStrictEqual(validConfigWithAuth);
+
+    fs.unlinkSync(configPath);
+  });
+
+  it("should throw error if config file is not valid", () => {
+    const configPath = `${os.tmpdir()}/config.json`;
+    fs.writeFileSync(configPath, JSON.stringify({ quux: { url: "mqtt://localhost:1883" } }, null, 2));
+
+    expect(() => parseConfig(configPath)).toThrowError(/Invalid config file/);
 
     fs.unlinkSync(configPath);
   });
@@ -29,14 +36,5 @@ describe("config", () => {
     expect(() => parseConfig(configPath)).toThrowError(/Could not parse config file/);
 
     fs.unlinkSync(configPath);
-  });
-
-  it("should read config object and produce environment variables", () => {
-    configToEnvironment(config);
-
-    // eslint-disable-next-line dot-notation
-    for (const [key, val] of Object.entries(config)) {
-      expect(process.env[key.toUpperCase()]).toBe(val.toString());
-    }
   });
 });

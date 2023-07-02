@@ -1,45 +1,50 @@
 import * as mqtt from "mqtt";
-import { getEnv, getEnvOrThrow } from "@cornerstone/core/dist/environment";
 import { logger } from "@cornerstone/core";
 import _ from "lodash";
 
-const opts = _.omitBy(
-  {
-    username: getEnv("MQTT_USERNAME"),
-    password: getEnv("MQTT_PASSWORD"),
-  },
-  (prop) => _.isNil(prop)
-);
+export type MqttOptions = {
+  username?: string;
+  password?: string;
+  url: string;
+};
 
-const client = mqtt.connect(getEnvOrThrow("MQTT_URL"), opts);
+export class Mqtt {
+  private _client: mqtt.MqttClient;
 
-export function publish(topic: string, message: string) {
-  logger.info(`Publishing message to ${topic}`);
-  client.publish(topic, message);
-}
+  public constructor(opts: MqttOptions) {
+    const _opts = _.omitBy(opts, (prop) => _.isNil(prop));
 
-export function subscribe(topic: string, callback: (message: Buffer) => void) {
-  logger.info(`Subscribing to ${topic}`);
-  client.subscribe(topic);
-  client.on("message", (topic: string, message: Buffer) => {
-    logger.info({ message: `Received message on ${topic}` });
-    callback(message);
-  });
-}
+    this._client = mqtt.connect(opts.url, _opts);
+  }
 
-export function subscribeAsync(topic: string, callback: (message: Buffer) => Promise<void>) {
-  logger.info(`Subscribing to ${topic}`);
-  client.subscribe(topic);
+  public publish(topic: string, message: string) {
+    logger.info(`Publishing message to ${topic}`);
+    this._client.publish(topic, message);
+  }
 
-  client.on("message", (topic: string, message: Buffer) => {
-    logger.info(`Received message on ${topic}`);
-    callback(message).catch((error: unknown) =>
-      logger.error({ message: "Error processing message", topic, mqttMessage: message.toString(), error })
-    );
-  });
-}
+  public subscribe(topic: string, callback: (message: Buffer) => void) {
+    logger.info(`Subscribing to ${topic}`);
+    this._client.subscribe(topic);
+    this._client.on("message", (topic: string, message: Buffer) => {
+      logger.info({ message: `Received message on ${topic}` });
+      callback(message);
+    });
+  }
 
-export function close() {
-  logger.info("Closing MQTT connection");
-  client.end();
+  public subscribeAsync(topic: string, callback: (message: Buffer) => Promise<void>) {
+    logger.info(`Subscribing to ${topic}`);
+    this._client.subscribe(topic);
+
+    this._client.on("message", (topic: string, message: Buffer) => {
+      logger.info(`Received message on ${topic}`);
+      callback(message).catch((error: unknown) =>
+        logger.error({ message: "Error processing message", topic, mqttMessage: message.toString(), error })
+      );
+    });
+  }
+
+  public close() {
+    logger.info("Closing MQTT connection");
+    this._client.end();
+  }
 }

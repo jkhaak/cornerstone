@@ -30,6 +30,7 @@ importers:
       rollup: ~3.26.0
       typescript: ~5.0.4
       x11: ~2.3.0
+      zod: ~3.21.4
     dependencies:
       '@cornerstone/core': link:../../lib/core
       '@cornerstone/mqtt': link:../../lib/mqtt
@@ -39,6 +40,7 @@ importers:
       lodash: 4.17.21
       node-ble: 1.9.0
       x11: 2.3.0
+      zod: 3.21.4
     devDependencies:
       '@cornerstone/node-rig': link:../../tools/node-rig
       '@rollup/plugin-commonjs': 25.0.2_rollup@3.26.0

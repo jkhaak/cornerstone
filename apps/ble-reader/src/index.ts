@@ -6,8 +6,7 @@ import { run } from "./run";
 const program = new Command();
 
 type RunOptions = {
-  environment: boolean;
-  config?: string;
+  config: string;
 };
 
 type DaemonOptions = {
@@ -23,14 +22,9 @@ program
 program
   .command("run", { isDefault: true })
   .description("run the program in foreground (default)")
-  .option("-e, --environment", "read config from environment variables (default)", true)
-  .option("-c, --config <path>", "path to config file")
+  .requiredOption("-c, --config <path>", "path to config file")
   .action((options: RunOptions) => {
-    if (options.config) {
-      parseConfig(options.config);
-    }
-
-    run();
+    run(parseConfig(options.config));
   });
 
 program

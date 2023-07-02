@@ -4,11 +4,16 @@ import { RuuviService } from "./services/ruuvi";
 import { sendEvent } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
 import { setTimeout } from "timers/promises";
+import { Mqtt } from "@cornerstone/mqtt";
+import type { Config } from "./config";
 
-export function run() {
+export function run(props: Config) {
   const bluetooth = createBluetooth();
+
+  const mqtt = new Mqtt(props.mqtt);
+
   const ruuviService = new RuuviService();
-  ruuviService.setEndpoint(sendEvent);
+  ruuviService.setEndpoint(sendEvent(mqtt));
 
   bluetooth
     .startDiscovery()
