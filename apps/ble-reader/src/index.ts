@@ -1,5 +1,7 @@
 import { Command } from "commander";
 import { logger } from "@cornerstone/core";
+import { parseConfig } from "./config";
+import { run } from "./run";
 
 const program = new Command();
 
@@ -24,7 +26,11 @@ program
   .option("-e, --environment", "read config from environment variables (default)", true)
   .option("-c, --config <path>", "path to config file")
   .action((options: RunOptions) => {
-    logger.info({ message: "run mode not implemented yet", options });
+    if (options.config) {
+      parseConfig(options.config);
+    }
+
+    run();
   });
 
 program
