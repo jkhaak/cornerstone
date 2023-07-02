@@ -1,11 +1,11 @@
-import { environment, logger } from "@cornerstone/core";
+import { logger } from "@cornerstone/core";
 import { createBluetooth } from "./services/bluetooth";
 import { RuuviService } from "./services/ruuvi";
 import { sendEvent } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
 import { setTimeout } from "timers/promises";
 
-function main() {
+export function run() {
   const bluetooth = createBluetooth();
   const ruuviService = new RuuviService();
   ruuviService.setEndpoint(sendEvent);
@@ -19,5 +19,3 @@ function main() {
     })
     .catch((error: unknown) => logger.error({ message: "unexpected error happened", error }));
 }
-
-main();

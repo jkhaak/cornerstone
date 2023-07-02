@@ -22,6 +22,7 @@ importers:
       '@types/lodash': ~4.14.194
       '@types/node': ~18.16.3
       axios: ~1.4.0
+      commander: ~11.0.0
       dbus-next: ~0.10.2
       eslint: ~8.39.0
       lodash: ~4.17.21
@@ -33,6 +34,7 @@ importers:
       '@cornerstone/core': link:../../lib/core
       '@cornerstone/mqtt': link:../../lib/mqtt
       axios: 1.4.0
+      commander: 11.0.0
       dbus-next: 0.10.2
       lodash: 4.17.21
       node-ble: 1.9.0
@@ -2168,6 +2170,11 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
+
+  /commander/11.0.0:
+    resolution: {integrity: sha512-9HMlXtt/BNoYr8ooyjjNRdIilOTkVJXB+GhxMTtOKwk0R4j4lS4NpjuqmRxroBfnfTSHQIHQB7wryHhXarNjmQ==}
+    engines: {node: '>=16'}
+    dev: false
 
   /commander/2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
