@@ -8,6 +8,13 @@ export const ConfigSchema = z.object({
     username: z.string().optional(),
     password: z.string().optional(),
   }),
+  daemon: z
+    .object({
+      pidfile: z.string(),
+      uid: z.number().default(1000),
+      gid: z.number().default(1000),
+    })
+    .optional(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
