@@ -36,12 +36,8 @@ program
       process.exit(4);
     }
 
-    const childOpts = {
-      detatched: true,
-      uid: daemon.uid,
-      gid: daemon.gid,
-    };
-
+    const { gid, uid, pidfile } = daemon;
+    const childOpts = { detatched: true, uid, gid };
     const child = fork(__filename, ["run", "-c", options.config], childOpts);
     const { pid } = child;
 
@@ -52,7 +48,7 @@ program
     }
 
     const checkAlive = setTimeout(() => {
-      fs.writeFileSync(daemon.pidfile, pid.toString());
+      fs.writeFileSync(pidfile, pid.toString());
       logger.info({ message: "Daemon started", pid });
     }, 1000);
 
