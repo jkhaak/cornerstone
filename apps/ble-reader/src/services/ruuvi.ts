@@ -19,21 +19,21 @@ export class RuuviService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _propToEvent(prop: any): Event {
+  private _propToEvent(prop: unknown): Event {
     const prefix = Buffer.from("9904", "hex");
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const data = prop["1177"].value as Buffer;
+    // Using undocumented node-ble API
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    const data = (prop as any)["1177"].value as Buffer;
 
     return {
       manufacturerDataBase64: Buffer.concat([prefix, data]).toString("base64"),
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private async _ruuviTagListener(deviceId: string, device: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    const prop: unknown = await device.helper.waitPropChange("ManufacturerData");
+  private async _ruuviTagListener(deviceId: string, device: Device) {
+    // Using undocumented node-ble API
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+    const prop: unknown = await (device as any).helper.waitPropChange("ManufacturerData");
     const event = this._propToEvent(prop);
 
     logger.info({ message: "sending event", deviceId });
