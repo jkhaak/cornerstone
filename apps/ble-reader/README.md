@@ -1,0 +1,54 @@
+# ble-reader
+
+## Requirements
+
+For running ble-reader requires node.js 18 and mqtt server (mosquitto will do) up and running.
+
+For building you need to have node.js 18 and @microsoft/rush installed.
+
+## Installation
+
+1. Install dependencies with `rush install`.
+2. Build the bundle `rushx bundle`.
+3. Create a self-running bundle.
+
+```shell
+echo "#!/usr/bin/node" > ble-reader
+cat < dist/bundle.js >> ble-reader
+chmod +x blue-reader
+```
+
+4. Copy the bundle to appropriate place, like `/opt/bin`.
+
+## OpenRC daemon
+
+Create config `/etc/ble-reader/config.json` for the ble-reader daemon. For example:
+
+```json
+{
+  "mqtt": {
+    "url": "mqtt://127.0.0.1:1883",
+    "username": "mqttuser",
+    "password": "mqttpassword"
+  },
+  "daemon": {
+    "uid": 1000,
+    "gid": 1000
+  }
+}
+```
+
+Then create the init script `/etc/init.d/ble-reader`.
+
+```shell
+#!/sbin/openrc-run
+
+config="/etc/ble-reader/config.json"
+pidfile="/run/${RC_SVCNAME}.pid"
+command="/opt/bin/ble-reader"
+command_args="daemon -p ${pidfile} -c ${config}"
+
+depend() {
+    need dbus mosquitto
+}
+```

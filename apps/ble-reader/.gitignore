@@ -2,9 +2,10 @@
 
 !.eslintignore
 !.eslintrc.cjs
-!rollup.config.mjs
 !.gitignore
 !package.json
+!README.md
+!rollup.config.mjs
 !tsconfig.json
 
 !config/
