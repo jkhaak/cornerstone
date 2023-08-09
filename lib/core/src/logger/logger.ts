@@ -3,7 +3,7 @@ import { getEnvOrElse } from "../environment";
 
 let opts = {};
 
-const level = getEnvOrElse("LOG_LEVEL", "info");
+const level = getEnvOrElse("LOG_LEVEL", "info").toLowerCase();
 
 opts = { ...opts, level };
 

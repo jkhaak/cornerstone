@@ -4,11 +4,16 @@ import { run } from "./run";
 import { fork } from "node:child_process";
 import { logger } from "@cornerstone/core";
 import fs from "node:fs";
+import _ from "lodash";
 
 const program = new Command();
 
-export type Options = {
+export type RunOptions = {
   config: string;
+};
+
+export type DaemonOptions = RunOptions & {
+  pidfile?: string;
 };
 
 program
@@ -20,7 +25,7 @@ program
   .command("run", { isDefault: true })
   .description("run the program in foreground (default)")
   .requiredOption("-c, --config <path>", "path to config file")
-  .action((options: Options) => {
+  .action((options: RunOptions) => {
     run(parseConfig(options.config));
   });
 
@@ -28,7 +33,8 @@ program
   .command("daemon")
   .description("run as a daemon")
   .requiredOption("-c, --config <path>", "path to config file")
-  .action((options: Options) => {
+  .option("-p, --pidfile <path>", "path to pidfile")
+  .action((options: DaemonOptions) => {
     const { daemon } = parseConfig(options.config);
 
     if (!daemon) {
@@ -36,8 +42,22 @@ program
       process.exit(4);
     }
 
-    const { gid, uid, pidfile } = daemon;
-    const childOpts = { detatched: true, uid, gid };
+    const pidfile = [options.pidfile, daemon.pidfile].find((x) => _.isString(x));
+
+    if (!pidfile) {
+      logger.error({ message: "Pidfile not configured" });
+      process.exit(7);
+    }
+
+    const { gid, uid } = daemon;
+    const childOpts = {
+      detatched: true,
+      uid,
+      gid,
+      env: {
+        LOG_LEVEL: "ERROR",
+      },
+    };
     const child = fork(__filename, ["run", "-c", options.config], childOpts);
     const { pid } = child;
 
@@ -50,7 +70,14 @@ program
     const checkAlive = setTimeout(() => {
       fs.writeFileSync(pidfile, pid.toString());
       logger.info({ message: "Daemon started", pid });
-    }, 1000);
+      process.exit(0);
+    }, 2000);
+
+    child.on("exit", (code) => {
+      clearTimeout(checkAlive);
+      logger.error({ message: "Daemon exited unexpectedly", code });
+      process.exit(8);
+    });
 
     child.on("error", (err) => {
       clearTimeout(checkAlive);

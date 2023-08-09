@@ -10,7 +10,7 @@ export const ConfigSchema = z.object({
   }),
   daemon: z
     .object({
-      pidfile: z.string(),
+      pidfile: z.string().optional(),
       uid: z.number().default(1000),
       gid: z.number().default(1000),
     })
