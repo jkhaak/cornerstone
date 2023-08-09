@@ -14,18 +14,18 @@
   "dependencies": {
     "date-fns": "~2.30.0",
     "date-fns-tz": "~2.0.0",
-    "pino": "~8.11.0",
-    "pino-http": "~8.3.3"
+    "pino": "~8.15.0",
+    "pino-http": "~8.4.0"
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",
-    "@rushstack/eslint-config": "~3.2.0",
-    "@rushstack/heft": "~0.50.2",
-    "@rushstack/heft-jest-plugin": "~0.5.8",
+    "@rushstack/eslint-config": "~3.3.3",
+    "@rushstack/heft": "~0.58.2",
+    "@rushstack/heft-jest-plugin": "~0.8.1",
     "@types/heft-jest": "~1.0.3",
-    "@types/node": "~18.16.3",
-    "eslint": "~8.39.0",
-    "expect-type": "~0.15.0",
-    "typescript": "~5.0.4"
+    "@types/node": "~20.4.9",
+    "eslint": "~8.46.0",
+    "expect-type": "~0.16.0",
+    "typescript": "~5.1.6"
   }
 }

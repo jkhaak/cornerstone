@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "heft build --clean && npm run bundle",
+    "build": "heft build --clean",
     "test": "heft test"
   },
   "dependencies": {
@@ -19,14 +19,14 @@
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",
     "@cornerstone/typing-tools": "workspace:*",
-    "@rushstack/eslint-config": "~3.2.0",
-    "@rushstack/heft": "~0.50.2",
-    "@rushstack/heft-jest-plugin": "~0.5.8",
+    "@rushstack/eslint-config": "~3.3.3",
+    "@rushstack/heft": "~0.58.2",
+    "@rushstack/heft-jest-plugin": "~0.8.1",
     "@types/heft-jest": "~1.0.3",
-    "@types/lodash": "~4.14.194",
-    "@types/node": "~18.16.3",
-    "eslint": "~8.39.0",
-    "expect-type": "~0.15.0",
-    "typescript": "~5.0.4"
+    "@types/lodash": "~4.14.196",
+    "@types/node": "~20.4.9",
+    "eslint": "~8.46.0",
+    "expect-type": "~0.16.0",
+    "typescript": "~5.1.6"
   }
 }

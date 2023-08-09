@@ -1,6 +1,7 @@
 {
   "extends": "@rushstack/heft-jest-plugin/includes/jest-shared.config.json",
   "collectCoverage": true,
+  "roots": ["<rootDir>/dist/__test__"],
   "coveragePathIgnorePatterns": ["<rootDir>/src/__test__"],
   "coverageThreshold": {
     "global": {
