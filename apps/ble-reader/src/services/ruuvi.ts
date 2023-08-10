@@ -10,7 +10,7 @@ import type { RuuviData } from "@cornerstone/ruuvi-parser";
  */
 const CHECK_INTERVAL = 5 * 1000;
 
-export type EventHandler = (obj: object) => void;
+export type EventHandler = (topic: string, obj: object) => void;
 
 export class RuuviService {
   private _endpoint: EventHandler;
@@ -39,7 +39,7 @@ export class RuuviService {
 
     logger.info({ message: "sending event", deviceId });
 
-    this._endpoint(event);
+    this._endpoint(`ruuvi/event/${event.mac.slice(8)}`, event);
   }
 
   public setEndpoint(endpoint: EventHandler) {
