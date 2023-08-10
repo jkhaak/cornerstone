@@ -16,6 +16,9 @@ importers:
       '@cornerstone/mqtt':
         specifier: workspace:*
         version: link:../../lib/mqtt
+      '@cornerstone/ruuvi-parser':
+        specifier: workspace:*
+        version: link:../../lib/ruuvi-parser
       axios:
         specifier: ~1.4.0
         version: 1.4.0

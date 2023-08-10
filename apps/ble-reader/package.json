@@ -15,6 +15,7 @@
   "dependencies": {
     "@cornerstone/core": "workspace:*",
     "@cornerstone/mqtt": "workspace:*",
+    "@cornerstone/ruuvi-parser": "workspace:*",
     "axios": "~1.4.0",
     "commander": "~11.0.0",
     "dbus-next": "~0.10.2",

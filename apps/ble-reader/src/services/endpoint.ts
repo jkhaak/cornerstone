@@ -1,9 +1,6 @@
 import type { Mqtt } from "@cornerstone/mqtt";
+import type { EventHandler } from "./ruuvi";
 
-export type Event = {
-  manufacturerDataBase64: string;
-};
-
-export function sendEvent(mqtt: Mqtt) {
-  return (event: Event) => mqtt.publish("ruuvi/event", JSON.stringify(event));
+export function sendEvent(mqtt: Mqtt): EventHandler {
+  return (obj: object) => mqtt.publish("ruuvi/event", JSON.stringify(obj));
 }

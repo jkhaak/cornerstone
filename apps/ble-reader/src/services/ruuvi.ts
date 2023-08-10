@@ -1,16 +1,19 @@
 import { logger } from "@cornerstone/core";
 import { DBusError } from "dbus-next";
 import type { Device } from "node-ble";
-import type { Event } from "./endpoint";
 import { errorHandler } from "../util/error-handler";
+import { ruuvi } from "@cornerstone/ruuvi-parser";
+import type { RuuviData } from "@cornerstone/ruuvi-parser";
 
 /**
  * Check interval in milliseconds.
  */
 const CHECK_INTERVAL = 5 * 1000;
 
+export type EventHandler = (obj: object) => void;
+
 export class RuuviService {
-  private _endpoint: (event: Event) => void;
+  private _endpoint: EventHandler;
   private _timers: [string, NodeJS.Timer][] = [];
 
   public constructor() {
@@ -19,29 +22,27 @@ export class RuuviService {
     };
   }
 
-  private _propToEvent(prop: unknown): Event {
+  private async _propToEvent(prop: unknown): Promise<RuuviData> {
     const prefix = Buffer.from("9904", "hex");
     // Using undocumented node-ble API
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     const data = (prop as any)["1177"].value as Buffer;
 
-    return {
-      manufacturerDataBase64: Buffer.concat([prefix, data]).toString("base64"),
-    };
+    return ruuvi.decodeAsync(Buffer.concat([prefix, data]));
   }
 
   private async _ruuviTagListener(deviceId: string, device: Device) {
     // Using undocumented node-ble API
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
     const prop: unknown = await (device as any).helper.waitPropChange("ManufacturerData");
-    const event = this._propToEvent(prop);
+    const event = await this._propToEvent(prop);
 
     logger.info({ message: "sending event", deviceId });
 
     this._endpoint(event);
   }
 
-  public setEndpoint(endpoint: (event: Event) => void) {
+  public setEndpoint(endpoint: EventHandler) {
     this._endpoint = endpoint;
   }
 
@@ -50,8 +51,9 @@ export class RuuviService {
   }
 
   public stopTimers() {
-    this._timers.forEach(([__, timer]) => clearInterval(timer));
+    const timers = this._timers;
     this._timers = [];
+    timers.forEach(([, timer]) => clearInterval(timer));
   }
 
   public handleNewDevice(deviceId: string, device: Device) {
