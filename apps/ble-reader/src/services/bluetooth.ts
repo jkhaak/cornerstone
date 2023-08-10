@@ -30,6 +30,12 @@ export class Bluetooth extends EventEmitter {
     this._destroy = destroy;
   }
 
+  public static init(): Bluetooth {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { bluetooth, destroy } = nodeBleCreateBluetooth();
+    return new Bluetooth(bluetooth, destroy);
+  }
+
   public async startDiscovery() {
     const adapter = await this.getAdapter();
     if (!(await adapter.isDiscovering())) {
@@ -162,12 +168,4 @@ export class Bluetooth extends EventEmitter {
     }
     return this._adapter;
   }
-}
-
-export function createBluetooth() {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { bluetooth, destroy } = nodeBleCreateBluetooth();
-  const bt = new Bluetooth(bluetooth, destroy);
-
-  return bt;
 }

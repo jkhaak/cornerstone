@@ -1,5 +1,5 @@
 import { logger } from "@cornerstone/core";
-import { createBluetooth } from "./services/bluetooth";
+import { Bluetooth } from "./services/bluetooth";
 import { RuuviService } from "./services/ruuvi";
 import { sendEvent } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
@@ -8,7 +8,7 @@ import { Mqtt } from "@cornerstone/mqtt";
 import type { Config } from "./config";
 
 export function run(props: Config) {
-  const bluetooth = createBluetooth();
+  const bluetooth = Bluetooth.init();
 
   const mqtt = new Mqtt(props.mqtt);
 
