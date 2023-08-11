@@ -31,7 +31,7 @@
     },
     {
       "packageName": "@cornerstone/node-rig",
-      "projectFolder": "tools/node-rig",
+      "projectFolder": "lib/node-rig",
       "tags": ["tools"]
     },
 
