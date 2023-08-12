@@ -16,6 +16,22 @@ export type DaemonOptions = RunOptions & {
   pidfile?: string;
 };
 
+function getConfig(path: string): ReturnType<typeof parseConfig> {
+  let config;
+  try {
+    config = parseConfig(path);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error({ message: error.message });
+    } else {
+      logger.error({ message: "Unknown error occured", error });
+    }
+    process.exit(1);
+  }
+
+  return config;
+}
+
 program
   .name("ble-reader")
   .description("CLI tool for reading ruuvi tag advertisements and publishing them via mqtt")
@@ -26,7 +42,7 @@ program
   .description("run the program in foreground (default)")
   .requiredOption("-c, --config <path>", "path to config file")
   .action((options: RunOptions) => {
-    run(parseConfig(options.config));
+    run(getConfig(options.config));
   });
 
 program
@@ -35,7 +51,7 @@ program
   .requiredOption("-c, --config <path>", "path to config file")
   .option("-p, --pidfile <path>", "path to pidfile")
   .action((options: DaemonOptions) => {
-    const { daemon } = parseConfig(options.config);
+    const { daemon } = getConfig(options.config);
 
     if (!daemon) {
       logger.error({ message: "Daemon config missing" });

@@ -1,4 +1,3 @@
-import { logger } from "@cornerstone/core";
 import fs from "node:fs";
 import z from "zod";
 
@@ -26,22 +25,19 @@ export function parseConfig(path: string) {
   try {
     rawString = fs.readFileSync(path, "utf-8");
   } catch (e: unknown) {
-    logger.error({ message: `Could not read config file at ${path}` });
-    process.exit(1);
+    throw new Error(`Could not read config file at ${path}`);
   }
 
   try {
     obj = JSON.parse(rawString) as unknown;
   } catch (e: unknown) {
-    logger.error({ message: `Could not parse config file at ${path}` });
-    process.exit(2);
+    throw new Error(`Could not parse config file at ${path}`);
   }
 
   const result = ConfigSchema.safeParse(obj);
 
   if (!result.success) {
-    logger.error({ message: "Invalid config file", error: result.error.format() });
-    process.exit(3);
+    throw new Error("Invalid config file");
   }
 
   return result.data;
