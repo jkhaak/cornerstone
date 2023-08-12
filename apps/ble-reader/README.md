@@ -1,8 +1,10 @@
 # ble-reader
 
+ble-reader reads bluetooth low energy advertisements through dbus and sends decoded data via mqtt broker. Currently ble-reader only supports Ruuvi tag data format 5.
+
 ## Requirements
 
-For running ble-reader requires node.js 18 and mqtt server (mosquitto will do) up and running.
+For running ble-reader requires node.js 18, dbus and mqtt server (mosquitto will do) up and running.
 
 For building you need to have node.js 18 and @microsoft/rush installed.
 
