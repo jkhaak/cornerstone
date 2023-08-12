@@ -312,9 +312,9 @@ importers:
       '@rushstack/heft-typescript-plugin':
         specifier: ~0.1.21
         version: 0.1.21(@rushstack/heft@0.58.2)
-      '@tsconfig/node18-strictest':
-        specifier: ~1.0.0
-        version: 1.0.0
+      '@tsconfig/strictest':
+        specifier: ~2.0.1
+        version: 2.0.1
       eslint:
         specifier: ~8.46.0
         version: 8.46.0
@@ -1516,9 +1516,8 @@ packages:
       '@sinonjs/commons': 3.0.0
     dev: true
 
-  /@tsconfig/node18-strictest@1.0.0:
-    resolution: {integrity: sha512-bOuNKwO4Fzbt+Su5wqI9zNHwx5C25gLnutwVQA1sBZk0cW8UjVPVcwzIUhJIIJDUx7zDEbAwdCD2HfvIsV8dYg==}
-    deprecated: TypeScript 5.0 supports combining TSConfigs using array syntax in extends
+  /@tsconfig/strictest@2.0.1:
+    resolution: {integrity: sha512-7JHHCbyCsGUxLd0pDbp24yz3zjxw2t673W5oAP6HCEdr/UUhaRhYd3SSnUsGCk+VnPVJVA4mXROzbhI+nyIk+w==}
     dev: true
 
   /@types/argparse@1.0.38:
