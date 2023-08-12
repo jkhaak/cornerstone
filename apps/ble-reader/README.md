@@ -10,7 +10,7 @@ For building you need to have node.js 18 and @microsoft/rush installed.
 
 1. Install dependencies with `rush install`.
 2. Build the bundle `rushx bundle`.
-3. Create a self-running bundle.
+3. Create a single bundle file.
 
 ```shell
 echo "#!/usr/bin/node" > ble-reader
