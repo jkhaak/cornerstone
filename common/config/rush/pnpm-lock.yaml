@@ -157,6 +157,61 @@ importers:
         specifier: ~5.1.6
         version: 5.1.6
 
+  ../../apps/hub:
+    dependencies:
+      '@cornerstone/core':
+        specifier: workspace:*
+        version: link:../../lib/core
+      '@cornerstone/mqtt':
+        specifier: workspace:*
+        version: link:../../lib/mqtt
+      '@cornerstone/ruuvi-parser':
+        specifier: workspace:*
+        version: link:../../lib/ruuvi-parser
+      commander:
+        specifier: ~11.0.0
+        version: 11.0.0
+      lodash:
+        specifier: ~4.17.21
+        version: 4.17.21
+      pg-promise:
+        specifier: ~11.5.3
+        version: 11.5.3
+      zod:
+        specifier: ~3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@cornerstone/node-rig':
+        specifier: workspace:*
+        version: link:../../lib/node-rig
+      '@rushstack/eslint-config':
+        specifier: ~3.3.3
+        version: 3.3.3(eslint@8.46.0)(typescript@5.1.6)
+      '@rushstack/heft':
+        specifier: ~0.58.2
+        version: 0.58.2(@types/node@20.4.9)
+      '@rushstack/heft-jest-plugin':
+        specifier: ~0.8.1
+        version: 0.8.1(@rushstack/heft@0.58.2)(@types/node@20.4.9)
+      '@types/heft-jest':
+        specifier: ~1.0.3
+        version: 1.0.3
+      '@types/lodash':
+        specifier: ~4.14.196
+        version: 4.14.196
+      '@types/node':
+        specifier: ~20.4.9
+        version: 20.4.9
+      esbuild:
+        specifier: ~0.19.1
+        version: 0.19.1
+      eslint:
+        specifier: ~8.46.0
+        version: 8.46.0
+      typescript:
+        specifier: ~5.1.6
+        version: 5.1.6
+
   ../../lib/core:
     dependencies:
       date-fns:

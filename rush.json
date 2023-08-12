@@ -54,6 +54,11 @@
 
     // apps
     {
+      "packageName": "@cornerstone/hub",
+      "projectFolder": "apps/hub",
+      "tags": ["daemon"]
+    },
+    {
       "packageName": "@cornerstone/ble-reader",
       "projectFolder": "apps/ble-reader",
       "tags": ["daemon"]

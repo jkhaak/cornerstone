@@ -1,0 +1,37 @@
+{
+  "name": "@cornerstone/hub",
+  "version": "1.0.0",
+  "description": "collect information from mqtt",
+  "license": "EUPL-1.2",
+  "author": "Jani Haakana",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "heft build --clean",
+    "bundle": "npm run build && npm run bundle:esbuild",
+    "bundle:esbuild": "esbuild --bundle src/index.ts --outfile=dist/bundle.js --platform=node",
+    "start": "node ./dist/index.js",
+    "test": "heft test --clean"
+  },
+  "dependencies": {
+    "@cornerstone/core": "workspace:*",
+    "@cornerstone/mqtt": "workspace:*",
+    "@cornerstone/ruuvi-parser": "workspace:*",
+    "commander": "~11.0.0",
+    "lodash": "~4.17.21",
+    "pg-promise": "~11.5.3",
+    "zod": "~3.21.4"
+  },
+  "devDependencies": {
+    "@cornerstone/node-rig": "workspace:*",
+    "@rushstack/eslint-config": "~3.3.3",
+    "@rushstack/heft": "~0.58.2",
+    "@rushstack/heft-jest-plugin": "~0.8.1",
+    "@types/heft-jest": "~1.0.3",
+    "@types/lodash": "~4.14.196",
+    "@types/node": "~20.4.9",
+    "esbuild": "~0.19.1",
+    "eslint": "~8.46.0",
+    "typescript": "~5.1.6"
+  }
+}
