@@ -52,3 +52,41 @@ depend() {
     need dbus mosquitto
 }
 ```
+
+## Homebridge MQTTThing
+
+Example config for collecting ruuvi events with [MQTTThing](https://github.com/arachnetech/homebridge-mqttthing).
+
+```json
+{
+    "type": "weatherStation",
+    "name": "<Name>",
+    "url": "mqtt://127.0.0.1:1883",
+    "username": "mqttuser",
+    "password": "mqttpassword",
+    "topics": {
+        "getAirPressure": {
+            "topic": "ruuvi/event/<RuuviID>",
+            "apply": "return JSON.parse(message).pressure / 100"
+        },
+        "getBatteryLevel": {
+            "topic": "ruuvi/event/<RuuviID>",
+            "apply": "return (JSON.parse(message).power.voltage / 3.646 * 100)"
+        },
+        "getStatusLowBattery": {
+            "topic": "ruuvi/event/<RuuviID>",
+            "apply": "return (JSON.parse(message).power.voltage / 3.646 * 100) < 20"
+        },
+        "getCurrentRelativeHumidity": {
+            "topic": "ruuvi/event/<RuuviID>",
+            "apply": "return JSON.parse(message).humidity"
+        },
+        "getCurrentTemperature": {
+            "topic": "ruuvi/event/<RuuviID>",
+            "apply": "return JSON.parse(message).temperature"
+        }
+    },
+    "logMqtt": false,
+    "accessory": "mqttthing"
+}
+```
