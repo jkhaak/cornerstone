@@ -62,11 +62,6 @@
       "packageName": "@cornerstone/ble-reader",
       "projectFolder": "apps/ble-reader",
       "tags": ["daemon"]
-    },
-    {
-      "packageName": "@cornerstone/collector",
-      "projectFolder": "apps/collector",
-      "tags": ["backend"]
     }
   ]
 }

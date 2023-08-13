@@ -5,7 +5,7 @@ Collection of node.js apps.
 ## Packages
 
 * [/apps/ble-reader](./apps/ble-reader/)
-* [/apps/collector](./apps/collector/)
+* [/apps/hub](./apps/hub/)
 
 ## Libraries
 

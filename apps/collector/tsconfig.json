@@ -1,4 +1,0 @@
-{
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./node_modules/@cornerstone/node-rig/profiles/default/tsconfig-base.json"
-}
