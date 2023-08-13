@@ -4,8 +4,11 @@
   "description": "core tools",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "commonjs",
-  "main": "./dist/index.js",
+  "type": "module",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist-commonjs/index.js"
+  },
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
@@ -16,8 +19,7 @@
     "date-fns": "~2.30.0",
     "date-fns-tz": "~2.0.0",
     "pino": "~8.15.0",
-    "pino-http": "~8.4.0",
-    "zod": "~3.21.4"
+    "pino-http": "~8.4.0"
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",

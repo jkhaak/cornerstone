@@ -1,5 +1,5 @@
 import type { Mqtt } from "@cornerstone/mqtt";
-import type { EventHandler } from "./ruuvi";
+import type { EventHandler } from "./ruuvi.js";
 
 export function sendEvent(mqtt: Mqtt): EventHandler {
   return (topic: string, obj: object) => mqtt.publish(topic, JSON.stringify(obj));

@@ -1,11 +1,11 @@
 import { Command } from "commander";
-import { run } from "./run";
+import { run } from "./run.js";
 import { fork } from "node:child_process";
 import { logger, config } from "@cornerstone/core";
 import fs from "node:fs";
 import _ from "lodash";
-import { ConfigSchema } from "./model";
-import type { Config } from "./model";
+import { ConfigSchema } from "./model.js";
+import type { Config } from "./model.js";
 
 const program = new Command();
 
@@ -20,7 +20,12 @@ export type DaemonOptions = RunOptions & {
 function getConfig(path: string): Config {
   let conf: Config;
   try {
-    conf = config.parseConfig(path, ConfigSchema);
+    const { data, problems } = ConfigSchema(config.parseConfig(path));
+    if (!data) {
+      // TODO
+      throw new Error(problems.join(","));
+    }
+    conf = data;
   } catch (error) {
     if (error instanceof Error) {
       logger.error({ message: error.message });
@@ -69,8 +74,8 @@ program
     const { gid, uid } = daemon;
     const childOpts = {
       detatched: true,
-      uid,
-      gid,
+      uid: uid ?? 1000,
+      gid: gid ?? 1000,
       env: {
         LOG_LEVEL: "ERROR",
       },

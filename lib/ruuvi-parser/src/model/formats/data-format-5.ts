@@ -12,7 +12,7 @@ import type {
   RuuviData,
   RuuviManufacturerId,
   Temperature,
-} from "./ruuvi-data-types";
+} from "./ruuvi-data-types.js";
 
 export type DecodedFormat = {
   manufacturerId: RuuviManufacturerId;

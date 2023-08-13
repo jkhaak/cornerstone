@@ -4,7 +4,7 @@
   "compilerOptions": {
     // node18
     "lib": ["es2023"],
-    "module": "Node16",
+    "module": "es2022",
     "target": "es2022",
     "moduleResolution": "node16",
 
@@ -14,7 +14,7 @@
     "declaration": true,
     "declarationMap": true,
     "ignoreDeprecations": "5.0",
-    // "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true,
     "types": ["heft-jest", "node"]
   },
   "include": ["../../../../../src/**/*.ts"],

@@ -1,11 +1,11 @@
 import { logger } from "@cornerstone/core";
-import { Bluetooth } from "./services/bluetooth";
-import { RuuviService } from "./services/ruuvi";
-import { sendEvent } from "./services/endpoint";
-import type { NewDeviceEventParams } from "./services/bluetooth";
+import { Bluetooth } from "./services/bluetooth.js";
+import { RuuviService } from "./services/ruuvi.js";
+import { sendEvent } from "./services/endpoint.js";
+import type { NewDeviceEventParams } from "./services/bluetooth.js";
 import { setTimeout } from "timers/promises";
 import { Mqtt } from "@cornerstone/mqtt";
-import type { Config } from "./model";
+import type { Config } from "./model.js";
 
 export function run(props: Config) {
   const bluetooth = Bluetooth.init();

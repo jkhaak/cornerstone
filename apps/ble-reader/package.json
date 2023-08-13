@@ -4,7 +4,7 @@
   "description": "runner environment",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "heft build --clean",
@@ -17,13 +17,13 @@
     "@cornerstone/core": "workspace:*",
     "@cornerstone/mqtt": "workspace:*",
     "@cornerstone/ruuvi-parser": "workspace:*",
+    "arktype": "~1.0.19-alpha",
     "axios": "~1.4.0",
     "commander": "~11.0.0",
     "dbus-next": "~0.10.2",
     "lodash": "~4.17.21",
     "node-ble": "~1.9.0",
-    "x11": "~2.3.0",
-    "zod": "~3.21.4"
+    "x11": "~2.3.0"
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",

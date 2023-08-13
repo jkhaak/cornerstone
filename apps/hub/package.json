@@ -19,8 +19,7 @@
     "@cornerstone/ruuvi-parser": "workspace:*",
     "commander": "~11.0.0",
     "lodash": "~4.17.21",
-    "pg-promise": "~11.5.3",
-    "zod": "~3.21.4"
+    "pg-promise": "~11.5.3"
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",

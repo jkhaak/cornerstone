@@ -1,7 +1,7 @@
 import { logger } from "@cornerstone/core";
 import { DBusError } from "dbus-next";
 import type { Device } from "node-ble";
-import { errorHandler } from "../util/error-handler";
+import { errorHandler } from "../util/error-handler.js";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
 import type { RuuviData } from "@cornerstone/ruuvi-parser";
 

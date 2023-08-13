@@ -1,31 +1,16 @@
-import { z } from "zod";
+import { type } from "arktype";
 
-export const ConfigSchema = z.object({
-  mqtt: z.object({
-    url: z.string(),
-    username: z.string().optional(),
-    password: z.string().optional(),
-  }),
-  daemon: z
-    .object({
-      pidfile: z.string().optional(),
-      user: z
-        .object({
-          uid: z.number(),
-          gid: z.number(),
-        })
-        .optional(),
-    })
-    .optional(),
+export const ConfigSchema = type({
+  mqtt: {
+    url: "string",
+    "username?": "string",
+    "password?": "string",
+  },
+  daemon: {
+    "pidfile?": "string",
+    "uid?": "number",
+    "gid?": "number",
+  },
 });
 
-export type Config = z.infer<typeof ConfigSchema>;
-
-const daemonDefaults = {
-  daemon: {
-    user: {
-      uid: 1000,
-      gid: 1000,
-    },
-  },
-};
+export type Config = typeof ConfigSchema.infer;

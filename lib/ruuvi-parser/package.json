@@ -5,9 +5,12 @@
   "keywords": [],
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "commonjs",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist-commonjs/index.js"
+  },
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
     "test": "heft test"

@@ -1,4 +1,4 @@
-import { filterRejected, filterSettled } from "../promises";
+import { filterRejected, filterSettled } from "../promises.js";
 
 describe("promises", () => {
   const promises = Promise.allSettled([

@@ -5,6 +5,24 @@
   "$schema": "https://developer.microsoft.com/json-schemas/heft/typescript.schema.json",
 
   /**
+   * If provided, emit these module kinds in addition to the modules specified in the tsconfig.
+   * Note that this option only applies to the main tsconfig.json configuration.
+   */
+  "additionalModuleKindsToEmit": [
+    {
+      /**
+       * (REQUIRED) Must be one of "commonjs", "amd", "umd", "system", "es2015", "esnext"
+       */
+      "moduleKind": "commonjs",
+
+      /**
+       * (REQUIRED) The name of the folder where the output will be written.
+       */
+      "outFolderName": "dist-commonjs"
+    }
+  ],
+
+  /**
    * Configures additional file types that should be copied into the TypeScript compiler's emit folders, for example
    * so that these files can be resolved by import statements.
    */

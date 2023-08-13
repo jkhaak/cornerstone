@@ -1,4 +1,4 @@
-import { notUndefined } from "../filter-tools";
+import { notUndefined } from "../filter-tools.js";
 import { expectTypeOf } from "expect-type";
 
 describe("filter tools", () => {

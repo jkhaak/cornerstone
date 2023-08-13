@@ -5,7 +5,7 @@
   "keywords": [],
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "heft build --clean",

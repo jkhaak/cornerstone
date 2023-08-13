@@ -1,4 +1,4 @@
-import * as Ruuvi from "../model/ruuvi";
+import * as Ruuvi from "../model/ruuvi.js";
 
 const MANUFACTURER_ID = "9904" as const;
 

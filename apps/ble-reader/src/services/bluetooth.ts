@@ -4,7 +4,7 @@ import type NodeBle from "node-ble";
 import type { Adapter, Device } from "node-ble";
 import EventEmitter from "node:events";
 import { environment } from "@cornerstone/core";
-import { errorHandler } from "../util/error-handler";
+import { errorHandler } from "../util/error-handler.js";
 import { setTimeout, setInterval } from "node:timers";
 
 /**

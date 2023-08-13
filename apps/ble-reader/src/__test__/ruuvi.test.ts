@@ -1,6 +1,6 @@
 import type { Device } from "node-ble";
-import type { EventHandler } from "../services/ruuvi";
-import { RuuviService } from "../services/ruuvi";
+import type { EventHandler } from "../services/ruuvi.js";
+import { RuuviService } from "../services/ruuvi.js";
 import { setTimeout } from "node:timers/promises";
 
 const deviceMock = {
