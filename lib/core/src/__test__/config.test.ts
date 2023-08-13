@@ -1,9 +1,10 @@
-import { expectTypeOf } from "expect-type";
-import { parseConfig } from "../config.js";
 import fs from "node:fs";
 import os from "node:os";
 
+import { expectTypeOf } from "expect-type";
 import { type } from "arktype";
+
+import { parseConfig } from "../config.js";
 
 const testSchema = type({
   mqtt: {
@@ -32,11 +33,8 @@ describe("config", () => {
   it("should parse config file and produce config object", () => {
     fs.writeFileSync(configPath, JSON.stringify(validConfigWithAuth, null, 2));
 
-    const { data, problems } = testSchema(parseConfig(configPath));
-    expect(problems).toBeUndefined();
-    expect(data).not.toBeUndefined();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const result = data!;
+    const result = parseConfig(configPath, testSchema);
+    expect(result).not.toBeUndefined();
 
     expectTypeOf(result).toMatchTypeOf<TestSchema>();
 
@@ -44,12 +42,12 @@ describe("config", () => {
   });
 
   it("should throw error if config file does not exist", () => {
-    expect(() => parseConfig("does-not-exist.json")).toThrowError(/Could not read config file/);
+    expect(() => parseConfig("does-not-exist.json", testSchema)).toThrowError(/Could not read config file/);
   });
 
   it("should throw error if config file is not valid JSON", () => {
     fs.writeFileSync(configPath, "this is not valid JSON");
 
-    expect(() => parseConfig(configPath)).toThrowError(/Could not parse config file/);
+    expect(() => parseConfig(configPath, testSchema)).toThrowError(/Could not parse config file/);
   });
 });

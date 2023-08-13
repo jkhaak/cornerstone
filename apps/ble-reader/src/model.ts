@@ -1,6 +1,7 @@
 import { type } from "arktype";
+import { logger, config } from "@cornerstone/core";
 
-export const ConfigSchema = type({
+export const configSchema = type({
   mqtt: {
     url: "string",
     "username?": "string",
@@ -13,4 +14,17 @@ export const ConfigSchema = type({
   },
 });
 
-export type Config = typeof ConfigSchema.infer;
+export type Config = typeof configSchema.infer;
+
+export function getConfig(path: string): Config {
+  try {
+    return config.parseConfig(path, configSchema);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error({ message: error.message });
+    } else {
+      logger.error({ message: "Unknown error occured", error });
+    }
+    process.exit(1);
+  }
+}

@@ -1,11 +1,10 @@
 import { Command } from "commander";
 import { run } from "./run.js";
 import { fork } from "node:child_process";
-import { logger, config } from "@cornerstone/core";
+import { logger } from "@cornerstone/core";
 import fs from "node:fs";
-import _ from "lodash";
-import { ConfigSchema } from "./model.js";
-import type { Config } from "./model.js";
+import { isString } from "lodash";
+import { getConfig } from "./model.js";
 
 const program = new Command();
 
@@ -16,27 +15,6 @@ export type RunOptions = {
 export type DaemonOptions = RunOptions & {
   pidfile?: string;
 };
-
-function getConfig(path: string): Config {
-  let conf: Config;
-  try {
-    const { data, problems } = ConfigSchema(config.parseConfig(path));
-    if (!data) {
-      // TODO
-      throw new Error(problems.join(","));
-    }
-    conf = data;
-  } catch (error) {
-    if (error instanceof Error) {
-      logger.error({ message: error.message });
-    } else {
-      logger.error({ message: "Unknown error occured", error });
-    }
-    process.exit(1);
-  }
-
-  return conf;
-}
 
 program
   .name("ble-reader")
@@ -64,7 +42,7 @@ program
       process.exit(4);
     }
 
-    const pidfile = [options.pidfile, daemon.pidfile].find((x) => _.isString(x));
+    const pidfile = [options.pidfile, daemon.pidfile].find(isString);
 
     if (!pidfile) {
       logger.error({ message: "Pidfile not configured" });

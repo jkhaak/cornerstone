@@ -1,6 +1,7 @@
 import fs from "node:fs";
+import type { Type } from "arktype";
 
-export function parseConfig(path: string): unknown {
+export function parseConfig<T>(path: string, schema: Type<T>): Type<T>["infer"] {
   let rawString: string;
   let obj: unknown;
 
@@ -16,5 +17,5 @@ export function parseConfig(path: string): unknown {
     throw new Error(`Could not parse config file at ${path}`);
   }
 
-  return obj;
+  return schema.assert(obj);
 }
