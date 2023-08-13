@@ -214,6 +214,9 @@ importers:
 
   ../../lib/core:
     dependencies:
+      arktype:
+        specifier: ~1.0.19-alpha
+        version: 1.0.19-alpha
       date-fns:
         specifier: ~2.30.0
         version: 2.30.0
@@ -226,6 +229,9 @@ importers:
       pino-http:
         specifier: ~8.4.0
         version: 8.4.0
+      zod:
+        specifier: ~3.21.4
+        version: 3.21.4
     devDependencies:
       '@cornerstone/node-rig':
         specifier: workspace:*
@@ -1971,6 +1977,11 @@ packages:
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
     dev: true
+
+  /arktype@1.0.19-alpha:
+    resolution: {integrity: sha512-tcmWSZupIjjG/hBYAlL9JzheY3WP3upCPlD7UCbY65AbzZegLZXrbCM4+TI03t2rKRwT2TuSioH27Bdqst757Q==}
+    requiresBuild: true
+    dev: false
 
   /array-buffer-byte-length@1.0.0:
     resolution: {integrity: sha512-LPuwb2P+NrQw3XhxGc36+XSvuBPopovXYTR9Ew++Du9Yb/bx5AzBfrIsBoj0EZUifjQU+sHL21sseZ3jerWO/A==}

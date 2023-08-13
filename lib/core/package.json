@@ -12,10 +12,12 @@
     "test": "heft test --clean"
   },
   "dependencies": {
+    "arktype": "~1.0.19-alpha",
     "date-fns": "~2.30.0",
     "date-fns-tz": "~2.0.0",
     "pino": "~8.15.0",
-    "pino-http": "~8.4.0"
+    "pino-http": "~8.4.0",
+    "zod": "~3.21.4"
   },
   "devDependencies": {
     "@cornerstone/node-rig": "workspace:*",

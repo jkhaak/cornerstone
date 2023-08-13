@@ -5,7 +5,7 @@ import { sendEvent } from "./services/endpoint";
 import type { NewDeviceEventParams } from "./services/bluetooth";
 import { setTimeout } from "timers/promises";
 import { Mqtt } from "@cornerstone/mqtt";
-import type { Config } from "./config";
+import type { Config } from "./model";
 
 export function run(props: Config) {
   const bluetooth = Bluetooth.init();

@@ -1,10 +1,11 @@
 import { Command } from "commander";
-import { parseConfig } from "./config";
 import { run } from "./run";
 import { fork } from "node:child_process";
-import { logger } from "@cornerstone/core";
+import { logger, config } from "@cornerstone/core";
 import fs from "node:fs";
 import _ from "lodash";
+import { ConfigSchema } from "./model";
+import type { Config } from "./model";
 
 const program = new Command();
 
@@ -16,10 +17,10 @@ export type DaemonOptions = RunOptions & {
   pidfile?: string;
 };
 
-function getConfig(path: string): ReturnType<typeof parseConfig> {
-  let config;
+function getConfig(path: string): Config {
+  let conf: Config;
   try {
-    config = parseConfig(path);
+    conf = config.parseConfig(path, ConfigSchema);
   } catch (error) {
     if (error instanceof Error) {
       logger.error({ message: error.message });
@@ -29,7 +30,7 @@ function getConfig(path: string): ReturnType<typeof parseConfig> {
     process.exit(1);
   }
 
-  return config;
+  return conf;
 }
 
 program
