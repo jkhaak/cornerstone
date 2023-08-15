@@ -1,9 +1,10 @@
 import { createBluetooth as nodeBleCreateBluetooth } from "node-ble";
 import { logger } from "@cornerstone/core";
 import type NodeBle from "node-ble";
-import type { Adapter, Device } from "node-ble";
+import type { Adapter } from "node-ble";
 import EventEmitter from "node:events";
 import { environment } from "@cornerstone/core";
+import type { Device } from "../model.js";
 import { errorHandler } from "../util/error-handler.js";
 import { setTimeout, setInterval } from "node:timers";
 

@@ -1,14 +1,14 @@
 import { logger } from "@cornerstone/core";
 import { DBusError } from "dbus-next";
-import type { Device } from "node-ble";
 import { errorHandler } from "../util/error-handler.js";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
 import type { RuuviData } from "@cornerstone/ruuvi-parser";
+import type { Device, DeviceProp } from "../model.js";
 
 /**
  * Check interval in milliseconds.
  */
-const CHECK_INTERVAL = 5 * 1000;
+export const CHECK_INTERVAL = 5 * 1000;
 
 export type EventHandler = (topic: string, obj: object) => void;
 
@@ -22,19 +22,15 @@ export class RuuviService {
     };
   }
 
-  private async _propToEvent(prop: unknown): Promise<RuuviData> {
+  private async _propToEvent(prop: DeviceProp): Promise<RuuviData> {
     const prefix = Buffer.from("9904", "hex");
-    // Using undocumented node-ble API
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-    const data = (prop as any)["1177"].value as Buffer;
+    const data = prop["1177"].value;
 
     return ruuvi.decodeAsync(Buffer.concat([prefix, data]));
   }
 
   private async _ruuviTagListener(deviceId: string, device: Device) {
-    // Using undocumented node-ble API
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
-    const prop: unknown = await (device as any).helper.waitPropChange("ManufacturerData");
+    const prop = await device.helper.waitPropChange("ManufacturerData");
     const event = await this._propToEvent(prop);
 
     logger.info({ message: "sending event", deviceId });

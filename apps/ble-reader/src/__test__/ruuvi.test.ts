@@ -1,7 +1,7 @@
-import type { Device } from "node-ble";
 import type { EventHandler } from "../services/ruuvi.js";
 import { RuuviService } from "../services/ruuvi.js";
-import { setTimeout } from "node:timers/promises";
+import { setImmediate } from "node:timers/promises";
+import type { Device } from "../model.js";
 
 const deviceMock = {
   getAlias: jest.fn().mockResolvedValue("unknown device"),
@@ -30,7 +30,7 @@ describe("ruuvi service", () => {
 
       ruuviService.handleNewDevice("", deviceMockAsDevice);
       expect(deviceMock.getAlias).toHaveBeenCalled();
-      await setTimeout(100);
+      await setImmediate();
 
       const devices = ruuviService.listDevices();
       expect(devices).toStrictEqual([tagName]);
@@ -39,7 +39,7 @@ describe("ruuvi service", () => {
     it("should not start timer for unknown device", async () => {
       ruuviService.handleNewDevice("", deviceMockAsDevice);
       expect(deviceMock.getAlias).toHaveBeenCalled();
-      await setTimeout(100);
+      await setImmediate();
 
       const devices = ruuviService.listDevices();
       expect(devices).toStrictEqual([]);
