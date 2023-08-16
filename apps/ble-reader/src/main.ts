@@ -56,12 +56,12 @@ program
       pidfile,
       modulePath: __filename,
       args: ["run", "-c", options.config],
-      uid,
-      gid,
+      uid: uid ?? 1000,
+      gid: gid ?? 1000,
       env: {
         LOG_LEVEL: "ERROR",
       },
-    };
+    } satisfies daemonTools.DaemonProps;
 
     daemonTools.daemonize(props);
   });
