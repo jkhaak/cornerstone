@@ -11,16 +11,11 @@ For building you need to have node.js 18 and @microsoft/rush installed.
 ## Installation
 
 1. Install dependencies with `rush install`.
-2. Build the bundle `rushx bundle`.
-3. Create a single bundle file.
-
-```shell
-echo "#!/usr/bin/node" > ble-reader
-cat < dist/bundle.js >> ble-reader
-chmod +x blue-reader
+2. Build the ble-reader with `rushx bundle`.
+4. Copy the `dist/bin.js` to appropriate place, like `/opt/bin` or use global link with `rushx link`.
+```sh
+cp dist/bin.js /opt/bin/ble-reader
 ```
-
-4. Copy the bundle to appropriate place, like `/opt/bin`.
 
 ## OpenRC daemon
 
