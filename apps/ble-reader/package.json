@@ -5,11 +5,14 @@
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
   "type": "module",
-  "main": "dist/index.js",
+  "bin": {
+    "ble-reader": "./dist/bin.js"
+  },
   "scripts": {
     "build": "heft build --clean",
     "bundle": "npm run build && npm run bundle:esbuild",
-    "bundle:esbuild": "esbuild --bundle src/index.ts --outfile=dist/bundle.js --platform=node",
+    "bundle:esbuild": "esbuild --bundle src/bin.ts --outfile=dist/bin.js --platform=node && chmod +x dist/bin.js",
+    "link": "pnpm run bundle && pnpm link -g",
     "start": "node ./dist/index.js",
     "test": "heft test --clean"
   },

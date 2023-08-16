@@ -6,10 +6,10 @@
   "author": "Jani Haakana",
   "type": "module",
   "exports": {
-    "import": "./dist/index.js",
-    "require": "./dist-commonjs/index.js"
+    "import": "./lib/index.js",
+    "require": "./lib-commonjs/index.js"
   },
-  "types": "./dist/index.d.ts",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
     "test": "heft test --clean"

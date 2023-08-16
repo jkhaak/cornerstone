@@ -6,10 +6,10 @@
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "build": "heft build --clean",
-    "start": "node ./dist/index.js",
+    "start": "node ./lib/index.js",
     "test": ""
   },
   "dependencies": {
