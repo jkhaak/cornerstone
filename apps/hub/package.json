@@ -4,7 +4,7 @@
   "description": "collect information from mqtt",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "commonjs",
+  "type": "module",
   "main": "./lib/main.js",
   "bin": {
     "hub": "./dist/bin.js"
@@ -20,6 +20,7 @@
     "@cornerstone/core": "workspace:*",
     "@cornerstone/mqtt": "workspace:*",
     "@cornerstone/ruuvi-parser": "workspace:*",
+    "arktype": "~1.0.19-alpha",
     "commander": "~11.0.0",
     "lodash": "~4.17.21",
     "pg-promise": "~11.5.3"

@@ -83,6 +83,9 @@ importers:
       '@cornerstone/ruuvi-parser':
         specifier: workspace:*
         version: link:../../lib/ruuvi-parser
+      arktype:
+        specifier: ~1.0.19-alpha
+        version: 1.0.19-alpha
       commander:
         specifier: ~11.0.0
         version: 11.0.0
