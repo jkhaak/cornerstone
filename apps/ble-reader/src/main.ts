@@ -43,21 +43,21 @@ program
       process.exit(5);
     }
 
-    const pidfile = [options.pidfile, daemon.pidfile].find(isString);
+    const pidfile = [options.pidfile, daemon?.pidfile].find(isString);
 
     if (!pidfile) {
       logger.error({ message: "Pidfile not configured" });
       process.exit(7);
     }
 
-    const { gid, uid } = daemon;
+    const { gid = 1000, uid = 1000 } = daemon ?? {};
 
     const props = {
       pidfile,
       modulePath: __filename,
       args: ["run", "-c", options.config],
-      uid: uid ?? 1000,
-      gid: gid ?? 1000,
+      uid,
+      gid,
       env: {
         LOG_LEVEL: "ERROR",
       },

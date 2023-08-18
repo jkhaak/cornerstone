@@ -23,7 +23,7 @@ export const configSchema = type({
     "username?": "string",
     "password?": "string",
   },
-  daemon: {
+  "daemon?": {
     "pidfile?": "string",
     "uid?": "number",
     "gid?": "number",
