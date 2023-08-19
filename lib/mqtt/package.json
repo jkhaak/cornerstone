@@ -6,6 +6,10 @@
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
   "type": "module",
+  "exports": {
+    "import": "./lib/index.js",
+    "require": "./lib-commonjs/index.js"
+  },
   "main": "./lib/index.js",
   "scripts": {
     "build": "heft build --clean",
