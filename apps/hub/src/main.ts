@@ -39,7 +39,7 @@ program
       process.exit(5);
     }
 
-    const { gid = 1000, uid = 1000 } = daemonConfig;
+    const { gid = 1000, uid = 1000 } = daemonConfig ?? {};
     const props = {
       pidfile,
       modulePath: __filename,
