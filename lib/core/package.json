@@ -12,7 +12,9 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
-    "test": "heft test --clean"
+    "build:watch": "heft build-watch --clean",
+    "test": "heft test --clean",
+    "test:watch": "heft test-watch --clean"
   },
   "dependencies": {
     "arktype": "~1.0.19-alpha",

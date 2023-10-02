@@ -13,7 +13,9 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
-    "test": "heft test"
+    "build:watch": "heft build-watch --clean",
+    "test": "heft test --clean",
+    "test:watch": "heft test-watch --clean"
   },
   "dependencies": {
     "@cornerstone/core": "workspace:*",

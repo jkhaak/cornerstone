@@ -9,12 +9,14 @@
     "ble-reader": "./dist/bin.js"
   },
   "scripts": {
-    "build": "heft build --clean",
-    "bundle": "npm run build && npm run bundle:esbuild",
-    "bundle:esbuild": "esbuild --bundle src/bin.ts --outfile=dist/bin.js --platform=node && chmod +x dist/bin.js",
+    "build": "npm run build:build && npm run build:bundle -- --log-level=warning && npm run build:postbundle",
+    "build:build": "heft build --clean",
+    "build:bundle": "esbuild --bundle src/bin.ts --outfile=dist/bin.js --platform=node",
+    "build:postbundle": "chmod +x dist/bin.js",
+    "build:watch": "heft build-watch --clean",
     "link": "pnpm run bundle && pnpm link -g",
-    "start": "node ./dist/index.js",
-    "test": "heft test --clean"
+    "test": "heft test --clean",
+    "test:watch": "heft test-watch --clean"
   },
   "dependencies": {
     "@cornerstone/core": "workspace:*",

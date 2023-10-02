@@ -13,8 +13,10 @@
   "main": "./lib/index.js",
   "scripts": {
     "build": "heft build --clean",
-    "start": "node ./lib/index.js",
-    "test": ""
+    "build:watch": "heft build-watch --clean",
+    "test": "",
+    "test:test": "heft test --clean",
+    "test:watch": "heft test-watch --clean"
   },
   "dependencies": {
     "@cornerstone/core": "workspace:*",
