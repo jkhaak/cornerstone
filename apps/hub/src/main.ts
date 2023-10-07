@@ -19,9 +19,12 @@ program
   .description("run the program in foreground (default)")
   .requiredOption("-c, --config <path>", "path to config file")
   .action(async (options: RunOptions) => {
-    // TODO set database connection environment variables
+    const config = getConfig(options.config);
+    // eslint-disable-next-line dot-notation
+    process.env["DB_CN"] = config.database.cn;
+
     const { run } = await import("./run.js");
-    run(getConfig(options.config));
+    run(config);
   });
 
 program
