@@ -19,7 +19,7 @@
 
   "phasesByName": {
     "build": {
-      "cleanFiles": [{ "includeGlobs": ["dist", "dist-commonjs", "lib", "lib-commonjs", "temp"] }],
+      "cleanFiles": [{ "includeGlobs": ["dist", "lib", "temp"] }],
 
       "tasksByName": {
         "typescript": {

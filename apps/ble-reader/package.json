@@ -4,14 +4,14 @@
   "description": "runner environment",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "module",
+  "type": "commonjs",
   "bin": {
     "ble-reader": "./dist/bin.js"
   },
   "scripts": {
     "build": "npm run build:build && npm run build:bundle -- --log-level=warning && npm run build:postbundle",
     "build:build": "heft build --clean",
-    "build:bundle": "esbuild --bundle src/bin.ts --outfile=dist/bin.js --platform=node",
+    "build:bundle": "esbuild --bundle lib/bin.js --outfile=dist/bin.js --platform=node",
     "build:postbundle": "chmod +x dist/bin.js",
     "build:watch": "heft build-watch --clean",
     "link": "pnpm run bundle && pnpm link -g",

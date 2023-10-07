@@ -5,10 +5,9 @@
   "keywords": [],
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
-  "type": "module",
+  "type": "commonjs",
   "exports": {
-    "import": "./lib/index.js",
-    "require": "./lib-commonjs/index.js"
+    "require": "./lib/index.js"
   },
   "types": "./lib/index.d.ts",
   "scripts": {

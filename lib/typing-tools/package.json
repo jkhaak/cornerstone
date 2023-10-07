@@ -4,6 +4,7 @@
   "description": "general typing tools",
   "license": "EUPL-1.2",
   "author": "Jani Haakana",
+  "type": "commonjs",
   "typings": "src/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
