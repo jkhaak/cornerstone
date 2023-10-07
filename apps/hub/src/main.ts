@@ -1,7 +1,6 @@
 import { Command } from "commander";
 import { logger, daemonTools } from "@cornerstone/core";
 import { getConfig, type DaemonConfig } from "./model.js";
-import { run } from "./run.js";
 
 export const program = new Command();
 
@@ -19,7 +18,9 @@ program
   .command("run", { isDefault: true })
   .description("run the program in foreground (default)")
   .requiredOption("-c, --config <path>", "path to config file")
-  .action((options: RunOptions) => {
+  .action(async (options: RunOptions) => {
+    // TODO set database connection environment variables
+    const { run } = await import("./run.js");
     run(getConfig(options.config));
   });
 

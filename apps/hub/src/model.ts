@@ -8,11 +8,7 @@ export const configSchema = type({
     "password?": "string",
   },
   database: {
-    host: "string",
-    port: "number",
-    database: "string",
-    username: "string",
-    password: "string",
+    cn: /^[^:]+:\/\/[^:]+(?::[^@]+)?@[^:]+(?::[^/]+\/)?[^\s]+$/,
   },
   "daemon?": {
     "uid?": "number",
