@@ -2,7 +2,7 @@ jest.mock("@cornerstone/mqtt");
 
 import { Mqtt } from "@cornerstone/mqtt";
 import { run } from "../run.js";
-import type { Config } from "../model.js";
+import type { Config } from "../model/config.js";
 
 const mqttConfig = {
   url: "mqtt://localhost",

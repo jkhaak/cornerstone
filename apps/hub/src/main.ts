@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { logger, daemonTools } from "@cornerstone/core";
-import { getConfig, type DaemonConfig } from "./model.js";
+import { getConfig, type DaemonConfig } from "./model/config.js";
 
 export const program = new Command();
 
