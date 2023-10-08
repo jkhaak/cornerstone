@@ -49,6 +49,6 @@ command="/opt/bin/hub"
 command_args="daemon -p ${pidfile} -c ${config}"
 
 depend() {
-    need dbus mosquitto postgresql
+    need mosquitto postgresql
 }
 ```
