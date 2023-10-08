@@ -233,9 +233,6 @@ importers:
       '@rushstack/heft-typescript-plugin':
         specifier: ~0.1.21
         version: 0.1.21(@rushstack/heft@0.58.2)
-      '@tsconfig/strictest':
-        specifier: ~2.0.1
-        version: 2.0.1
       eslint:
         specifier: ~8.46.0
         version: 8.46.0
@@ -1435,10 +1432,6 @@ packages:
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
     dependencies:
       '@sinonjs/commons': 3.0.0
-    dev: true
-
-  /@tsconfig/strictest@2.0.1:
-    resolution: {integrity: sha512-7JHHCbyCsGUxLd0pDbp24yz3zjxw2t673W5oAP6HCEdr/UUhaRhYd3SSnUsGCk+VnPVJVA4mXROzbhI+nyIk+w==}
     dev: true
 
   /@types/argparse@1.0.38:

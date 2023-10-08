@@ -14,7 +14,6 @@
     "@rushstack/heft-jest-plugin": "~0.8.1",
     "@rushstack/heft-lint-plugin": "~0.1.22",
     "@rushstack/heft-typescript-plugin": "~0.1.21",
-    "@tsconfig/strictest": "~2.0.1",
     "eslint": "~8.46.0",
     "typescript": "~5.1.6"
   }

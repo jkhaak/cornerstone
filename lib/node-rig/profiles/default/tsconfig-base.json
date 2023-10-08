@@ -1,6 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     // node18
     "lib": ["es2023"],
@@ -8,6 +7,7 @@
     "target": "es2022",
     "moduleResolution": "Node10",
 
+    "strict": true,
     "outDir": "../../../../../lib",
     "exactOptionalPropertyTypes": false,
     "allowUnusedLabels": false,
