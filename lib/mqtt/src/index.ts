@@ -8,6 +8,8 @@ export type MqttOptions = {
   url: string;
 };
 
+export type SubscribeCallback<ReturnType = void> = (message: Buffer) => ReturnType;
+
 export class Mqtt {
   private _client: mqtt.MqttClient;
 
@@ -22,7 +24,7 @@ export class Mqtt {
     this._client.publish(topic, message);
   }
 
-  public subscribe(topic: string, callback: (message: Buffer) => void) {
+  public subscribe(topic: string, callback: SubscribeCallback) {
     logger.info(`Subscribing to ${topic}`);
     this._client.subscribe(topic);
     this._client.on("message", (topic: string, message: Buffer) => {
@@ -31,7 +33,7 @@ export class Mqtt {
     });
   }
 
-  public subscribeAsync(topic: string, callback: (message: Buffer) => Promise<void>) {
+  public subscribeAsync(topic: string, callback: SubscribeCallback<Promise<void>>) {
     logger.info(`Subscribing to ${topic}`);
     this._client.subscribe(topic);
 
