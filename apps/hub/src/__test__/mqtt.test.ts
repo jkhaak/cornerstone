@@ -13,7 +13,7 @@ describe("mqtt controller", () => {
 
     ruuvitagMqttController(mqttMock as unknown as Mqtt);
 
-    expect(mqttMock.subscribeAsync).toHaveBeenCalledWith("ruuvi/event#", expect.any(Function));
+    expect(mqttMock.subscribeAsync).toHaveBeenCalledWith("ruuvi/event/#", expect.any(Function));
     expect(storeEventMock).toBeCalledTimes(0);
     const message = Buffer.from("test");
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
