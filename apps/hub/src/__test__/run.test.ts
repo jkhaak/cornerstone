@@ -3,6 +3,7 @@ jest.mock("@cornerstone/mqtt");
 import { Mqtt } from "@cornerstone/mqtt";
 import { run } from "../run.js";
 import type { Config } from "../model/config.js";
+import * as mqttController from "../controller/mqtt.js";
 
 const mqttConfig = {
   url: "mqtt://localhost",
@@ -27,15 +28,10 @@ describe("run", () => {
     expect(Mqtt).toHaveBeenCalledWith(mqttConfig);
   });
 
-  /*
   it("should start store service", () => {
-    const storeServiceMock = jest.spyOn(storeServiceModule, "storeService");
+    const mqttControllerMock = jest.spyOn(mqttController, "ruuvitagMqttController");
     run(testConfig);
-    expect(storeServiceMock).toHaveBeenCalledTimes(1);
-    expect(storeServiceMock).toHaveBeenCalledWith(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      expect.objectContaining({ mqtt: expect.anything(), db: expect.anything() })
-    );
+    expect(mqttControllerMock).toHaveBeenCalledTimes(1);
+    expect(mqttControllerMock).toHaveBeenCalledWith(expect.any(Mqtt));
   });
-  */
 });
