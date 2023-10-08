@@ -30,6 +30,10 @@ function initEvent(obj: object): RuuviData {
   return _.merge(exampleEvent, obj) as RuuviData;
 }
 
+afterAll(async () => {
+  await db.$pool.end();
+});
+
 describe("ruuvi-service", () => {
   afterEach(async () => {
     await db.none("TRUNCATE ruuvitag, ruuvidata RESTART IDENTITY;");
@@ -37,7 +41,8 @@ describe("ruuvi-service", () => {
 
   it("should decode an event", async () => {
     const event = await ruuviService.decodeEvent(exampleEventBuffer);
-    expect(event).toMatchObject({ tagId: exampleEvent.mac.slice(-4) });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    expect(event).toMatchObject({ tagId: exampleEvent.mac.slice(-4), date: expect.any(Date) });
   });
 
   it.each`
@@ -55,11 +60,20 @@ describe("ruuvi-service", () => {
       })
     );
 
-    const tags = await ruuviService.fetchTags();
+    const tags = await db.manyOrNone("SELECT * FROM ruuvitag;");
     expect(tags).toHaveLength(expectedLength);
   });
 
   it("should store an event to database", async () => {
     await ruuviService.storeEvent(exampleEventBuffer);
+
+    const events = await db.manyOrNone("SELECT * FROM ruuvidata;");
+
+    expect(events).toHaveLength(1);
+    const expected = _(exampleEvent)
+      .omit(["acceleration", "power", "mac", "manufacturerId"])
+      .mapKeys((__, k) => _.snakeCase(k))
+      .value();
+    expect(events[0]).toMatchObject(expected);
   });
 });

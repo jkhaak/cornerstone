@@ -12,9 +12,20 @@ const SQL_SELECT_RUUVITAGS = new PS({
   text: `SELECT id, mac FROM ruuvitag;`,
 });
 
-type RuuviEventDto = RuuviData & {
-  tagId: string;
-};
+const SQL_INSERT_RUUVIEVENT = new PS({
+  name: "insert-ruuvievent",
+  text: `
+    INSERT INTO ruuvidata
+    (id, ruuvitag, "version", datetime, temperature, humidity, pressure, acceleration_x, acceleration_y, acceleration_z, power_voltage, power_tx, movement_counter, measurement_sequence)
+    VALUES(nextval('ruuvidata_id_seq':: regclass), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);`,
+});
+
+type RuuviEventDto = Readonly<
+  RuuviData & {
+    tagId: string;
+    date: Date;
+  }
+>;
 
 type RuuviTag = {
   tagId: string;
@@ -27,6 +38,7 @@ export async function decodeEvent(eventBuffer: Buffer): Promise<RuuviEventDto> {
   return {
     ...event,
     tagId: event.mac.slice(-4),
+    date: new Date(),
   };
 }
 
@@ -35,7 +47,36 @@ export async function fetchTags(): Promise<RuuviTag[]> {
 }
 
 export async function storeEvent(eventBuffer: Buffer) {
-  const event = await decodeEvent(eventBuffer);
+  const {
+    tagId,
+    version,
+    date,
+    temperature,
+    humidity,
+    pressure,
+    acceleration,
+    power,
+    movementCounter,
+    measurementSequence,
+    mac,
+  } = await decodeEvent(eventBuffer);
 
-  await db.none(SQL_INSERT_RUUVITAG, [event.tagId, event.mac]);
+  await db.tx(async (t) => {
+    await t.none(SQL_INSERT_RUUVITAG, [tagId, mac]);
+    await t.none(SQL_INSERT_RUUVIEVENT, [
+      tagId,
+      version,
+      date,
+      temperature,
+      humidity,
+      pressure,
+      acceleration.x,
+      acceleration.y,
+      acceleration.z,
+      power.voltage,
+      power.tx,
+      movementCounter,
+      measurementSequence,
+    ]);
+  });
 }
