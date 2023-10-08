@@ -1,12 +1,12 @@
-import * as DataFormat5 from "../model/formats/data-format-5.js";
-import type { DecodedFormat as DecodedFormat5 } from "../model/formats/data-format-5.js";
+import * as DataFormat5 from "../model/formats/data-format-5";
+import type { DecodedFormat as DecodedFormat5 } from "../model/formats/data-format-5";
 import type {
   TestValuesBufferObject,
   TestValuesHex,
   TestValuesNumber,
   TestValuesNumberObject,
-} from "./test-util.js";
-import { createTestValues, testWith, testWithMatch, toBuffer } from "./test-util.js";
+} from "./test-util";
+import { createTestValues, testWith, testWithMatch, toBuffer } from "./test-util";
 
 type TestVector = [string, DecodedFormat5];
 

@@ -1,8 +1,8 @@
-jest.mock("../service/ruuvi.js");
+jest.mock("../service/ruuvi");
 
 import { Mqtt } from "@cornerstone/mqtt";
-import * as ruuviService from "../service/ruuvi.js";
-import { ruuvitagMqttController } from "../controller/mqtt.js";
+import * as ruuviService from "../service/ruuvi";
+import { ruuvitagMqttController } from "../controller/mqtt";
 
 describe("mqtt controller", () => {
   it("should subscribe to ruuvi/event topic", async () => {

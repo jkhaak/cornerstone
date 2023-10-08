@@ -4,7 +4,7 @@ import os from "node:os";
 import { expectTypeOf } from "expect-type";
 import { type } from "arktype";
 
-import { parseConfig } from "../config.js";
+import { parseConfig } from "../config";
 
 const testSchema = type({
   mqtt: {

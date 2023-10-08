@@ -1,4 +1,4 @@
-import { Bluetooth } from "../services/bluetooth.js";
+import { Bluetooth } from "../services/bluetooth";
 import type NodeBle from "node-ble";
 
 const adapterMock = {

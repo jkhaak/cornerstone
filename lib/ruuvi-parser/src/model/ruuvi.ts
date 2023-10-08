@@ -1,6 +1,6 @@
 import _ from "lodash";
-import * as dataFormat5 from "./formats/data-format-5.js";
-import type { RuuviData, RuuviManufacturerId } from "./formats/ruuvi-data-types.js";
+import * as dataFormat5 from "./formats/data-format-5";
+import type { RuuviData, RuuviManufacturerId } from "./formats/ruuvi-data-types";
 
 const ruuviManufacturerId = "0499" satisfies RuuviManufacturerId;
 

@@ -1,6 +1,6 @@
 import { fork } from "node:child_process";
 import fs from "node:fs";
-import { logger } from "./index.js";
+import { logger } from "./index";
 
 export type DaemonProps = {
   pidfile: string;

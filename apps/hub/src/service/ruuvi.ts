@@ -1,5 +1,5 @@
 import { RuuviData, ruuvi } from "@cornerstone/ruuvi-parser";
-import { db } from "./database.js";
+import { db } from "./database";
 import { PreparedStatement as PS } from "pg-promise";
 
 const SQL_INSERT_RUUVITAG = new PS({

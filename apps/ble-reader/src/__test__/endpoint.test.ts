@@ -1,5 +1,5 @@
 import type { Mqtt } from "@cornerstone/mqtt";
-import { sendEvent } from "../services/endpoint.js";
+import { sendEvent } from "../services/endpoint";
 
 const mqttMock = {
   publish: jest.fn(),

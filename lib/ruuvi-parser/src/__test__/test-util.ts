@@ -1,4 +1,4 @@
-import { exhausted } from "../model/utils.js";
+import { exhausted } from "../model/utils";
 
 export type TestValues<Input, Expected> = [Input, Expected];
 

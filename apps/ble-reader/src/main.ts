@@ -1,9 +1,9 @@
 import { Command } from "commander";
-import { run } from "./run.js";
+import { run } from "./run";
 import { logger, daemonTools } from "@cornerstone/core";
 import { isString } from "lodash";
-import { getConfig } from "./model.js";
-import type { DaemonConfig } from "./model.js";
+import { getConfig } from "./model";
+import type { DaemonConfig } from "./model";
 
 export const program = new Command();
 

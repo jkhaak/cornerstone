@@ -1,8 +1,8 @@
 jest.mock("node:child_process");
 
 import child_process from "node:child_process";
-import * as daemonTools from "../daemon-tools.js";
-import type { DaemonProps } from "../daemon-tools.js";
+import * as daemonTools from "../daemon-tools";
+import type { DaemonProps } from "../daemon-tools";
 import os from "node:os";
 import fs from "node:fs";
 

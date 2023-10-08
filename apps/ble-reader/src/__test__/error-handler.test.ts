@@ -1,7 +1,7 @@
 // prettier-ignore
 jest.mock("@cornerstone/core")
 
-import { errorHandler } from "../util/error-handler.js";
+import { errorHandler } from "../util/error-handler";
 import { logger } from "@cornerstone/core";
 
 describe("error handler", () => {

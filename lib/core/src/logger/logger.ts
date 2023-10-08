@@ -1,5 +1,5 @@
 import { pino } from "pino";
-import { getEnvOrElse } from "../environment.js";
+import { getEnvOrElse } from "../environment";
 
 let opts = {};
 

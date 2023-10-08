@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { logger, daemonTools } from "@cornerstone/core";
-import { getConfig, type DaemonConfig } from "./model/config.js";
+import { getConfig, type DaemonConfig } from "./model/config";
 
 export const program = new Command();
 
@@ -23,7 +23,7 @@ program
     // eslint-disable-next-line dot-notation
     process.env["DB_CN"] = config.database.cn;
 
-    const { run } = await import("./run.js");
+    const { run } = await import("./run");
     run(config);
   });
 

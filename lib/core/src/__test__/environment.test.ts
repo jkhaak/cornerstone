@@ -1,4 +1,4 @@
-import { getEnv, getEnvOrElse, getEnvOrElseGet, setEnv } from "../environment.js";
+import { getEnv, getEnvOrElse, getEnvOrElseGet, setEnv } from "../environment";
 
 describe("environment", () => {
   describe("getEnv", () => {

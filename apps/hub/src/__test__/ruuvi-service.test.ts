@@ -1,8 +1,8 @@
 import _ from "lodash";
 
 import { RuuviData, ruuvi } from "@cornerstone/ruuvi-parser";
-import * as ruuviService from "../service/ruuvi.js";
-import { db } from "../service/database.js";
+import * as ruuviService from "../service/ruuvi";
+import { db } from "../service/database";
 
 const exampleEvent = {
   manufacturerId: "0499",

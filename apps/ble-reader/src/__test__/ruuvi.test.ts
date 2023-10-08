@@ -1,7 +1,7 @@
-import type { EventHandler } from "../services/ruuvi.js";
-import { RuuviService } from "../services/ruuvi.js";
+import type { EventHandler } from "../services/ruuvi";
+import { RuuviService } from "../services/ruuvi";
 import { setImmediate } from "node:timers/promises";
-import type { Device } from "../model.js";
+import type { Device } from "../model";
 
 const deviceMock = {
   getAlias: jest.fn().mockResolvedValue("unknown device"),

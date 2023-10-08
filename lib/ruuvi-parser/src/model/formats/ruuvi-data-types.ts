@@ -1,5 +1,5 @@
-import type { GetFormats, GetVersion } from "../utils.js";
-import type { DecodedFormat as DecodedFormat5 } from "./data-format-5.js";
+import type { GetFormats, GetVersion } from "../utils";
+import type { DecodedFormat as DecodedFormat5 } from "./data-format-5";
 
 /**
  * Ruuvi manufacturer id. Id is 0x0499, which is transmitted as 0x9904.

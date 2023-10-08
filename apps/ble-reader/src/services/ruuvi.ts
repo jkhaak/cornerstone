@@ -1,9 +1,9 @@
 import { logger } from "@cornerstone/core";
 import { DBusError } from "dbus-next";
-import { errorHandler } from "../util/error-handler.js";
+import { errorHandler } from "../util/error-handler";
 import { ruuvi } from "@cornerstone/ruuvi-parser";
 import type { RuuviData } from "@cornerstone/ruuvi-parser";
-import type { Device, DeviceProp } from "../model.js";
+import type { Device, DeviceProp } from "../model";
 
 /**
  * Check interval in milliseconds.
