@@ -12,7 +12,7 @@ For building you need to have node.js 18 and @microsoft/rush installed.
 
 1. Install dependencies with `rush install`.
 2. Build the ble-reader with `rushx bundle`.
-4. Copy the `dist/bin.js` to appropriate place, like `/opt/bin` or use global link with `rushx link`.
+3. Copy the `dist/bin.js` to appropriate place, like `/opt/bin` or use global link with `rushx link`.
 ```sh
 cp dist/bin.js /opt/bin/ble-reader
 ```
@@ -37,7 +37,7 @@ Create config `/etc/ble-reader/config.json` for the ble-reader daemon. For examp
 
 Then create the init script `/etc/init.d/ble-reader`.
 
-```shell
+```sh
 #!/sbin/openrc-run
 
 config="/etc/ble-reader/config.json"
@@ -49,6 +49,10 @@ depend() {
     need dbus mosquitto
 }
 ```
+
+## Storing data to database with hub
+
+See instructions from [hub](../hub/README.md).
 
 ## Homebridge MQTTThing
 
