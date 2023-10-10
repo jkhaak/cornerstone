@@ -1,4 +1,4 @@
-import { RuuviData, ruuvi } from "@cornerstone/ruuvi-parser";
+import type { RuuviData } from "@cornerstone/ruuvi-parser";
 import { db } from "./database";
 import { PreparedStatement as PS } from "pg-promise";
 
@@ -32,8 +32,8 @@ type RuuviTag = {
   mac: string;
 };
 
-export async function decodeEvent(eventBuffer: Buffer): Promise<RuuviEventDto> {
-  const event = await ruuvi.decodeAsync(eventBuffer);
+export function decodeEvent(eventBuffer: Buffer): RuuviEventDto {
+  const event = JSON.parse(eventBuffer.toString()) as RuuviData;
 
   return {
     ...event,
@@ -59,7 +59,7 @@ export async function storeEvent(eventBuffer: Buffer) {
     movementCounter,
     measurementSequence,
     mac,
-  } = await decodeEvent(eventBuffer);
+  } = decodeEvent(eventBuffer);
 
   await db.tx(async (t) => {
     await t.none(SQL_INSERT_RUUVITAG, [tagId, mac]);

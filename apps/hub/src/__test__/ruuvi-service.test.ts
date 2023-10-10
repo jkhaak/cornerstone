@@ -1,6 +1,5 @@
 import _ from "lodash";
 
-import { RuuviData, ruuvi } from "@cornerstone/ruuvi-parser";
 import * as ruuviService from "../service/ruuvi";
 import { db } from "../service/database";
 
@@ -24,10 +23,10 @@ const exampleEvent = {
   mac: "F897846A37E6",
 } as const;
 
-const exampleEventBuffer = ruuvi.encode(exampleEvent);
+const exampleEventBuffer = Buffer.from(JSON.stringify(exampleEvent), "utf-8");
 
-function initEvent(obj: object): RuuviData {
-  return _.merge(exampleEvent, obj) as RuuviData;
+function initEvent(obj: object): Buffer {
+  return Buffer.from(JSON.stringify(_.merge(exampleEvent, obj)), "utf-8");
 }
 
 afterAll(async () => {
@@ -40,7 +39,7 @@ describe("ruuvi-service", () => {
   });
 
   it("should decode an event", async () => {
-    const event = await ruuviService.decodeEvent(exampleEventBuffer);
+    const event = ruuviService.decodeEvent(exampleEventBuffer);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     expect(event).toMatchObject({ tagId: exampleEvent.mac.slice(-4), date: expect.any(Date) });
   });
@@ -56,7 +55,7 @@ describe("ruuvi-service", () => {
     await Promise.all(
       macs.map(async (mac) => {
         const event = initEvent({ mac });
-        await ruuviService.storeEvent(ruuvi.encode(event));
+        await ruuviService.storeEvent(event);
       })
     );
 
